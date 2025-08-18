@@ -23,6 +23,11 @@ export default defineNuxtConfig({
     hub: {
     database: true
   },
+  content: {
+    preview: {
+      api: 'https://api.nuxt.studio'
+    }
+  },
   ngrok: {
       authtoken: process.env.NGROK_AUTHTOKEN,
       domain: 'knowing-husky-reliably.ngrok-free.app'
