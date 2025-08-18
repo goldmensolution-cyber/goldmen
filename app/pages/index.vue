@@ -34,7 +34,7 @@ async function submitForm() {
     })
     result.value = res
   } catch (err: any) {
-    errorMessage.value = err?.data?.message || err?.message || 'Something went wrong.'
+    errorMessage.value = err?.data?.message || err?.message  || 'Something went wrong.'
   } finally {
     loading.value = false
   }
@@ -49,11 +49,11 @@ async function submitForm() {
       <label>
         Your Phone (STK will pop here)
         <input
+          v-model.trim="initiatorPhone"
           type="tel"
           inputmode="tel"
           autocomplete="tel"
           placeholder="0712345678 or +254712345678"
-          v-model.trim="initiatorPhone"
           required
         >
       </label>
@@ -61,11 +61,11 @@ async function submitForm() {
       <label>
         Account Number (Phone)
         <input
+          v-model.trim="accountPhone"
           type="tel"
           inputmode="tel"
           autocomplete="tel"
           placeholder="0712345678"
-          v-model.trim="accountPhone"
           required
         >
       </label>
@@ -73,12 +73,12 @@ async function submitForm() {
       <label>
         Amount (KES)
         <input
+          v-model.number="amount"
           type="number"
           inputmode="numeric"
           min="1"
           step="1"
           placeholder="100"
-          v-model.number="amount"
           required
         >
       </label>

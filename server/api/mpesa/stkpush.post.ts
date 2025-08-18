@@ -4,7 +4,7 @@ import { and, eq, useDrizzle, tables  } from '~~/server/utils/drizzle'
 
 import { initiateStkPush, normalizeMsisdn } from '~~/server/utils/mpesa'
 import { publishResult, waitForResult } from '~~/server/utils/waiter'
-import type { InitiateStkPushBody, InitiateStkPushResponse } from '~/shared/types/mpesa'
+import type { InitiateStkPushBody, InitiateStkPushResponse } from '~~/shared/types/mpesa'
 
 export default eventHandler(async (event): Promise<InitiateStkPushResponse> => {
   const body = await readBody<InitiateStkPushBody>(event)

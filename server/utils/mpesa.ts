@@ -114,7 +114,7 @@ export async function initiateStkPush(params: {
     PartyA: params.phone,
     PartyB: shortcode,
     PhoneNumber: params.phone,
-    CallBackURL: 'https://knowing-husky-reliably.ngrok-free.app/mpesa/callback',
+    CallBackURL: 'https://knowing-husky-reliably.ngrok-free.app/api/mpesa/callback',
     AccountReference: params.accountReference,
     TransactionDesc: params.description,
   }
@@ -130,7 +130,7 @@ export async function initiateStkPush(params: {
   }).catch((err) => {
     console.error('STK Push error:', err)
     if (err.response?.status === 400) {
-        throw createError({ statusCode: 400, message: `Invalid request: ${payload.CallBackURL || 'Unknown error'}` })
+        throw createError({ statusCode: 400, message: `Invalid request: ${payload.PhoneNumber || 'Unknown error'}` })
         }
     throw createError({ statusCode: 502, message: `STK Push request failed: ${err?.message || err}` })
    })

@@ -33,6 +33,12 @@ export default defineNuxtConfig({
       allowedHosts: ['knowing-husky-reliably.ngrok-free.app']
     }
   },
+  icon: {
+      customCollections: [{
+        prefix: 'custom',
+        dir: './app/assets/icons'
+      }]
+    },
 ui: {
     colorMode: false
   },
