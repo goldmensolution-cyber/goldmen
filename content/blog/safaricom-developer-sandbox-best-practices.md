@@ -5,7 +5,7 @@ date: 2025-08-13
 excerpt: "Practical sandbox usage tips: avoiding rate limits, simulating user behavior, and structuring tests for Daraja integrations."
 author: "Bonface Muthoni"
 tags: ["safaricom", "sandbox", "testing", "mpesa"]
-cover: "/images/bg-hero.jpg"
+cover: "/images/hero-bg.jpeg"
 ---
 
 ## Why the sandbox matters

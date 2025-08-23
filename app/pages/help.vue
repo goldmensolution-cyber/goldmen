@@ -11,7 +11,7 @@
     </ul>
 
     <h2>2. How to Reach Us</h2>
-    <p>Please email us at <a href="mailto:support@mentel.pages.dev">support@mentel.pages.dev</a> with your MPESA transaction ID and details. We’ll assist you promptly.</p>
+    <p>Please email us at <a href="mailto:support@goldmen.pages.dev">support@goldmen.pages.dev</a> with your MPESA transaction ID and details. We’ll assist you promptly.</p>
 
     <h2>3. Business Hours</h2>
     <p>Though airtime purchases are instant and available 24/7, our support team works Monday–Friday, 8 AM–5 PM EAT.</p>

@@ -5,7 +5,7 @@ date: 2025-08-13
 excerpt: "A practical checklist for small businesses and startups integrating mobile money in Kenya — compliance, reporting, and where to seek authoritative guidance."
 author: "Bonface Muthoni"
 tags: ["regulation", "compliance", "cbk", "payments"]
-cover: "/images/bg-hero.jpg"
+cover: "/images/hero-bg.jpeg"
 ---
 
 ## Quick disclaimer

@@ -5,7 +5,7 @@ date: 2025-08-13
 excerpt: "A practical debug guide for handling STK Push lifecycle: request errors, 'user cancelled', timeouts, and querying transaction status."
 author: "Bonface Muthoni"
 tags: ["mpesa", "debugging", "stkpush", "errors"]
-cover: "/images/bg-hero.jpg"
+cover: "/images/hero-bg.jpeg"
 ---
 
 ## Typical lifecycle

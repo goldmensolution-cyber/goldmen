@@ -5,7 +5,7 @@ date: 2025-08-13
 excerpt: "Security recommendations specific to airtime and mobile-money payments: token handling, webhooks, rate limits, and fraud monitoring."
 author: "Bonface Muthoni"
 tags: ["security", "mpesa", "best-practices"]
-cover: "/images/bg-hero.jpg"
+cover: "/images/hero-bg.jpeg"
 ---
 
 ## Threat landscape

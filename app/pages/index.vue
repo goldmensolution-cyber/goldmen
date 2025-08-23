@@ -83,10 +83,10 @@ const steps = [
 const faqs = [
   {
     label: 'Can I send airtime to any network?',
-    content: 'Yes. Mentel supports airtime purchases for all Kenyan networks.'
+    content: 'Yes. goldmen supports airtime purchases for all Kenyan networks.'
   },
   {
-    label: 'Is there a fee for using Mentel?',
+    label: 'Is there a fee for using goldmen?',
     content: 'No extra fee is charged — standard M-Pesa Paybill rates apply.'
   },
   {

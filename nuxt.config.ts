@@ -8,7 +8,8 @@ export default defineNuxtConfig({
     '@nuxt/content',
     '@nuxt/image',
     '@nuxtjs/ngrok',
-    '@nuxthub/core'
+    '@nuxthub/core',
+    'nuxt-auth-utils',
   ]
   , runtimeConfig: {
     // Server-only config

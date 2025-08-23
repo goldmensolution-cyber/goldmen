@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-const { data } = await useFetch('/api/transactions/list.get' )
+const transactions  = await useFetch('/api/mpesa/transactions.list' )
     
 </script>
 
@@ -9,6 +9,6 @@ const { data } = await useFetch('/api/transactions/list.get' )
     <template #header>
         MPesa Transactions
     </template>
-  <UTable :data="data"  class="flex-1" />
+  <UTable :data="transactions.data.value"  class="flex-1" />
   </UCard>
 </template>

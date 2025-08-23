@@ -3,8 +3,8 @@
     <h1>Frequently Asked Questions</h1>
 
     <section>
-      <h2>What is Mentel?</h2>
-      <p>Mentel is a fast and secure platform allowing you to purchase airtime, data bundles, and SMS credits for all major Kenyan networks via M-Pesa Paybill.</p>
+      <h2>What is goldmen?</h2>
+      <p>goldmen is a fast and secure platform allowing you to purchase airtime, data bundles, and SMS credits for all major Kenyan networks via M-Pesa Paybill.</p>
     </section>
     
     <section>
@@ -19,7 +19,7 @@
     
     <section>
       <h2>Are there any service fees?</h2>
-      <p>No—Mentel does not charge extra fees. You pay exactly what you enter, and airtime is delivered instantly.</p>
+      <p>No—goldmen does not charge extra fees. You pay exactly what you enter, and airtime is delivered instantly.</p>
     </section>
     
     <section>

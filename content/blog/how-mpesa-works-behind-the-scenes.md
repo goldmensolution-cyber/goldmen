@@ -5,7 +5,7 @@ date: 2025-08-13
 excerpt: "A technical but approachable explanation of M-Pesa's main flows (Lipa na M-Pesa, Paybill, Buy Goods), and how merchants integrate with Safaricom's APIs."
 author: "Bonface Muthoni"
 tags: ["mpesa", "safaricom", "payments", "overview"]
-cover: "/images/bg-hero.jpg"
+cover: "/images/hero-bg.jpeg"
 ---
 
 ## Overview

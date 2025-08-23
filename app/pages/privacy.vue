@@ -1,7 +1,7 @@
 <template>
   <main class="prose mx-auto py-8">
     <h1>Privacy Policy</h1>
-    <p>Your privacy matters. This policy explains how Mentel handles personal information.</p>
+    <p>Your privacy matters. This policy explains how goldmen handles personal information.</p>
 
     <section>
       <h2>Data We Collect</h2>

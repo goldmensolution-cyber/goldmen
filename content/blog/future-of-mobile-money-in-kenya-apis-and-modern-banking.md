@@ -5,7 +5,7 @@ date: 2025-08-13
 excerpt: "Where mobile money is headed: open APIs, increased interoperability, and what developers should prepare for."
 author: "Bonface Muthoni"
 tags: ["future", "open-banking", "mpesa", "innovation"]
-cover: "/images/bg-hero.jpg"
+cover: "/images/hero-bg.jpeg"
 ---
 
 ## Trends to watch
