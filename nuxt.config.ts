@@ -15,11 +15,12 @@ export default defineNuxtConfig({
     // Server-only config
     mpesa: {
       env: process.env.MPESA_ENV || 'sandbox',
+      baseUrl: process.env.SAFARICOM_BASE_URL || 'sandbox.safaricom.co.ke',
       consumerKey: process.env.MPESA_CONSUMER_KEY || '',
       consumerSecret: process.env.MPESA_CONSUMER_SECRET || '',
       shortcode: process.env.MPESA_SHORTCODE || '',
       passkey: process.env.MPESA_PASSKEY || '',
-      callbackUrl: process.env.MPESA_CALLBACK_URL || 'knowing-husky-reliably.ngrok-free.app',
+      callbackUrl: process.env.MPESA_CALLBACK_URL || 'knowing-husky-reliably.ngrok-free.app/api/mpesa/callback',
     },},
     hub: {
     database: true

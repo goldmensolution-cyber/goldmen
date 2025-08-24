@@ -3,7 +3,7 @@ import type { NavigationMenuItem } from '@nuxt/ui'
 
 const items = ref<NavigationMenuItem[]>([
   [{
-    label: 'Goldmen Telecom',
+    label: 'Goldmen Solutions',
     icon: 'i-lucide-signal',
     to: '/',
     class: 'text-error text-xl font-playfair not-md:visible w-full shrink-0'

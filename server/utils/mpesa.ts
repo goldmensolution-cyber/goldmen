@@ -35,9 +35,10 @@ export function nowTimestamp(): string {
 }
 
 function baseUrl(env: string): string {
-  return env === 'production'
-    ? 'https://api.safaricom.co.ke'
-    : 'https://sandbox.safaricom.co.ke'
+  if (env === 'production') {
+    return 'https://api.safaricom.co.ke'
+  }
+  return 'https://sandbox.safaricom.co.ke'
 }
 
 export async function getAccessToken(): Promise<string> {
@@ -114,7 +115,7 @@ export async function initiateStkPush(params: {
     PartyA: params.phone,
     PartyB: shortcode,
     PhoneNumber: params.phone,
-    CallBackURL: 'https://goldmen.co.ke/api/mpesa/callback',
+    CallBackURL: callbackUrl,
     AccountReference: params.accountReference,
     TransactionDesc: params.description,
   }
