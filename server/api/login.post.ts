@@ -1,12 +1,7 @@
-import { z } from 'zod'
 
-const bodySchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8)
-})
 
 export default defineEventHandler(async (event) => {
-  const { email, password } = await readValidatedBody(event, bodySchema.parse)
+  const { email, password } = await readBody<{ email: string, password: string }>(event)
 
   if (email === 'goldmen.solutions@gmail.com' && password === 'iamtheadmin') {
     // set the user session in the cookie
@@ -20,7 +15,7 @@ export default defineEventHandler(async (event) => {
   }
   throw createError({
     statusCode: 401,
-    message: 'Bad credentials'
+    message: 'Bad credentials'+ email +password
   })
 })
 

@@ -4,8 +4,7 @@ const { data: posts } = await useAsyncData('posts', () => queryCollection('blog'
 
 <template>
   <UPage>
-    <UPageHero title="Blog" />
-
+    <UPageHero title="Blog" description="A Collection of all the blogs"/>
     <UPageBody>
       <UContainer>
         <UBlogPosts>

@@ -15,7 +15,7 @@ export function normalizeMsisdn(input: string): string {
   } else if (msisdn.startsWith('254') && msisdn.length > 12) {
     msisdn = msisdn.slice(0, 12)
   }
-  if (!/^2547\d{8}$/.test(msisdn)) {
+  if (!/^254[17]\d{8}$/.test(msisdn)) {
     throw createError({ statusCode: 400, message: 'Invalid Kenyan phone number.' })
   }
   return msisdn
