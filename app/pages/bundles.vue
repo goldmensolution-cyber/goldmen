@@ -1,5 +1,5 @@
 <script setup lang="ts">
 </script>
 <template>
-  <AirtimeForm/>
+  <p>hello</p>
 </template>

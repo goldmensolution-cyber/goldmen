@@ -3,7 +3,7 @@ import { createError, readBody } from 'h3'
 import { and, eq, useDrizzle, tables  } from '~~/server/utils/drizzle'
 
 import { initiateStkPush, normalizeMsisdn } from '~~/server/utils/mpesa'
-import { publishResult, waitForResult } from '~~/server/utils/waiter'
+import { waitForResult } from '~~/server/utils/waiter'
 import type { InitiateStkPushBody, InitiateStkPushResponse } from '~~/shared/types/mpesa'
 
 export default eventHandler(async (event): Promise<InitiateStkPushResponse> => {
