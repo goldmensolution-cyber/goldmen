@@ -2,10 +2,16 @@
 title: "How M-Pesa Works: Behind the Scenes"
 slug: how-mpesa-works-behind-the-scenes
 date: 2025-08-13
-excerpt: "A technical but approachable explanation of M-Pesa's main flows (Lipa na M-Pesa, Paybill, Buy Goods), and how merchants integrate with Safaricom's APIs."
-author: "Bonface Muthoni"
-tags: ["mpesa", "safaricom", "payments", "overview"]
-cover: "/images/hero-bg.jpeg"
+excerpt: A technical but approachable explanation of M-Pesa's main flows (Lipa
+  na M-Pesa, Paybill, Buy Goods), and how merchants integrate with Safaricom's
+  APIs.
+author: Bonface Muthoni
+tags:
+  - mpesa
+  - safaricom
+  - payments
+  - overview
+cover: /images/hero-bg.jpeg
 ---
 
 ## Overview
