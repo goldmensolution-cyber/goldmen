@@ -114,7 +114,7 @@ export async function initiateStkPush(params: {
     PartyA: params.phone,
     PartyB: shortcode,
     PhoneNumber: params.phone,
-    CallBackURL: 'https://knowing-husky-reliably.ngrok-free.app/api/mpesa/callback',
+    CallBackURL: 'https://goldmen.co.ke/api/mpesa/callback',
     AccountReference: params.accountReference,
     TransactionDesc: params.description,
   }
