@@ -71,7 +71,7 @@ export default eventHandler(async (event): Promise<InitiateStkPushResponse> => {
     if (waited.message.includes('Timeout')) {
       return {
         status: 'TIMEOUT',
-        message: 'No confirmation received yet. You can retry or wait and refresh.',
+        message: waited.message,
         transactionId: pending.id,
         merchantRequestId: waited.merchantRequestId,
         checkoutRequestId: waited.checkoutRequestId,

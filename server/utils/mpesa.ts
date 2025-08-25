@@ -119,6 +119,7 @@ export async function initiateStkPush(params: {
     AccountReference: params.accountReference,
     TransactionDesc: params.description,
   }
+    console.log('STK Push request payload:', payload) // Add this line
 
   const res = await $fetch<StkPushResponse>('/mpesa/stkpush/v1/processrequest', {
     baseURL: baseUrl(env),

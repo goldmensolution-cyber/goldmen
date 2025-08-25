@@ -1,21 +1,29 @@
-
-
+import type { User } from "#auth-utils";
 export default defineEventHandler(async (event) => {
-  const { email, password } = await readBody<{ email: string, password: string }>(event)
-
-  if (email === 'goldmen.solutions@gmail.com' && password === 'iamtheadmin') {
-    // set the user session in the cookie
-    // this server util is auto-imported by the auth-utils module
-    await setUserSession(event, {
-      user: {
-        name: 'bonface Muthoni'
-      }
-    })
-    return {}
+  const storage = useStorage("data");
+  const { email, password } = await readBody(event);
+  const user = await storage.getItem<User & { password?: string }>(email);
+  if (!user) {
+    return createError({
+      statusCode: 400,
+      statusMessage: "Please check your email and password.",
+    });
   }
-  throw createError({
-    statusCode: 401,
-    message: 'Bad credentials'+ email +password
-  })
-})
 
+  const isPasswordValid = await verifyPassword(user?.password || "", password);
+
+  if (!isPasswordValid) {
+    return createError({
+      statusCode: 400,
+      statusMessage: "Please check your email and password.",
+    });
+  }
+
+  delete user.password;
+  await setUserSession(event, {
+    user,
+    loggedInAt: new Date(),
+  });
+
+  return await getUserSession(event);
+});
