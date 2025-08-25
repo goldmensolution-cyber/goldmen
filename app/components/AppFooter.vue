@@ -34,7 +34,7 @@
         <div>
             <h1>Connect With Us</h1>
             <div class="flex flex-col ">
-                <UButton icon="i-logos-facebook" variant="link" to="https://www.facebook.com/bonsus.co.ke"  label="Facebook"/>
+                <UButton icon="i-logos-facebook" variant="link" to="https://web.facebook.com/CreditForAllNetwork"  label="Facebook"/>
                 <UButton icon="i-logos-twitter" variant="link" to="https://x.com/BonsusMwangiLTD" label="Twitter"/>
                 <UButton icon="i-logos-instagram-icon" variant="link" to="https://www.instagram.com/xbonsus/" label="instagram"/>
             </div>
