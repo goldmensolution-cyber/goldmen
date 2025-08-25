@@ -38,6 +38,10 @@ const items = ref<NavigationMenuItem[]>([
     slot: 'main'
 
   }],[
+    {
+      slot: 'signup'
+    },
+    
   {
     slot: 'burger',
     class: 'visible'
@@ -47,7 +51,9 @@ const items = ref<NavigationMenuItem[]>([
 
 <template>
   <UNavigationMenu :items="items" :ui="{linkLabel: 'not-sm:hidden'}" variant="link" class="w-full text-black  bg-neutral justify-between backdrop-blur-3xl z-50" >
-  
+  <template #signup>
+    
+  </template>
     <template #burger>
       <UPopover>
         <UButton 

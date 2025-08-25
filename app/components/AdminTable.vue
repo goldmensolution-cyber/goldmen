@@ -171,7 +171,7 @@ function getHeader(column: Column<Transaction>, label: string) {
 const sorting = ref([
   {
     id: 'id',
-    desc: false
+    desc: true
   }
 ])
 const columnVisibility = ref({
@@ -181,12 +181,13 @@ const pagination = ref({
   pageIndex: 0,
   pageSize: 10
 })
+const { user} = useUserSession()
 </script>
 
 <template>
 <UCard class="w-full">
-    <template #header>
-        MPesa Transactions
+    <template v-if="user" #header>
+      <h1>Transaction Table</h1>
     </template>
     <div class="flex justify-end px-4 py-3.5 border-b  border-accented">
       <UDropdownMenu

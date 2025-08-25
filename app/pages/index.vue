@@ -27,9 +27,14 @@
 
     <!-- Provider Logos Marquee -->
     <section class="bg-gray-50 py-8 overflow-hidden">
-      <div class="whitespace-nowrap animate-scroll px-4 flex items-center w-full gap-12">
-        <NuxtImg v-for="provider in providers" :key="provider" :src="`/images/${provider}`" class="h-12 grayscale hover:grayscale-0 transition" alt="provider logo" />
-      </div>
+      <UMarquee>
+    <UIcon name="i-custom-safaricom" class="size-10 shrink-0" />
+    <UIcon name="i-custom-airtel" class="size-10 shrink-0" />
+    <UIcon name="i-custom-equitel" class="size-10 shrink-0" />
+    <UIcon name="i-custom-telkom" class="size-10 shrink-0" />
+    <UIcon name="i-custom-faiba" class="size-10 shrink-0" />
+    <UIcon name="i-custom-safaricom2" class="size-10 shrink-0" />
+  </UMarquee>
     </section>
 
     <!-- How to Buy Steps -->
@@ -57,13 +62,7 @@
 </template>
 
 <script setup lang="ts">
-const providers = [
-  'safaricom.png',
-  'airtel.jpg',
-  'telkom.png',
-  'faiba.png',
-  'equitel.jpg'
-]
+
 
 const steps = [
   {
@@ -96,12 +95,3 @@ const faqs = [
 ]
 </script>
 
-<style scoped>
-@keyframes scroll {
-  0% { transform: translateX(0%); }
-  100% { transform: translateX(-50%); }
-}
-.animate-scroll {
-  animation: scroll 30s linear infinite;
-}
-</style>

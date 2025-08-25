@@ -25,7 +25,7 @@ const route = useRoute()
 
 watchEffect(() => {
   if (user.value) {
-    const redirect = route.query.redirect || '/'
+    const redirect = route.query.redirect || '/admin'
     router.replace(redirect as string)
   }
 })
