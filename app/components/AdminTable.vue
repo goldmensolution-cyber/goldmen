@@ -3,9 +3,12 @@ import type { Transaction} from '~~/server/utils/drizzle'
 import type {  TableColumn,  } from '@nuxt/ui'
 import { upperFirst } from 'scule'
 import { getPaginationRowModel } from '@tanstack/vue-table'
+import type { Column } from '@tanstack/vue-table'
 
 const UBadge = resolveComponent('UBadge')
+const UButton = resolveComponent('UButton')
 const UCheckbox = resolveComponent('UCheckbox')
+const UDropdownMenu = resolveComponent('UDropdownMenu')
 const table = useTemplateRef('table')
 // const data = ref<Transaction[]>([])
 const { data }  = await useFetch('/api/mpesa/transactions.list',
@@ -36,14 +39,14 @@ const columns: TableColumn<Transaction>[] = [
         'aria-label': 'Select row'
       })
   },
-  {
+{
     accessorKey: 'id',
-    header: '#',
+    header: ({ column }) => getHeader(column, 'ID'),
     cell: ({ row }) => `#${row.getValue('id')}`
   },
   {
     accessorKey: 'createdAt',
-    header: 'Date Created',
+    header: ({ column }) => getHeader(column, 'Date Created'),
     cell: ({ row }) => {
       return new Date(row.getValue('createdAt')).toLocaleString('en-US', {
         day: 'numeric',
@@ -54,22 +57,10 @@ const columns: TableColumn<Transaction>[] = [
       })
     }
   },
-    {
-    accessorKey: 'transactionDate',
-    header: 'Date',
-    cell: ({ row }) => {
-      return new Date(row.getValue('transactionDate')).toLocaleString('en-US', {
-        day: 'numeric',
-        month: 'short',
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false
-      })
-    }
-  },
+    
     {
     accessorKey: 'updatedAt',
-    header: 'Date Created',
+    header: ({ column }) => getHeader(column, 'Date updated'),
     cell: ({ row }) => {
       return new Date(row.getValue('updatedAt')).toLocaleString('en-US', {
         day: 'numeric',
@@ -80,15 +71,15 @@ const columns: TableColumn<Transaction>[] = [
       })
     }
   },
-  {
+ {
     accessorKey: 'status',
-    header: 'Status',
+    header: ({ column }) => getHeader(column, 'Status'),
     cell: ({ row }) => {
       const color = {
         SUCCESS: 'success' as const,
         FAILED: 'error' as const,
-        CANCELLED: 'error' as const,
-        PENDING: 'neutral' as const
+        PENDING: 'neutral' as const,
+        CANCELLED: 'error' as const
       }[row.getValue('status') as string]
 
       return h(UBadge, { class: 'capitalize', variant: 'subtle', color }, () =>
@@ -98,11 +89,15 @@ const columns: TableColumn<Transaction>[] = [
   },
   {
     accessorKey: 'initiatorPhone',
-    header: 'Sender'
+    header: 'Sender Number'
   },
   {
+    accessorKey: 'recipientPhone',
+    header: 'Receiver Number'
+  },
+ {
     accessorKey: 'amount',
-    header: () => h('div', { class: 'text-right' }, 'Amount'),
+    header: ({ column }) => h('div', { class: 'text-right' }, getHeader(column, 'Amount')),
     cell: ({ row }) => {
       const amount = Number.parseFloat(row.getValue('amount'))
 
@@ -113,15 +108,78 @@ const columns: TableColumn<Transaction>[] = [
 
       return h('div', { class: 'text-right font-medium' }, formatted)
     }
+  },
+  {
+    accessorKey: 'description',
+    header: 'Description'
   }
 ]
+function getHeader(column: Column<Transaction>, label: string) {
+  const isSorted = column.getIsSorted()
 
+  return h(
+    UDropdownMenu,
+    {
+      content: {
+        align: 'start'
+      },
+      'aria-label': 'Actions dropdown',
+      items: [
+        {
+          label: 'Asc',
+          type: 'checkbox',
+          icon: 'i-lucide-arrow-up-narrow-wide',
+          checked: isSorted === 'asc',
+          onSelect: () => {
+            if (isSorted === 'asc') {
+              column.clearSorting()
+            } else {
+              column.toggleSorting(false)
+            }
+          }
+        },
+        {
+          label: 'Desc',
+          icon: 'i-lucide-arrow-down-wide-narrow',
+          type: 'checkbox',
+          checked: isSorted === 'desc',
+          onSelect: () => {
+            if (isSorted === 'desc') {
+              column.clearSorting()
+            } else {
+              column.toggleSorting(true)
+            }
+          }
+        }
+      ]
+    },
+    () =>
+      h(UButton, {
+        color: 'neutral',
+        variant: 'ghost',
+        label,
+        icon: isSorted
+          ? isSorted === 'asc'
+            ? 'i-lucide-arrow-up-narrow-wide'
+            : 'i-lucide-arrow-down-wide-narrow'
+          : 'i-lucide-arrow-up-down',
+        class: '-mx-2.5 data-[state=open]:bg-elevated',
+        'aria-label': `Sort by ${isSorted === 'asc' ? 'descending' : 'ascending'}`
+      })
+  )
+}
+const sorting = ref([
+  {
+    id: 'id',
+    desc: false
+  }
+])
 const columnVisibility = ref({
   id: false
 })
 const pagination = ref({
   pageIndex: 0,
-  pageSize: 5
+  pageSize: 10
 })
 </script>
 
@@ -162,6 +220,7 @@ const pagination = ref({
    ref="table"
       v-model:pagination="pagination"
       v-model:column-visibility="columnVisibility"
+      v-model:sorting="sorting"
       :data="data"
       :columns="columns"
       :pagination-options="{

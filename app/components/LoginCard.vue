@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import * as z from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui'
-const {  openInPopup } = useUserSession()
+const { user,  openInPopup } = useUserSession()
 
 const fields = [{
   name: 'email',
@@ -20,6 +20,15 @@ const fields = [{
   type: 'checkbox' as const
 }]
 
+const router = useRouter()
+const route = useRoute()
+
+watchEffect(() => {
+  if (user.value) {
+    const redirect = route.query.redirect || '/'
+    router.replace(redirect as string)
+  }
+})
 const providers = [{
   label: 'Google',
   icon: 'i-simple-icons-google',
