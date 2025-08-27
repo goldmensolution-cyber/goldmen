@@ -252,9 +252,13 @@ const canSubmit = computed(() => initiatorMeta.value.key === 'safaricom')
   <UCard class="max-w-2xl mx-auto">
     <div class="space-y-6">
       <!-- Info panel with steps -->
-      <UCard variant="soft" color="primary" icon="i-heroicons-information-circle">
+      <UAlert 
+      variant="soft" 
+      color="primary" 
+      icon="i-heroicons-information-circle"
+      title="How to pay with M-Pesa (STK Push)">
+        <template #description>
         <div class="space-y-2">
-          <p class="font-medium">How to pay with M-Pesa (STK Push)</p>
           <ol class="list-decimal pl-5 space-y-1 text-sm text-muted-foreground">
             <li>Enter the recipient phone and amount.</li>
             <li>Enter your Safaricom number (payer) and tap Pay.</li>
@@ -265,7 +269,8 @@ const canSubmit = computed(() => initiatorMeta.value.key === 'safaricom')
             Tips: Phone formats accepted include 07XXXXXXXX, 7XXXXXXXX, 2547XXXXXXXX, +2547XXXXXXXX.
           </p>
         </div>
-      </UCard>
+        </template>
+      </UAlert>
 
       <!-- Real-time status while waiting -->
       <div v-if="waiting" class="rounded-lg border p-4 space-y-3">
@@ -285,18 +290,18 @@ const canSubmit = computed(() => initiatorMeta.value.key === 'safaricom')
         v-if="feedback.kind !== 'idle'"
         :color="feedback.kind === 'success' ? 'success' : feedback.kind === 'warning' ? 'warning' : feedback.kind === 'info' ? 'primary' : 'error'"
         :icon="feedback.kind === 'success' ? 'i-heroicons-check-circle' : feedback.kind === 'warning' ? 'i-heroicons-exclamation-triangle' : feedback.kind === 'info' ? 'i-heroicons-information-circle' : 'i-heroicons-x-circle'"
-      >
-        <div class="space-y-1">
-          <p class="font-medium">{{ feedback.title }}</p>
+      :title="feedback.title "
+        >
+          <template #description>
           <p class="text-sm text-muted-foreground">{{ feedback.message }}</p>
           <p v-if="feedback.receipt" class="text-sm"><span class="font-medium">Receipt:</span> {{ feedback.receipt }}</p>
           <p v-if="feedback.details" class="text-xs text-muted-foreground">{{ feedback.details }}</p>
-        </div>
+          </template>
       </UAlert>
 
       <USeparator />
 
-      <UForm :schema="schema" :state="state" @submit="onSubmit" class="space-y-6">
+      <UForm :schema="schema" :state="state" class="space-y-6" @submit="onSubmit">
         <!-- Recipient -->
         <UFormField name="accountPhone" label="Recipient phone">
           <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
@@ -381,7 +386,7 @@ const canSubmit = computed(() => initiatorMeta.value.key === 'safaricom')
               Enter a Safaricom number in the payer field to enable payment.
             </template>
           </UTooltip>
-          <UButton variant="ghost" color="neutral" @click="resetFeedback()" :disabled="submitting || waiting">
+          <UButton variant="ghost" color="neutral" :disabled="submitting || waiting" @click="resetFeedback()">
             Clear status
           </UButton>
         </div>
