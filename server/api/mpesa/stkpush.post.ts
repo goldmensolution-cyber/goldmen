@@ -20,7 +20,11 @@ export default eventHandler(async (event): Promise<InitiateStkPushResponse> => {
   const initiatorPhone = normalizeMsisdn(body.initiatorPhone)
   const accountPhone = normalizeMsisdn(body.accountPhone)
   const amount = body.amount
-  const reference = body.reference?.trim() || accountPhone
+  // Remove country code (assume starts with '254') and replace with '0'
+  const localAccountPhone = accountPhone.startsWith('254')
+    ? '0' + accountPhone.slice(3)
+    : accountPhone
+  const reference = body.reference?.trim() || localAccountPhone
   const description = body.description?.trim() || `Payment for ${accountPhone}`
 
   const db = useDrizzle()

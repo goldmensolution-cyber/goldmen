@@ -8,7 +8,7 @@ export function normalizeMsisdn(input: string): string {
   let msisdn = input.trim().replace(/[^0-9]/g, '')
   if (msisdn.startsWith('0')) {
     msisdn = `254${msisdn.slice(1)}`
-  } else if (msisdn.startsWith('7') && msisdn.length === 9) {
+  } else if ((msisdn.startsWith('7') || msisdn.startsWith('1')) && msisdn.length === 9) {
     msisdn = `254${msisdn}`
   } else if (msisdn.startsWith('254') && msisdn.length === 12) {
     // already normalized
