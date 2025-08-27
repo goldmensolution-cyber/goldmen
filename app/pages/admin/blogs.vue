@@ -1,5 +1,5 @@
 <script setup lang="ts">
 </script>
 <template>
-  <div>blog Admin</div>
+  <div>blog Admin user</div>
 </template>
