@@ -3,7 +3,7 @@ import { ref, reactive, computed, watch } from 'vue'
 import { z } from 'zod'
 import type { FormSubmitEvent } from '#ui/types'
 import { useToast } from '#imports'
-
+import { vMaska } from 'maska/vue'
 // --- Types ---
 type ApiResponse = {
   status: 'SUCCESS' | 'FAILED' | 'TIMEOUT' | 'ALREADY_PAID'
@@ -36,10 +36,10 @@ function detectProvider(input: string): { key: string, label: string, color: Bad
     return { key: 'faiba', label: 'Faiba', color: 'info', icon: 'i-heroicons-signal-20-solid' }
   }
   if (['070', '071', '072', '074', '079'].includes(p3) || local.startsWith('011')) {
-    return { key: 'safaricom', label: 'Safaricom', color: 'primary', icon: 'i-heroicons-sparkles-20-solid' }
+    return { key: 'safaricom', label: 'Safaricom', color: 'primary', icon: 'i-custom-safaricom' }
   }
   if (p3 === '073' || p3 === '075' || local.startsWith('010')) {
-    return { key: 'airtel', label: 'Airtel', color: 'error', icon: 'i-heroicons-bolt-20-solid' }
+    return { key: 'airtel', label: 'Airtel', color: 'error', icon: 'i-custom-airtel' }
   }
   if (p3 === '077') {
     return { key: 'telkom', label: 'Telkom', color: 'warning', icon: 'i-heroicons-signal-20-solid' }
@@ -75,7 +75,6 @@ const schema = z.object({
     .positive('Amount must be greater than 0')
     .max(150000, 'Amount cannot exceed KES 150,000'),
   reference: z.string().optional(),
-  description: z.string().optional()
 })
 
 type FormState = z.infer<typeof schema>
@@ -86,7 +85,6 @@ const state = reactive<FormState>({
   initiatorPhone: '',
   amount: 100,
   reference: '',
-  description: ''
 })
 
 const submitting = ref(false)
@@ -220,7 +218,6 @@ async function onSubmit(e: FormSubmitEvent<FormState>) {
         accountPhone: data.accountPhone,
         amount: data.amount,
         reference: data.reference,
-        description: data.description
       }
     })
 
@@ -250,6 +247,10 @@ const canSubmit = computed(() => initiatorMeta.value.key === 'safaricom')
 
 <template>
   <UCard class="max-w-2xl mx-auto">
+    <template #header>
+      <h1>Buy Airtime</h1>
+    </template>
+    
     <div class="space-y-6">
       <!-- Info panel with steps -->
       <UAlert 
@@ -302,77 +303,53 @@ const canSubmit = computed(() => initiatorMeta.value.key === 'safaricom')
       <USeparator />
 
       <UForm :schema="schema" :state="state" class="space-y-6" @submit="onSubmit">
+         <!-- Payer -->
+        <UFormField name="initiatorPhone" help="You will receive mpesa PIN prompt here" label="Your M-Pesa number (payer)">
+              <UInput
+                v-model="state.initiatorPhone"
+                v-maska="'# ### ### ###'" 
+                placeholder="0 723 456 789"       
+                 icon="i-heroicons-device-phone-mobile"
+                autocomplete="tel"
+                inputmode="tel"
+              >
+            <template #trailing>
+              <UBadge 
+              :color="initiatorMeta.color"
+               variant="subtle"
+               size="xs"
+                 :icon="initiatorMeta.icon" 
+                 :label="initiatorMeta.label" 
+                 />
+               
+              </template>
+              </UInput>
+        </UFormField>
         <!-- Recipient -->
-        <UFormField name="accountPhone" label="Recipient phone">
-          <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
-            <div class="sm:col-span-2">
+        <UFormField name="accountPhone" help="The phone number for the account to credit." label="Recipient phone">
               <UInput
                 v-model="state.accountPhone"
-                placeholder="07XX XXX XXX"
+                v-maska="'# ### ### ###'" 
+                placeholder="0 723 456 789"   
                 icon="i-heroicons-user-circle"
                 autocomplete="tel"
                 inputmode="tel"
+              >
+              <template #trailing>
+              <UBadge 
+              :color="accountMeta.color" variant="subtle"
+               :icon="accountMeta.icon" size="xs" :label="accountMeta.label" 
               />
-              <p class="mt-1 text-xs text-muted-foreground">
-                The phone number for the account to credit.
-              </p>
-            </div>
-            <div class="sm:col-span-1 flex items-center gap-2">
-              <UBadge :color="accountMeta.color" variant="subtle">
-                <UIcon :name="accountMeta.icon" class="mr-1" />
-                {{ accountMeta.label }}
-              </UBadge>
-              <span class="text-xs text-muted-foreground ml-auto">{{ toLocal(state.accountPhone) || '—' }}</span>
-            </div>
-          </div>
+              </template>
+              </UInput>
         </UFormField>
 
         <!-- Amount -->
-        <UFormField name="amount" label="Amount (KES)">
-          <div class="max-w-xs">
+        <UFormField name="amount" help="Specify a whole number" label="Amount (KES)">
             <UInputNumber v-model="state.amount" :min="1" :max="150000" :step="1" />
-            <p class="mt-1 text-xs text-muted-foreground">Maximum KES 150,000 per transaction.</p>
-          </div>
         </UFormField>
-
         <USeparator />
-
-        <!-- Payer -->
-        <UFormField name="initiatorPhone" label="Your M-Pesa number (payer)">
-          <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
-            <div class="sm:col-span-2">
-              <UInput
-                v-model="state.initiatorPhone"
-                placeholder="07XX XXX XXX (Safaricom)"
-                icon="i-heroicons-device-phone-mobile"
-                autocomplete="tel"
-                inputmode="tel"
-              />
-              <p class="mt-1 text-xs text-muted-foreground">
-                STK Push works only on Safaricom lines.
-              </p>
-            </div>
-            <div class="sm:col-span-1 flex items-center gap-2">
-              <UBadge :color="initiatorMeta.color" variant="subtle">
-                <UIcon :name="initiatorMeta.icon" class="mr-1" />
-                {{ initiatorMeta.label }}
-              </UBadge>
-              <span class="text-xs text-muted-foreground ml-auto">{{ toLocal(state.initiatorPhone) || '—' }}</span>
-            </div>
-          </div>
-        </UFormField>
-
-        <!-- Optional details -->
-        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <UFormField name="reference" label="Reference (optional)">
-            <UInput v-model="state.reference" placeholder="e.g. Account or phone" />
-            <p class="mt-1 text-xs text-muted-foreground">Defaults to the recipient phone if left empty.</p>
-          </UFormField>
-          <UFormField name="description" label="Description (optional)">
-            <UInput v-model="state.description" placeholder="e.g. Airtime purchase" />
-          </UFormField>
-        </div>
-
+       
         <!-- Actions -->
         <div class="flex items-center gap-3">
           <UButton type="submit" :disabled="!canSubmit || submitting" :loading="submitting">
