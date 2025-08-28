@@ -1,7 +1,7 @@
 <template>
   <div class="w-full">
     <!-- Hero Section -->
-    <section class="relative h-[90vh] bg-cover bg-center text-white" :style="{ backgroundImage: `url('/images/hero-bg.jpeg')` }">
+    <section class="relative h-[90vh] bg-cover bg-center text-white" :style="{ backgroundImage: `url('/AI Man and Woman 6.jpeg')` }">
       <div class="absolute inset-0 bg-black/50"/>
       <div class="relative z-10 flex flex-col items-center justify-center h-full text-center px-4">
         <h1 class="text-4xl sm:text-6xl font-bold leading-tight max-w-3xl">
