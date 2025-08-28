@@ -28,28 +28,71 @@ function toLocal(msisdn: string) {
 }
 type BadgeColor = "error" | "info" | "primary" | "warning" | "neutral" | "success" | "secondary" | undefined
 
+// ...existing code...
 function detectProvider(input: string): { key: string, label: string, color: BadgeColor, icon: string } {
   const local = toLocal(input)
-  const p3 = local.slice(0, 3)
   const p4 = local.slice(0, 4)
-  if (p4 === '0747' || p4 === '0748') {
-    return { key: 'faiba', label: 'Faiba', color: 'info', icon: 'i-heroicons-signal-20-solid' }
-  }
-  if (['070', '071', '072', '074', '079'].includes(p3) || local.startsWith('011')) {
+  // const p3 = local.slice(0, 3)
+
+  // Safaricom prefixes
+  const safaricom = [
+    // 0110-0115
+    ...Array.from({length: 6}, (_, i) => `011${i}`),
+    // 0700-0729
+    ...Array.from({length: 30}, (_, i) => `07${(i<10?'0':'')}${i}`),
+    // 0745-0746, 0748
+    '0745', '0746', '0748',
+    // 0757-0759
+    '0757', '0758', '0759',
+    // 0768-0769
+    '0768', '0769',
+    // 0790-0799
+    ...Array.from({length: 10}, (_, i) => `079${i}`)
+  ]
+  // Airtel prefixes
+  const airtel = [
+    // 0100-0106
+    ...Array.from({length: 7}, (_, i) => `010${i}`),
+    // 0740-0743
+    ...Array.from({length: 4}, (_, i) => `074${i}`),
+    // 0750-0756
+    ...Array.from({length: 7}, (_, i) => `075${i}`),
+    // 0762, 0767
+    '0762', '0767',
+    // 0780-0789
+    ...Array.from({length: 10}, (_, i) => `078${i}`)
+  ]
+  // Telkom prefixes
+  const telkom = [
+    ...Array.from({length: 10}, (_, i) => `077${i}`)
+  ]
+  // Faiba (Jamii Telecom)
+  const faiba = ['0747']
+  // Equitel (Finserve)
+  const equitel = ['0763', '0764', '0765', '0766']
+
+  if (safaricom.includes(p4)) {
     return { key: 'safaricom', label: 'Safaricom', color: 'primary', icon: 'i-custom-safaricom' }
   }
-  if (p3 === '073' || p3 === '075' || local.startsWith('010')) {
+  if (airtel.includes(p4)) {
     return { key: 'airtel', label: 'Airtel', color: 'error', icon: 'i-custom-airtel' }
   }
-  if (p3 === '077') {
-    return { key: 'telkom', label: 'Telkom', color: 'warning', icon: 'i-heroicons-signal-20-solid' }
+  if (telkom.includes(p4)) {
+    return { key: 'telkom', label: 'Telkom', color: 'warning', icon: 'i-custom-telkom' }
   }
-  if (p3 === '076') {
-    // Changed 'violet' to 'secondary' to match allowed BadgeColor types
-    return { key: 'equitel', label: 'Equitel', color: 'secondary', icon: 'i-heroicons-banknotes-20-solid' }
+  if (faiba.includes(p4)) {
+    return { key: 'faiba', label: 'Faiba 4G', color: 'info', icon: 'i-custom-faiba' }
+  }
+  if (equitel.includes(p4)) {
+    return { key: 'equitel', label: 'Equitel', color: 'secondary', icon: 'i-custom-equitel' }
+  }
+  // Other known but less common prefixes (optional)
+  if (['0120', '0124', '0126', '0128', '0130', '0744', '0760', '0761'].includes(p4)) {
+    return { key: 'other', label: 'Other', color: 'neutral', icon: 'i-heroicons-question-mark-circle' }
   }
   return { key: 'unknown', label: 'Unknown', color: 'neutral', icon: 'i-heroicons-question-mark-circle' }
 }
+// ...existing code...
 function isLikelyKenyanMobile(input: string) {
   const d = onlyDigits(input)
   if (d.startsWith('0')) return /^0(7|1)\d{8}$/.test(d)
@@ -74,7 +117,6 @@ const schema = z.object({
     .int('Amount must be a whole number')
     .positive('Amount must be greater than 0')
     .max(150000, 'Amount cannot exceed KES 150,000'),
-  reference: z.string().optional(),
 })
 
 type FormState = z.infer<typeof schema>
@@ -83,8 +125,7 @@ type FormState = z.infer<typeof schema>
 const state = reactive<FormState>({
   accountPhone: '',
   initiatorPhone: '',
-  amount: 100,
-  reference: '',
+  amount: 10,
 })
 
 const submitting = ref(false)
@@ -96,15 +137,7 @@ const initiatorMeta = computed(() => detectProvider(state.initiatorPhone))
 const accountMeta = computed(() => detectProvider(state.accountPhone))
 
 // --- Reference autofill ---
-const referenceDirty = ref(false)
-watch(() => state.accountPhone, (v) => {
-  if (!referenceDirty.value) {
-    state.reference = toLocal(v) || ''
-  }
-})
-watch(() => state.reference, () => {
-  referenceDirty.value = true
-})
+
 
 // --- Persist last used values ---
 if (import.meta.client) {
@@ -217,7 +250,6 @@ async function onSubmit(e: FormSubmitEvent<FormState>) {
         initiatorPhone: data.initiatorPhone,
         accountPhone: data.accountPhone,
         amount: data.amount,
-        reference: data.reference,
       }
     })
 
@@ -241,12 +273,36 @@ async function onSubmit(e: FormSubmitEvent<FormState>) {
     submitting.value = false
   }
 }
-
+const open = ref(false)
 const canSubmit = computed(() => initiatorMeta.value.key === 'safaricom')
+// Add a wrapper for the actual submit logic
+async function handleConfirmedSubmit(e: FormSubmitEvent<FormState>) {
+  open.value = false
+  await onSubmit(e)
+}
+
+// Intercept submit to show modal instead of submitting directly
+function onFormSubmit(e: FormSubmitEvent<FormState>, nativeEvent?: Event) {
+  nativeEvent?.preventDefault?.()
+  open.value = true
+  // Store event for later use
+  lastFormEvent.value = e
+}
+function cancelModal() {
+  open.value = false
+}
+// Store the last form event for confirmation
+const lastFormEvent = ref<FormSubmitEvent<FormState> | null>(null)
+
+function confirmAndSubmit() {
+  if (lastFormEvent.value) {
+    handleConfirmedSubmit(lastFormEvent.value)
+  }
+}
 </script>
 
 <template>
-  <UCard class="max-w-2xl mx-auto">
+  <UCard class="max-w-2xl mx-auto mt-8">
     <template #header>
       <h1>Buy Airtime</h1>
     </template>
@@ -302,13 +358,13 @@ const canSubmit = computed(() => initiatorMeta.value.key === 'safaricom')
 
       <USeparator />
 
-      <UForm :schema="schema" :state="state" class="space-y-6" @submit="onSubmit">
+      <UForm :schema="schema" :state="state" class="space-y-6" @submit="onFormSubmit($event, $event?.event)">
          <!-- Payer -->
-        <UFormField name="initiatorPhone" help="You will receive mpesa PIN prompt here" label="Your M-Pesa number (payer)">
+        <UFormField name="initiatorPhone" help="You will receive mpesa PIN prompt here" label="Your M-Pesa number (payer)" required>
               <UInput
                 v-model="state.initiatorPhone"
-                v-maska="'# ### ### ###'" 
-                placeholder="0 723 456 789"       
+                v-maska="'#### ### ###'" 
+                placeholder="0723 456 789"       
                  icon="i-heroicons-device-phone-mobile"
                 autocomplete="tel"
                 inputmode="tel"
@@ -326,11 +382,11 @@ const canSubmit = computed(() => initiatorMeta.value.key === 'safaricom')
               </UInput>
         </UFormField>
         <!-- Recipient -->
-        <UFormField name="accountPhone" help="The phone number for the account to credit." label="Recipient phone">
+        <UFormField name="accountPhone" help="The phone number receiving the airtime(could be same as above)" label="Recipient phone">
               <UInput
                 v-model="state.accountPhone"
-                v-maska="'# ### ### ###'" 
-                placeholder="0 723 456 789"   
+                v-maska="'#### ### ###'" 
+                placeholder="0723 456 789"   
                 icon="i-heroicons-user-circle"
                 autocomplete="tel"
                 inputmode="tel"
@@ -345,7 +401,7 @@ const canSubmit = computed(() => initiatorMeta.value.key === 'safaricom')
         </UFormField>
 
         <!-- Amount -->
-        <UFormField name="amount" help="Specify a whole number" label="Amount (KES)">
+        <UFormField name="amount" help="Specify a whole number" label="Amount (KES)" required>
             <UInputNumber v-model="state.amount" :min="1" :max="150000" :step="1" />
         </UFormField>
         <USeparator />
@@ -355,14 +411,6 @@ const canSubmit = computed(() => initiatorMeta.value.key === 'safaricom')
           <UButton type="submit" :disabled="!canSubmit || submitting" :loading="submitting">
             Pay with M-Pesa
           </UButton>
-          <UTooltip v-if="!canSubmit">
-            <template #trigger>
-              <UBadge color="warning" variant="subtle">Safaricom required for STK</UBadge>
-            </template>
-            <template #content>
-              Enter a Safaricom number in the payer field to enable payment.
-            </template>
-          </UTooltip>
           <UButton variant="ghost" color="neutral" :disabled="submitting || waiting" @click="resetFeedback()">
             Clear status
           </UButton>
@@ -370,6 +418,26 @@ const canSubmit = computed(() => initiatorMeta.value.key === 'safaricom')
       </UForm>
 
       <USeparator />
+  <UModal v-model:open="open">
+  <template #body>
+    <div class="space-y-2">
+      <p class="font-medium">Confirm Payment</p>
+      <p>
+        Send <span class="font-semibold">KES {{ state.amount }}</span> airtime to
+        <span class="font-semibold">{{ toLocal(state.accountPhone) }}</span>
+        from <span class="font-semibold">{{ toLocal(state.initiatorPhone) }}</span>?
+      </p>
+    </div>
+  </template>
+  <template #footer>
+    <UButton color="primary" :loading="submitting" @click="confirmAndSubmit">
+      Confirm
+    </UButton>
+    <UButton variant="ghost" color="neutral" :disabled="submitting" @click="cancelModal">
+      Cancel
+    </UButton>
+  </template>
+</UModal>
 
       <p class="text-xs text-muted-foreground">
         By proceeding you agree to the processing of the provided data to complete your payment securely.
@@ -377,7 +445,3 @@ const canSubmit = computed(() => initiatorMeta.value.key === 'safaricom')
     </div>
   </UCard>
 </template>
-
-<style scoped>
-/* Minimal tweaks for spacing; Nuxt UI handles most styles */
-</style>
