@@ -6,7 +6,7 @@ import { useToast } from '#imports'
 import { vMaska } from 'maska/vue'
 // --- Types ---
 type ApiResponse = {
-  status: 'SUCCESS' | 'FAILED' | 'TIMEOUT' | 'ALREADY_PAID'
+  status: 'SUCCESS' | 'FAILED' | 'TIMEOUT' | 'ALREADY_PAID' | 'CANCELLED'
   message: string
   transactionId: string | number
   merchantRequestId?: string
@@ -15,6 +15,9 @@ type ApiResponse = {
   resultCode?: number
   resultDesc?: string
 }
+
+// Store the last transactionId after submit
+const lastTransactionId = ref<number | null>(null)
 
 // --- Utilities ---
 function onlyDigits(s: string) {
@@ -252,6 +255,9 @@ async function onSubmit(e: FormSubmitEvent<FormState>) {
         amount: data.amount,
       }
     })
+    // Store transactionId for polling
+    lastTransactionId.value = typeof res.transactionId === 'string' ? parseInt(res.transactionId) : res.transactionId
+
 
     stopCountdown()
     waiting.value = false
@@ -273,6 +279,16 @@ async function onSubmit(e: FormSubmitEvent<FormState>) {
     submitting.value = false
   }
 }
+// Watch countdown for timeout and start polling
+watch(countdown, (val) => {
+  if (val <= 0 && waiting.value && lastTransactionId.value) {
+    waiting.value = false
+    feedback.kind = 'warning'
+    feedback.title = 'Still waiting for confirmation'
+    feedback.message = 'No response from M-Pesa yet. Checking status...'
+    startPollingStatus(lastTransactionId.value)
+  }
+})
 const open = ref(false)
 const canSubmit = computed(() => initiatorMeta.value.key === 'safaricom')
 // Add a wrapper for the actual submit logic
@@ -298,6 +314,26 @@ function confirmAndSubmit() {
   if (lastFormEvent.value) {
     handleConfirmedSubmit(lastFormEvent.value)
   }
+}
+const pollInterval = ref<NodeJS.Timeout | null>(null)
+
+function startPollingStatus(transactionId: number) {
+  stopPollingStatus()
+  pollInterval.value = setInterval(async () => {
+    const res = await $fetch<ApiResponse>(`/api/mpesa/transaction-status?id=${transactionId}`)
+    if (res.status === 'SUCCESS' || res.status === 'FAILED' || res.status === 'CANCELLED') {
+      stopPollingStatus()
+      waiting.value = false
+      feedback.kind = res.status === 'SUCCESS' ? 'success' : 'error'
+      feedback.title = res.status === 'SUCCESS' ? 'Payment successful' : 'Payment failed'
+      feedback.message = res.resultDesc || (res.status === 'SUCCESS' ? 'Paid' : 'Failed')
+      feedback.receipt = res.mpesaReceiptNumber
+    }
+  }, 4000)
+}
+function stopPollingStatus() {
+  if (pollInterval.value) clearInterval(pollInterval.value)
+  pollInterval.value = null
 }
 </script>
 
