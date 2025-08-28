@@ -10,7 +10,7 @@ tags:
   - debugging
   - stkpush
   - errors
-cover: /images/equitel.jpg
+cover: /AI Man and Woman 6.jpeg
 ---
 
 ## Typical lifecycle
