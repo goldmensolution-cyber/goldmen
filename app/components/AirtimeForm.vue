@@ -238,7 +238,7 @@ async function onSubmit(e: FormSubmitEvent<FormState>) {
   resetFeedback()
   submitting.value = true
   waiting.value = true
-  startCountdown(60)
+  startCountdown(10)
 
   toast.add({
     title: 'STK Push sent',
@@ -257,7 +257,7 @@ async function onSubmit(e: FormSubmitEvent<FormState>) {
     })
     // Store transactionId for polling
     lastTransactionId.value = typeof res.transactionId === 'string' ? parseInt(res.transactionId) : res.transactionId
-
+    console.log('response: ' +  res.message)
 
     stopCountdown()
     waiting.value = false
@@ -323,6 +323,7 @@ function startPollingStatus(transactionId: number) {
     const res = await $fetch<ApiResponse>(`/api/mpesa/transaction-status?id=${transactionId}`)
     if (res.status === 'SUCCESS' || res.status === 'FAILED' || res.status === 'CANCELLED') {
       stopPollingStatus()
+      console.log('polling:'+ feedback)
       waiting.value = false
       feedback.kind = res.status === 'SUCCESS' ? 'success' : 'error'
       feedback.title = res.status === 'SUCCESS' ? 'Payment successful' : 'Payment failed'
@@ -340,7 +341,7 @@ function stopPollingStatus() {
 <template>
   <UCard class="max-w-2xl mx-auto mt-8">
     <template #header>
-      <h1>Buy Airtime</h1>
+      <h1 class="text-center font-extrabold text-6xl">Buy Airtime</h1>
     </template>
     
     <div class="space-y-6">
@@ -394,7 +395,7 @@ function stopPollingStatus() {
 
       <USeparator />
 
-      <UForm :schema="schema" :state="state" class="space-y-6" @submit="onFormSubmit($event, $event?.event)">
+      <UForm :schema="schema" :state="state" class="space-y-6 grid grid-cols-1 sm:grid-cols-2" @submit="onFormSubmit($event, $event?.event)">
          <!-- Payer -->
         <UFormField name="initiatorPhone" help="You will receive mpesa PIN prompt here" label="Your M-Pesa number (payer)" required>
               <UInput
@@ -418,7 +419,7 @@ function stopPollingStatus() {
               </UInput>
         </UFormField>
         <!-- Recipient -->
-        <UFormField name="accountPhone" help="The phone number receiving the airtime(could be same as above)" label="Recipient phone">
+        <UFormField name="accountPhone" help="The phone number receiving the airtime(could be same as above)" label="Recipient phone" required>
               <UInput
                 v-model="state.accountPhone"
                 v-maska="'#### ### ###'" 
@@ -437,13 +438,12 @@ function stopPollingStatus() {
         </UFormField>
 
         <!-- Amount -->
-        <UFormField name="amount" help="Specify a whole number" label="Amount (KES)" required>
+        <UFormField name="amount" help="Specify a whole number" label="Amount (KES)" required class="sm:col-span-2">
             <UInputNumber v-model="state.amount" :min="1" :max="150000" :step="1" />
         </UFormField>
-        <USeparator />
        
         <!-- Actions -->
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-3 w-full">
           <UButton type="submit" :disabled="!canSubmit || submitting" :loading="submitting">
             Pay with M-Pesa
           </UButton>
@@ -454,10 +454,12 @@ function stopPollingStatus() {
       </UForm>
 
       <USeparator />
-  <UModal v-model:open="open">
+  <UModal 
+  v-model:open="open"
+  title="Confirm Payment">
+    
   <template #body>
     <div class="space-y-2">
-      <p class="font-medium">Confirm Payment</p>
       <p>
         Send <span class="font-semibold">KES {{ state.amount }}</span> airtime to
         <span class="font-semibold">{{ toLocal(state.accountPhone) }}</span>
