@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { ref, reactive, computed, watch } from 'vue'
+import { ref, reactive, computed, } from 'vue'
 import { z } from 'zod'
 import type { FormSubmitEvent } from '#ui/types'
 import { useToast } from '#imports'
 import { vMaska } from 'maska/vue'
+
 // --- Types ---
 type ApiResponse = {
   status: 'SUCCESS' | 'FAILED' | 'TIMEOUT' | 'ALREADY_PAID' | 'CANCELLED'
@@ -16,8 +17,7 @@ type ApiResponse = {
   resultDesc?: string
 }
 
-// Store the last transactionId after submit
-const lastTransactionId = ref<number | null>(null)
+type BadgeColor = "error" | "info" | "primary" | "warning" | "neutral" | "success" | "secondary" | undefined
 
 // --- Utilities ---
 function onlyDigits(s: string) {
@@ -29,313 +29,205 @@ function toLocal(msisdn: string) {
   if (d.startsWith('7') && d.length === 9) d = '0' + d
   return d
 }
-type BadgeColor = "error" | "info" | "primary" | "warning" | "neutral" | "success" | "secondary" | undefined
-
-// ...existing code...
 function detectProvider(input: string): { key: string, label: string, color: BadgeColor, icon: string } {
   const local = toLocal(input)
   const p4 = local.slice(0, 4)
-  // const p3 = local.slice(0, 3)
-
-  // Safaricom prefixes
-  const safaricom = [
-    // 0110-0115
-    ...Array.from({length: 6}, (_, i) => `011${i}`),
-    // 0700-0729
-    ...Array.from({length: 30}, (_, i) => `07${(i<10?'0':'')}${i}`),
-    // 0745-0746, 0748
-    '0745', '0746', '0748',
-    // 0757-0759
-    '0757', '0758', '0759',
-    // 0768-0769
-    '0768', '0769',
-    // 0790-0799
-    ...Array.from({length: 10}, (_, i) => `079${i}`)
-  ]
-  // Airtel prefixes
-  const airtel = [
-    // 0100-0106
-    ...Array.from({length: 7}, (_, i) => `010${i}`),
-    // 0740-0743
-    ...Array.from({length: 4}, (_, i) => `074${i}`),
-    // 0750-0756
-    ...Array.from({length: 7}, (_, i) => `075${i}`),
-    // 0762, 0767
-    '0762', '0767',
-    // 0780-0789
-    ...Array.from({length: 10}, (_, i) => `078${i}`)
-  ]
-  // Telkom prefixes
-  const telkom = [
-    ...Array.from({length: 10}, (_, i) => `077${i}`)
-  ]
-  // Faiba (Jamii Telecom)
+  // Example prefixes (fill in as needed)
+  const safaricom = ['0701', '0702', '0711', '0722', '0740', '0790']
+  const airtel = ['0731', '0757', '0785']
+  const telkom = ['0770', '0771']
   const faiba = ['0747']
-  // Equitel (Finserve)
   const equitel = ['0763', '0764', '0765', '0766']
 
-  if (safaricom.includes(p4)) {
-    return { key: 'safaricom', label: 'Safaricom', color: 'primary', icon: 'i-custom-safaricom' }
-  }
-  if (airtel.includes(p4)) {
-    return { key: 'airtel', label: 'Airtel', color: 'error', icon: 'i-custom-airtel' }
-  }
-  if (telkom.includes(p4)) {
-    return { key: 'telkom', label: 'Telkom', color: 'warning', icon: 'i-custom-telkom' }
-  }
-  if (faiba.includes(p4)) {
-    return { key: 'faiba', label: 'Faiba 4G', color: 'info', icon: 'i-custom-faiba' }
-  }
-  if (equitel.includes(p4)) {
-    return { key: 'equitel', label: 'Equitel', color: 'secondary', icon: 'i-custom-equitel' }
-  }
-  // Other known but less common prefixes (optional)
-  if (['0120', '0124', '0126', '0128', '0130', '0744', '0760', '0761'].includes(p4)) {
-    return { key: 'other', label: 'Other', color: 'neutral', icon: 'i-heroicons-question-mark-circle' }
-  }
-  return { key: 'unknown', label: 'Unknown', color: 'neutral', icon: 'i-heroicons-question-mark-circle' }
+  if (safaricom.includes(p4)) return { key: 'safaricom', label: 'Safaricom', color: 'success', icon: 'custom:safaricom' }
+  if (airtel.includes(p4)) return { key: 'airtel', label: 'Airtel', color: 'primary', icon: 'custom:airtel' }
+  if (telkom.includes(p4)) return { key: 'telkom', label: 'Telkom', color: 'warning', icon: 'custom:telkom' }
+  if (faiba.includes(p4)) return { key: 'faiba', label: 'Faiba', color: 'info', icon: 'custom:faiba' }
+  if (equitel.includes(p4)) return { key: 'equitel', label: 'Equitel', color: 'secondary', icon: 'custom:equitel' }
+  return { key: '', label: 'Unknown', color: 'neutral', icon: 'i-heroicons-question-mark-circle' }
 }
-// ...existing code...
 function isLikelyKenyanMobile(input: string) {
   const d = onlyDigits(input)
-  if (d.startsWith('0')) return /^0(7|1)\d{8}$/.test(d)
-  if (d.startsWith('254')) return /^254(7|1)\d{8}$/.test(d)
-  if (d.startsWith('7') || d.startsWith('1')) return /^(7|1)\d{8}$/.test(d)
-  return false
+  return /^0[17]\d{8}$/.test(d) || /^254[17]\d{8}$/.test(d)
 }
-function isSafaricom(input: string) {
-  return detectProvider(input).key === 'safaricom'
-}
+// function isSafaricom(input: string) {
+//   return detectProvider(input).key === 'safaricom'
+// }
 
 // --- Zod Schema ---
 const schema = z.object({
-  accountPhone: z.string()
-    .min(9, 'Enter a valid Kenyan mobile number')
-    .refine(isLikelyKenyanMobile, 'Enter a valid Kenyan mobile number'),
-  initiatorPhone: z.string()
-    .min(9, 'Enter a valid Safaricom number for STK Push')
-    .refine(isLikelyKenyanMobile, 'Enter a valid Safaricom number for STK Push')
-    .refine(isSafaricom, 'STK Push works only on Safaricom numbers'),
-  amount: z.number({ error: 'Enter a valid amount' })
-    .int('Amount must be a whole number')
-    .positive('Amount must be greater than 0')
-    .max(150000, 'Amount cannot exceed KES 150,000'),
+  initiatorPhone: z.string().min(10, 'Enter your Safaricom number'),
+  accountPhone: z.string().min(10, 'Enter recipient number'),
+  amount: z.number().min(10, 'Minimum KES 10').max(10000, 'Max KES 10,000'),
 })
 
 type FormState = z.infer<typeof schema>
 
 // --- State ---
 const state = reactive<FormState>({
-  accountPhone: '',
   initiatorPhone: '',
+  accountPhone: '',
   amount: 10,
 })
 
 const submitting = ref(false)
 const waiting = ref(false)
-const countdown = ref(60)
-let countdownTimer: ReturnType<typeof setInterval> | undefined
+const lastTransactionId = ref<number | null>(null)
 
+// --- Provider Meta ---
 const initiatorMeta = computed(() => detectProvider(state.initiatorPhone))
 const accountMeta = computed(() => detectProvider(state.accountPhone))
 
-// --- Reference autofill ---
-
-
-// --- Persist last used values ---
-if (import.meta.client) {
-  const last = localStorage.getItem('airrime:last')
-  if (last) {
-    try {
-      const parsed = JSON.parse(last)
-      Object.assign(state, parsed)
-    } catch {
-      // Ignore JSON parse errors and use default state
-    }
-  }
-}
-watch(state, (v) => {
-  if (import.meta.client) {
-    localStorage.setItem('airrime:last', JSON.stringify(v))
-  }
-}, { deep: true })
-
 // --- Feedback ---
 const feedback = reactive<{
-  kind: 'idle' | 'info' | 'success' | 'warning' | 'error'
-  title?: string
+  kind: string
   message?: string
-  details?: string
   receipt?: string
+  status?: string
 }>({
   kind: 'idle'
 })
 
 function resetFeedback() {
   feedback.kind = 'idle'
-  feedback.title = undefined
-  feedback.message = undefined
-  feedback.details = undefined
-  feedback.receipt = undefined
-}
-
-function startCountdown(sec = 60) {
-  countdown.value = sec
-  clearInterval(countdownTimer)
-  countdownTimer = setInterval(() => {
-    countdown.value -= 1
-    if (countdown.value <= 0) {
-      clearInterval(countdownTimer)
-    }
-  }, 1000)
-}
-function stopCountdown() {
-  clearInterval(countdownTimer)
+  feedback.message = ''
+  feedback.receipt = ''
+  feedback.status = ''
 }
 
 const toast = useToast()
-function setToastByStatus(res: ApiResponse, contextPhone: string) {
+function setToastByStatus(res: ApiResponse, _contextPhone: string) {
   if (res.status === 'SUCCESS') {
-    toast.add({ title: 'Payment successful', description: `KES ${state.amount.toLocaleString()} paid. Receipt: ${res.mpesaReceiptNumber || '—'}`, color: 'success' })
-  } else if (res.status === 'ALREADY_PAID') {
-    toast.add({ title: 'Already paid', description: 'A matching successful payment already exists.', color: 'primary' })
+    toast.add({ title: 'Payment Success', description: res.message, color: 'success' })
+  } else if (res.status === 'FAILED') {
+    toast.add({ title: 'Payment Failed', description: res.message, color: 'error' })
   } else if (res.status === 'TIMEOUT') {
-    toast.add({ title: 'Still pending', description: `No confirmation yet. You may approve on your phone (${toLocal(contextPhone)}) or retry.`, color: 'warning' })
-  } else {
-    const cancelled = res.resultCode === 1032
-    toast.add({ title: cancelled ? 'Payment cancelled' : 'Payment failed', description: res.message || res.resultDesc || 'Please try again.', color: 'error' })
+    toast.add({ title: 'Timeout', description: 'No confirmation received. You can retry.', color: 'info' })
+  } else if (res.status === 'ALREADY_PAID') {
+    toast.add({ title: 'Already Paid', description: res.message, color: 'secondary' })
   }
 }
 function setInlineFeedback(res: ApiResponse) {
-  if (res.status === 'SUCCESS') {
-    feedback.kind = 'success'
-    feedback.title = 'Payment successful'
-    feedback.message = `KES ${state.amount.toLocaleString()} paid successfully.`
-    feedback.details = res.resultDesc
-    feedback.receipt = res.mpesaReceiptNumber
-  } else if (res.status === 'ALREADY_PAID') {
-    feedback.kind = 'info'
-    feedback.title = 'Already paid'
-    feedback.message = 'A previous transaction with the same details was completed.'
-    feedback.details = res.resultDesc
-  } else if (res.status === 'TIMEOUT') {
-    feedback.kind = 'warning'
-    feedback.title = 'Awaiting confirmation'
-    feedback.message = 'No confirmation received yet. You can retry after a moment.'
-    feedback.details = res.resultDesc
-  } else {
-    feedback.kind = 'error'
-    const cancelled = res.resultCode === 1032
-    feedback.title = cancelled ? 'Payment cancelled by user' : 'Payment failed'
-    feedback.message = res.message || res.resultDesc || 'Please try again.'
-    feedback.details = res.resultDesc
+  feedback.kind = res.status.toLowerCase()
+  feedback.message = res.message
+  feedback.status = res.status
+  if (res.mpesaReceiptNumber) feedback.receipt = res.mpesaReceiptNumber
+}
+
+// --- Polling Logic ---
+const POLL_TIMEOUT = 60000 // 60s
+const POLL_INTERVAL = 4000 // 4s
+
+let pollTimer: ReturnType<typeof setTimeout> | null = null
+let pollStartTime: number = 0
+
+function stopPollingStatus() {
+  if (pollTimer) clearTimeout(pollTimer)
+  pollTimer = null
+}
+
+async function pollStatus(transactionId: number) {
+  pollStartTime = Date.now()
+  waiting.value = true
+
+  async function poll() {
+    try {
+      const res = await $fetch<ApiResponse>(`/api/mpesa/transaction-status?id=${transactionId}`)
+      if (['SUCCESS', 'FAILED', 'CANCELLED'].includes(res.status)) {
+        waiting.value = false
+        setToastByStatus(res, state.initiatorPhone)
+        setInlineFeedback(res)
+        stopPollingStatus()
+        return
+      }
+      if (Date.now() - pollStartTime < POLL_TIMEOUT) {
+        pollTimer = setTimeout(poll, POLL_INTERVAL)
+      } else {
+        waiting.value = false
+        setInlineFeedback({ status: 'TIMEOUT', message: 'No confirmation received yet. You can retry.', transactionId })
+        stopPollingStatus()
+      }
+    } catch (err) {
+      waiting.value = false
+      console.error(err)
+      setInlineFeedback({ status: 'FAILED', message: 'Error checking status.', transactionId })
+      stopPollingStatus()
+    }
   }
+  poll()
+}
+
+// --- Submit Logic ---
+function resetAll() {
+  resetFeedback()
+  stopPollingStatus()
+  waiting.value = false
+  submitting.value = false
+  lastTransactionId.value = null
 }
 
 async function onSubmit(e: FormSubmitEvent<FormState>) {
-  const { data } = e
-
-  resetFeedback()
+  resetAll()
   submitting.value = true
-  waiting.value = true
-  startCountdown(10)
-
-  toast.add({
-    title: 'STK Push sent',
-    description: `We sent a prompt to ${toLocal(data.initiatorPhone)}. Approve it to continue.`,
-    color: 'primary'
-  })
-
   try {
     const res = await $fetch<ApiResponse>('/api/mpesa/stkpush', {
       method: 'POST',
       body: {
-        initiatorPhone: data.initiatorPhone,
-        accountPhone: data.accountPhone,
-        amount: data.amount,
+        initiatorPhone: e.data.initiatorPhone,
+        accountPhone: e.data.accountPhone,
+        amount: e.data.amount,
       }
     })
-    // Store transactionId for polling
-    lastTransactionId.value = typeof res.transactionId === 'string' ? parseInt(res.transactionId) : res.transactionId
-    console.log('response: ' +  res.message)
-
-    stopCountdown()
-    waiting.value = false
-    setToastByStatus(res, data.initiatorPhone)
+    lastTransactionId.value = Number(res.transactionId)
+    setToastByStatus(res, e.data.initiatorPhone)
     setInlineFeedback(res)
-  } catch (err: unknown) {
-    stopCountdown()
-    waiting.value = false
-    feedback.kind = 'error'
-    feedback.title = 'Request error'
-    let message = 'Unable to process request.'
-    if (typeof err === 'object' && err !== null) {
-      // @ts-expect-error: err may have data/message
-      message = err.data?.message || err.message || message
+    if (!['SUCCESS', 'FAILED', 'CANCELLED'].includes(res.status) && lastTransactionId.value) {
+      pollStatus(lastTransactionId.value)
     }
-    feedback.message = message
-    toast.add({ title: 'Request error', description: feedback.message, color: 'error' })
+  } catch (err: unknown) {
+    let message = 'Request failed'
+    if (err && typeof err === 'object') {
+      // Try to narrow err type
+      const errorObj = err as { data?: { message?: string }, message?: string }
+      if (errorObj.data?.message) {
+        message = errorObj.data.message
+      } else if (errorObj.message) {
+        message = errorObj.message
+      }
+    }
+    setInlineFeedback({ status: 'FAILED', message, transactionId: 0 })
   } finally {
     submitting.value = false
   }
 }
-// Watch countdown for timeout and start polling
-watch(countdown, (val) => {
-  if (val <= 0 && waiting.value && lastTransactionId.value) {
-    waiting.value = false
-    feedback.kind = 'warning'
-    feedback.title = 'Still waiting for confirmation'
-    feedback.message = 'No response from M-Pesa yet. Checking status...'
-    startPollingStatus(lastTransactionId.value)
-  }
-})
-const open = ref(false)
-const canSubmit = computed(() => initiatorMeta.value.key === 'safaricom')
-// Add a wrapper for the actual submit logic
-async function handleConfirmedSubmit(e: FormSubmitEvent<FormState>) {
-  open.value = false
-  await onSubmit(e)
-}
 
-// Intercept submit to show modal instead of submitting directly
+// --- Modal Logic (if you use a modal for confirmation) ---
+const open = ref(false)
+const lastFormEvent = ref<FormSubmitEvent<FormState> | null>(null)
 function onFormSubmit(e: FormSubmitEvent<FormState>, nativeEvent?: Event) {
-  nativeEvent?.preventDefault?.()
-  open.value = true
-  // Store event for later use
   lastFormEvent.value = e
+  open.value = true
+  if (nativeEvent) nativeEvent.preventDefault()
 }
 function cancelModal() {
   open.value = false
 }
-// Store the last form event for confirmation
-const lastFormEvent = ref<FormSubmitEvent<FormState> | null>(null)
-
 function confirmAndSubmit() {
-  if (lastFormEvent.value) {
-    handleConfirmedSubmit(lastFormEvent.value)
-  }
+  open.value = false
+  if (lastFormEvent.value) onSubmit(lastFormEvent.value)
 }
-const pollInterval = ref<NodeJS.Timeout | null>(null)
 
-function startPollingStatus(transactionId: number) {
-  stopPollingStatus()
-  pollInterval.value = setInterval(async () => {
-    const res = await $fetch<ApiResponse>(`/api/mpesa/transaction-status?id=${transactionId}`)
-    if (res.status === 'SUCCESS' || res.status === 'FAILED' || res.status === 'CANCELLED') {
-      stopPollingStatus()
-      console.log('polling:'+ feedback)
-      waiting.value = false
-      feedback.kind = res.status === 'SUCCESS' ? 'success' : 'error'
-      feedback.title = res.status === 'SUCCESS' ? 'Payment successful' : 'Payment failed'
-      feedback.message = res.resultDesc || (res.status === 'SUCCESS' ? 'Paid' : 'Failed')
-      feedback.receipt = res.mpesaReceiptNumber
-    }
-  }, 4000)
-}
-function stopPollingStatus() {
-  if (pollInterval.value) clearInterval(pollInterval.value)
-  pollInterval.value = null
-}
+// --- Computed for submit button ---
+const canSubmit = computed(() => initiatorMeta.value.key === 'safaricom' && isLikelyKenyanMobile(state.initiatorPhone) && isLikelyKenyanMobile(state.accountPhone) && state.amount >= 10)
+
+// Countdown for polling status
+const countdown = computed(() => {
+  if (!waiting.value || !pollStartTime) return POLL_TIMEOUT / 1000
+  const elapsed = Math.floor((Date.now() - pollStartTime) / 1000)
+  const remaining = Math.max(0, Math.ceil(POLL_TIMEOUT / 1000 - elapsed))
+  return remaining
+})
+
 </script>
 
 <template>
@@ -384,12 +276,11 @@ function stopPollingStatus() {
         v-if="feedback.kind !== 'idle'"
         :color="feedback.kind === 'success' ? 'success' : feedback.kind === 'warning' ? 'warning' : feedback.kind === 'info' ? 'primary' : 'error'"
         :icon="feedback.kind === 'success' ? 'i-heroicons-check-circle' : feedback.kind === 'warning' ? 'i-heroicons-exclamation-triangle' : feedback.kind === 'info' ? 'i-heroicons-information-circle' : 'i-heroicons-x-circle'"
-      :title="feedback.title "
+      :title="feedback.status"
         >
           <template #description>
           <p class="text-sm text-muted-foreground">{{ feedback.message }}</p>
           <p v-if="feedback.receipt" class="text-sm"><span class="font-medium">Receipt:</span> {{ feedback.receipt }}</p>
-          <p v-if="feedback.details" class="text-xs text-muted-foreground">{{ feedback.details }}</p>
           </template>
       </UAlert>
 

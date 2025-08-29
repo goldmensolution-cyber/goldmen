@@ -26,6 +26,7 @@
     "maska": "^3.2.0",
     "nuxt": "^4.0.3",
     "nuxt-auth-utils": "0.5.23",
+    "postgres": "^3.4.7",
     "zod": "^4.0.17"
   },
   "devDependencies": {
