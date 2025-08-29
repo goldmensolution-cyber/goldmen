@@ -50,10 +50,8 @@ const items = ref<NavigationMenuItem[]>([
 </script>
 
 <template>
-  <UNavigationMenu :items="items" :ui="{linkLabel: 'not-sm:hidden'}" variant="link" class="w-full text-black  bg-neutral justify-between backdrop-blur-3xl z-50" >
-  <template #signup>
-    
-  </template>
+  <UNavigationMenu :items="items" :ui="{linkLabel: 'not-sm:hidden text-error'}" variant="link" class="w-full text-black  bg-neutral justify-between backdrop-blur-3xl z-50" >
+  
     <template #burger>
       <UPopover>
         <UButton 
