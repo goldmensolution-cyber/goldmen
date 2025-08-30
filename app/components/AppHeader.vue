@@ -50,6 +50,6 @@ const items = ref<NavigationMenuItem[]>([
 
 <template>
   <UHeader>
-    <UNavigationMenu :items="items" />
+    <UNavigationMenu :ui="{linkLabel: 'text-error'}" :items="items" />
   </UHeader>
 </template>
