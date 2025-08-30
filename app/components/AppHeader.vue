@@ -1,13 +1,7 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from '@nuxt/ui'
 const items = ref<NavigationMenuItem[]>([
-  [{
-    label: 'Goldmen Solutions',
-    icon: 'i-lucide-signal',
-    to: '/',
-    class: 'text-error text-xl font-playfair not-md:visible w-full shrink-0'
-    
-  }],[
+  [
   {
     label: 'Home',
     to: '/',
@@ -50,6 +44,15 @@ const items = ref<NavigationMenuItem[]>([
 
 <template>
   <UHeader>
+    <template #title>
+      <UButton 
+        label="Goldmen Solutions" 
+        variant="ghost" 
+        icon="i-lucide-signal" 
+        color="error"
+        size="xl"
+         />
+    </template>
     <UNavigationMenu :ui="{linkLabel: 'text-error'}" :items="items" />
   </UHeader>
 </template>

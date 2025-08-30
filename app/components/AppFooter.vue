@@ -16,6 +16,14 @@ const columns: FooterColumn[] = [
       {
         label: 'Blog',
         to: '/blog',
+      },
+      {
+        label: 'About Us',
+        to: 'about',
+      },
+      {
+        label: 'Contact Us',
+        to: '/contact'
       }
     ]
   },
@@ -34,14 +42,7 @@ const columns: FooterColumn[] = [
         label: 'FAQs',
         to: '/faq',
       },
-      {
-        label: 'About Us',
-        to: 'about',
-      },
-      {
-        label: 'Contact Us',
-        to: '/contact'
-      }
+      
     ]
   },
   {
@@ -75,17 +76,8 @@ const columns: FooterColumn[] = [
 <template>
   <UFooter>
     <template #top>
-  <UFooterColumns :columns="columns">
-    <template #right>
-      <UFormField name="email" label="Subscribe to our newsletter" size="lg">
-        <UInput type="email" class="w-full">
-          <template #trailing>
-            <UButton type="submit" size="xs" color="neutral" label="Subscribe" />
-          </template>
-        </UInput>
-      </UFormField>
-    </template>
-  </UFooterColumns>
+  <UFooterColumns :columns="columns"/>
+    
 </template>
 <template #bottom>
     <p>© 2025 goldmen. All rights reserved.</p>
