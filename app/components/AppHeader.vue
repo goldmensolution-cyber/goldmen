@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from '@nuxt/ui'
-
 const items = ref<NavigationMenuItem[]>([
   [{
     label: 'Goldmen Solutions',
@@ -21,8 +20,8 @@ const items = ref<NavigationMenuItem[]>([
   
   },
   {
-    label: 'Buy Bundles',
-    to: '/bundles',
+    label: 'About Us',
+    to: '/about',
     slot: 'main'
 
   },
@@ -50,22 +49,7 @@ const items = ref<NavigationMenuItem[]>([
 </script>
 
 <template>
-  <UNavigationMenu :items="items" :ui="{linkLabel: 'not-sm:hidden text-error'}" variant="link" class="w-full text-black  bg-neutral justify-between backdrop-blur-3xl z-50" >
-  
-    <template #burger>
-      <UPopover>
-        <UButton 
-        variant="outline"
-        color="neutral" 
-        class="md:hidden"
-        icon="i-lucide-menu" />
-        <template #content>
-          <UNavigationMenu 
-            orientation="vertical"
-            :items="items"
-            />
-        </template>
-      </UPopover>
-    </template>
-  </UNavigationMenu>
+  <UHeader>
+    <UNavigationMenu :items="items" />
+  </UHeader>
 </template>
