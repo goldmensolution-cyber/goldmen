@@ -32,12 +32,25 @@ function toLocal(msisdn: string) {
 function detectProvider(input: string): { key: string, label: string, color: BadgeColor, icon: string } {
   const local = toLocal(input)
   const p4 = local.slice(0, 4)
-  // Example prefixes (fill in as needed)
-  const safaricom = ['0701', '0702', '0711', '0722', '0740', '0790']
-  const airtel = ['0731', '0757', '0785']
-  const telkom = ['0770', '0771']
+  // Prefixes
+  const safaricom = ["0110","0111","0112","0113","0114","0115",
+    "0700","0701","0702","0703","0704","0705","0706","0707","0708","0709",
+  "0710","0711","0712","0713","0714","0715","0716","0717","0718","0719",
+  "0720","0721","0722","0723","0724","0725","0726","0727","0728","0729",
+  "0740","0741","0742","0743","0744","0745","0746","0747","0748","0749",
+  "0790","0791","0792","0793","0794","0795","0796","0797","0798","0799",]
+  const airtel = ["0100","0101","0102","0103","0104","0105","0106",
+   "0730","0731","0732","0733","0734","0735","0736","0737","0738","0739",
+  "0750","0751","0752","0753","0754","0755","0756","0757","0758","0759"]
+
+  const telkom = [
+     "0770","0771","0772","0773","0774","0775","0776","0777","0778","0779"
+
+  ]
   const faiba = ['0747']
-  const equitel = ['0763', '0764', '0765', '0766']
+    const equitel = [ "0763","0764","0765","0766","0767","0768","0769"
+]
+
 
   if (safaricom.includes(p4)) return { key: 'safaricom', label: 'Safaricom', color: 'success', icon: 'custom:safaricom' }
   if (airtel.includes(p4)) return { key: 'airtel', label: 'Airtel', color: 'primary', icon: 'custom:airtel' }
@@ -50,9 +63,6 @@ function isLikelyKenyanMobile(input: string) {
   const d = onlyDigits(input)
   return /^0[17]\d{8}$/.test(d) || /^254[17]\d{8}$/.test(d)
 }
-// function isSafaricom(input: string) {
-//   return detectProvider(input).key === 'safaricom'
-// }
 
 // --- Zod Schema ---
 const schema = z.object({
@@ -218,8 +228,7 @@ function confirmAndSubmit() {
 }
 
 // --- Computed for submit button ---
-const canSubmit = computed(() => initiatorMeta.value.key === 'safaricom' && isLikelyKenyanMobile(state.initiatorPhone) && isLikelyKenyanMobile(state.accountPhone) && state.amount >= 10)
-
+const canSubmit = computed(() =>  isLikelyKenyanMobile(state.initiatorPhone) && isLikelyKenyanMobile(state.accountPhone) && state.amount >= 10)
 // Countdown for polling status
 const countdown = computed(() => {
   if (!waiting.value || !pollStartTime) return POLL_TIMEOUT / 1000
@@ -227,7 +236,6 @@ const countdown = computed(() => {
   const remaining = Math.max(0, Math.ceil(POLL_TIMEOUT / 1000 - elapsed))
   return remaining
 })
-
 </script>
 
 <template>
@@ -297,7 +305,7 @@ const countdown = computed(() => {
                 autocomplete="tel"
                 inputmode="tel"
               >
-            <template #trailing>
+            <template v-if="state.initiatorPhone.length > 9" #trailing>
               <UBadge 
               :color="initiatorMeta.color"
                variant="subtle"
@@ -319,7 +327,7 @@ const countdown = computed(() => {
                 autocomplete="tel"
                 inputmode="tel"
               >
-              <template #trailing>
+              <template v-if="state.accountPhone.length > 9 " #trailing>
               <UBadge 
               :color="accountMeta.color" variant="subtle"
                :icon="accountMeta.icon" size="xs" :label="accountMeta.label" 
@@ -330,7 +338,10 @@ const countdown = computed(() => {
 
         <!-- Amount -->
         <UFormField name="amount" help="Specify a whole number" label="Amount (KES)" required class="sm:col-span-2">
-            <UInputNumber v-model="state.amount" :min="1" :max="150000" :step="1" />
+          <UFieldGroup>
+            <UButton label="KSH" variant="subtle" color="neutral" />
+            <UInputNumber v-model="state.amount" orientation="vertical" :min="10" :max="150000" :step="1" />
+          </UFieldGroup>
         </UFormField>
        
         <!-- Actions -->
