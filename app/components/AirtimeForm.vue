@@ -20,6 +20,16 @@ type ApiResponse = {
 type BadgeColor = "error" | "info" | "primary" | "warning" | "neutral" | "success" | "secondary" | undefined
 
 // --- Utilities ---
+const generatePrefixRange = (start: string, end: string): string[] => {
+  const startNum = parseInt(start, 10);
+  const endNum = parseInt(end, 10);
+  const length = start.length;
+
+  return Array.from({ length: endNum - startNum + 1 }, (_, i) => {
+    const num = startNum + i;
+    return String(num).padStart(length, '0');
+  });
+};
 function onlyDigits(s: string) {
   return s.replace(/[^0-9]/g, '')
 }
@@ -33,23 +43,28 @@ function detectProvider(input: string): { key: string, label: string, color: Bad
   const local = toLocal(input)
   const p4 = local.slice(0, 4)
   // Prefixes
-  const safaricom = ["0110","0111","0112","0113","0114","0115",
-    "0700","0701","0702","0703","0704","0705","0706","0707","0708","0709",
-  "0710","0711","0712","0713","0714","0715","0716","0717","0718","0719",
-  "0720","0721","0722","0723","0724","0725","0726","0727","0728","0729",
-  "0740","0741","0742","0743","0744","0745","0746","0747","0748","0749",
-  "0790","0791","0792","0793","0794","0795","0796","0797","0798","0799",]
-  const airtel = ["0100","0101","0102","0103","0104","0105","0106",
-   "0730","0731","0732","0733","0734","0735","0736","0737","0738","0739",
-  "0750","0751","0752","0753","0754","0755","0756","0757","0758","0759"]
+  const safaricom = [
+  ...generatePrefixRange('0110', '0115'),
+  ...generatePrefixRange('0700', '0729'),
+  ...generatePrefixRange('0745', '0746'),
+  '0748',
+  ...generatePrefixRange('0757', '0759'),
+  ...generatePrefixRange('0768', '0769'),
+  ...generatePrefixRange('0790', '0799'),
+];
+  const airtel = [
+  ...generatePrefixRange('0100', '0106'),
+  ...generatePrefixRange('0740', '0743'),
+  ...generatePrefixRange('0750', '0756'),
+  '0762',
+  '0767', // Corrected from your inaccurate array
+  ...generatePrefixRange('0780', '0789'),
+];
+const telkom = generatePrefixRange('0770', '0779');
 
-  const telkom = [
-     "0770","0771","0772","0773","0774","0775","0776","0777","0778","0779"
+const faiba = ['0747'];
 
-  ]
-  const faiba = ['0747']
-    const equitel = [ "0763","0764","0765","0766","0767","0768","0769"
-]
+const equitel = generatePrefixRange('0763', '0766');
 
 
   if (safaricom.includes(p4)) return { key: 'safaricom', label: 'Safaricom', color: 'success', icon: 'custom:safaricom' }
