@@ -17,7 +17,7 @@
     "@iconify-json/simple-icons": "^1.2.47",
     "@nuxt/content": "3.6.3",
     "@nuxt/image": "1.11.0",
-    "@nuxt/ui": "^v4.0.0-alpha.0",
+    "@nuxt/ui": "^v4.0.0-alpha.1",
     "@nuxthub/core": "0.9.0",
     "@nuxtjs/ngrok": "3.0.1",
     "@vite-pwa/nuxt": "1.0.4",
