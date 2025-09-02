@@ -9,8 +9,8 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxtjs/ngrok',
     '@nuxthub/core',
-    'nuxt-auth-utils',
-    '@vite-pwa/nuxt',
+    '@nuxtjs/supabase',
+    'nuxt-vue3-google-signin'
   ]
   , runtimeConfig: {
     // Server-only config
@@ -31,49 +31,23 @@ export default defineNuxtConfig({
       api: 'https://api.nuxt.studio'
     }
   },
-  pwa: {
-    registerType: 'autoUpdate', // auto updates service worker
-    manifest: {
-      name: 'Mentel Airtime',
-      short_name: 'Mentel',
-      description: 'A brave new way of buying airtime to any network.',
-      theme_color: '#0f172a',
-      background_color: '#ffffff',
-      display: 'standalone',
-      orientation: 'portrait',
-      icons: [
-        {
-          src: 'pwa-192x192.png',
-          sizes: '192x192',
-          type: 'image/png'
-        },
-        {
-          src: 'pwa-512x512.png',
-          sizes: '512x512',
-          type: 'image/png'
-        },
-        {
-          src: 'pwa-512x512.png',
-          sizes: '512x512',
-          type: 'image/png',
-          purpose: 'any maskable'
-        }
-      ]
-    },
-    workbox: {
-      globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
-      cleanupOutdatedCaches: true
-    },
-    devOptions: {
-      enabled: true, // allows testing in dev
-      type: 'module'
+  supabase:{
+    redirectOptions: {
+      login: '/login',
+      callback: '/confirm',
+      exclude: ['/login', '/signup', '/confirm', '/blog/*','/'],
+      include: ['/dashboard','/admin/*'],
     }
+  },
+  googleSignIn: {
+    clientId: process.env.NUXT_OAUTH_GOOGLE_CLIENT_ID || '',
   },
   ngrok: {
       authtoken: process.env.NGROK_AUTHTOKEN,
       domain: 'knowing-husky-reliably.ngrok-free.app'
       
     },
+   
     vite: {
     server: {
       allowedHosts: ['knowing-husky-reliably.ngrok-free.app']

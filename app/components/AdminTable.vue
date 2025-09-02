@@ -181,15 +181,30 @@ const pagination = ref({
   pageIndex: 0,
   pageSize: 10
 })
-const { user} = useUserSession()
+const user = useSupabaseUser()
 </script>
 
 <template>
-<UCard class="w-full">
+<UCard class="w-full h-screen overflow-auto">
     <template v-if="user" #header>
       <h1>Transaction Table</h1>
     </template>
     <div class="flex justify-end px-4 py-3.5 border-b  border-accented">
+      <div>
+        <UTabs ></UTabs>
+      </div>
+      <UFieldGroup
+      >
+        <UButton label="show" variant="ghost" color="neutral"/>
+        <UInputNumber 
+        v-model="pagination.pageSize"
+        :default-value="pagination.pageSize" 
+        orientation="vertical"
+        size="sm"
+        class="shrink-1"
+        />
+        <UButton :label="'of ' + data?.length + ' records'" variant="ghost" color="neutral" />
+      </UFieldGroup>
       <UDropdownMenu
         :items="
           table?.tableApi
@@ -219,9 +234,10 @@ const { user} = useUserSession()
     </div>
   <UTable
    ref="table"
-      v-model:pagination="pagination"
+    v-model:pagination="pagination"
       v-model:column-visibility="columnVisibility"
       v-model:sorting="sorting"
+      sticky
       :data="data"
       :columns="columns"
       :pagination-options="{
