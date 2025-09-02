@@ -18,7 +18,7 @@
 
     <!-- Stylized Paybill Number -->
     <section class="py-10 bg-white text-center">
-        <UCard class="mx-auto max-w-md ring-primary">
+        <UCard class="mx-auto max-w-md ring-primary divide-y-0">
           <template #header>
             <NuxtImg src="/images/lipa.png" class="object-cover  w-full h-20" />
      </template>
@@ -52,7 +52,7 @@
         </div>
       </div>
     </section>
-
+<iframe width="560" height="315" src="https://www.youtube.com/embed/1nycv75SJL8?si=VW4-ikejS6v96iEl" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
     <!-- FAQ Section -->
     <section class="bg-gray-100 py-16 px-4">
       <h2 class="text-3xl font-bold text-center mb-12">FAQs</h2>
