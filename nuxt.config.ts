@@ -10,7 +10,6 @@ export default defineNuxtConfig({
     '@nuxtjs/ngrok',
     '@nuxthub/core',
     '@nuxtjs/supabase',
-    'nuxt-vue3-google-signin'
   ]
   , runtimeConfig: {
     // Server-only config
@@ -37,11 +36,10 @@ export default defineNuxtConfig({
       callback: '/confirm',
       exclude: ['/login', '/signup', '/confirm', '/blog/*','/'],
       include: ['/dashboard','/admin/*'],
+    saveRedirectToCookie: true,
     }
   },
-  googleSignIn: {
-    clientId: process.env.NUXT_OAUTH_GOOGLE_CLIENT_ID || '',
-  },
+  
   ngrok: {
       authtoken: process.env.NGROK_AUTHTOKEN,
       domain: 'knowing-husky-reliably.ngrok-free.app'

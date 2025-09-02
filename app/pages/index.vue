@@ -18,22 +18,24 @@
 
     <!-- Stylized Paybill Number -->
     <section class="py-10 bg-white text-center">
-      <h2 class="text-2xl font-semibold text-gray-800">Use Paybill</h2>
-      <p class="text-4xl font-bold tracking-widest text-blue-600 mt-2">
-        4166283
-      </p>
-      <p class="text-gray-600 mt-2">Instant delivery to your phone number. No hidden charges.</p>
-    </section>
+        <UCard class="mx-auto max-w-md">
+          <template #header>
+            <NuxtImg src="/images/lipa.png" class="object-cover w-full h-20" />
+     </template>
+           <h2 class="text-2xl font-semibold text-gray-800">Paybill Number</h2>
+  <UPinInput v-model="value" type="number" :length="6" highlight size="xl" /> 
+        <h2 class="text-2xl font-semibold text-gray-800">Account Number(the airtime recepient)</h2>
+        <UInput default-value="07 XXXXX XXX" size="xl"/>
+        <template #footer>
+        <p class="text-gray-600 mt-2">Instant delivery to your phone number.No hidden charges.</p>
+        </template>
+      </UCard>
+      </section>
 
     <!-- Provider Logos Marquee -->
     <section class="bg-gray-50 py-8 overflow-hidden">
       <UMarquee>
-    <UIcon name="i-custom-safaricom" class="size-10 shrink-0" />
-    <UIcon name="i-custom-airtel" class="size-10 shrink-0" />
-    <UIcon name="i-custom-equitel" class="size-10 shrink-0" />
-    <UIcon name="i-custom-telkom" class="size-10 shrink-0" />
-    <UIcon name="i-custom-faiba" class="size-10 shrink-0" />
-    <UIcon name="i-custom-safaricom2" class="size-10 shrink-0" />
+    <NuxtImg v-for="provider in providers" :key="provider" :src="provider" class="size-20 shrink-0" />
   </UMarquee>
     </section>
 
@@ -55,15 +57,21 @@
     <section class="bg-gray-100 py-16 px-4">
       <h2 class="text-3xl font-bold text-center mb-12">FAQs</h2>
       <div class="max-w-3xl mx-auto space-y-6">
-        <UAccordion :items="faqs" />
+        <UAccordion :items="faqs"  />
       </div>
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
-
-
+const value = ref([4,1,6,6,2,8,3])
+const providers = [
+  '/images/airtel.jpg',
+  '/images/equitel.jpg',
+  '/images/faiba.png',
+  '/images/safaricom.png',
+  '/images/telkom.png'
+]
 const steps = [
   {
     title: 'Go to M-Pesa',

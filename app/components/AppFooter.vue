@@ -2,6 +2,14 @@
 import type { FooterColumn } from '@nuxt/ui'
 
 const columns: FooterColumn[] = [
+{
+  label: 'Goldmen Solutions',
+  children: [
+    {
+      label: 'Your one stop shop for all your airtime needs'
+    }
+  ]
+},
   {
     label: 'Quick Links',
     children: [
@@ -56,15 +64,27 @@ const columns: FooterColumn[] = [
 
       },
       {
-        label: 'Twitter',
-        icon: 'i-lucide-twitter',
+        label: 'Twitter(x)',
+        icon: 'i-logos-twitter',
         to: "https://x.com/BonsusMwangiLTD",
         target: '_blank'
       },
       {
         label: 'Instagram',
-        icon: 'i-lucide-instagram',
+        icon: 'i-logos-instagram-icon',
         to: "https://www.instagram.com/xbonsus/",
+        target: '_blank'
+      },
+      {
+        label: 'Youtube',
+        icon: 'i-logos-youtube-icon',
+        to: "https://www.youtube.com/@BuyAirtime/videos",
+        target: '_blank'
+      },
+      {
+        label: 'Whatsapp Group',
+        icon: 'i-logos-whatsapp-icon',
+        to: "https://chat.whatsapp.com/DubNnwYSX76IVEOMwdaFMJ?mode=ems_share_c",
         target: '_blank'
       }
       
@@ -80,7 +100,7 @@ const columns: FooterColumn[] = [
     
 </template>
 <template #bottom>
-    <p>© 2025 goldmen. All rights reserved.</p>
+    <p class="w-full text-center">© 2025 goldmen. All rights reserved.</p>
 </template>
 </UFooter>
 </template>

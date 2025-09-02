@@ -191,7 +191,7 @@ const user = useSupabaseUser()
     </template>
     <div class="flex justify-end px-4 py-3.5 border-b  border-accented">
       <div>
-        <UTabs ></UTabs>
+        
       </div>
       <UFieldGroup
       >

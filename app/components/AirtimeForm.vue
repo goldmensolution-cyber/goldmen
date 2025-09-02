@@ -333,7 +333,7 @@ const countdown = computed(() => {
               </UInput>
         </UFormField>
         <!-- Recipient -->
-        <UFormField name="accountPhone" help="The phone number receiving the airtime(could be same as above)" label="Recipient phone" required>
+        <UFormField name="accountPhone"  help="The phone number receiving the airtime(could be same as above)" label="Recipient phone" required>
               <UInput
                 v-model="state.accountPhone"
                 v-maska="'#### ### ###'" 
@@ -354,7 +354,7 @@ const countdown = computed(() => {
         <!-- Amount -->
         <UFormField name="amount" help="Specify a whole number" label="Amount (KES)" required class="sm:col-span-2">
           <UFieldGroup>
-            <UButton label="KSH" variant="subtle" color="neutral" />
+            <UButton label="KSH" variant="subtle" block color="neutral" />
             <UInputNumber v-model="state.amount" orientation="vertical" :min="10" :max="150000" :step="1" />
           </UFieldGroup>
         </UFormField>
@@ -385,7 +385,7 @@ const countdown = computed(() => {
     </div>
   </template>
   <template #footer>
-    <UButton color="primary" :loading="submitting" @click="confirmAndSubmit">
+    <UButton color="primary" icon="i-lucide-dollar-sign" :loading="submitting" @click="confirmAndSubmit">
       Confirm
     </UButton>
     <UButton variant="ghost" color="neutral" :disabled="submitting" @click="cancelModal">
