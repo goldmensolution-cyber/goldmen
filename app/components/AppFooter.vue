@@ -2,14 +2,7 @@
 import type { FooterColumn } from '@nuxt/ui'
 
 const columns: FooterColumn[] = [
-{
-  label: 'Goldmen Solutions',
-  children: [
-    {
-      label: 'Your one stop shop for all your airtime needs'
-    }
-  ]
-},
+
   {
     label: 'Quick Links',
     children: [
@@ -94,9 +87,18 @@ const columns: FooterColumn[] = [
 </script>
 
 <template>
-  <UFooter>
+  <UFooter :ui="{ bottom: 'py-0 lg:py-0'}">
     <template #top>
-  <UFooterColumns :columns="columns"/>
+  <UFooterColumns :columns="columns" :ui="{root: 'mb-0 flex md:flex-row w-full  justify between', center: 'w-full', left: 'w-1/4vw h-full'}">
+    <template #left>
+      <UAlert 
+        title="Goldmen Solutions"
+        description="For your Airtime needs"
+        icon="i-lucide-signal"
+        variant="soft"
+        color="neutral"/>
+    </template>
+  </UFooterColumns>
     
 </template>
 <template #bottom>

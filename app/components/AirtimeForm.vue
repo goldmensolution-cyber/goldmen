@@ -307,11 +307,13 @@ const countdown = computed(() => {
           </template>
       </UAlert>
 
-      <USeparator />
-
-      <UForm :schema="schema" :state="state" class="space-y-6 grid grid-cols-1 sm:grid-cols-2" @submit="onFormSubmit($event, $event?.event)">
+      <UCard>
+      <UForm :schema="schema" :state="state" class="" @submit="onFormSubmit($event, $event?.event)">
          <!-- Payer -->
-        <UFormField name="initiatorPhone" help="You will receive mpesa PIN prompt here" label="Your M-Pesa number (payer)" required>
+        <UFormField 
+        name="initiatorPhone" 
+        help="You will receive mpesa PIN prompt here" 
+        label="Your M-Pesa number (payer)" required>
               <UInput
                 v-model="state.initiatorPhone"
                 v-maska="'#### ### ###'" 
@@ -319,6 +321,7 @@ const countdown = computed(() => {
                  icon="i-heroicons-device-phone-mobile"
                 autocomplete="tel"
                 inputmode="tel"
+                size="xl"
               >
             <template v-if="state.initiatorPhone.length > 9" #trailing>
               <UBadge 
@@ -341,6 +344,8 @@ const countdown = computed(() => {
                 icon="i-heroicons-user-circle"
                 autocomplete="tel"
                 inputmode="tel"
+                 size="xl"
+
               >
               <template v-if="state.accountPhone.length > 9 " #trailing>
               <UBadge 
@@ -352,24 +357,31 @@ const countdown = computed(() => {
         </UFormField>
 
         <!-- Amount -->
-        <UFormField name="amount" help="Specify a whole number" label="Amount (KES)" required class="sm:col-span-2">
-          <UFieldGroup>
-            <UButton label="KSH" variant="subtle" block color="neutral" />
-            <UInputNumber v-model="state.amount" orientation="vertical" :min="10" :max="150000" :step="1" />
+        <UFormField name="amount" help="Specify a whole number" label="Amount (KES)" required >
+          <UFieldGroup
+                size="xl"
+>
+            <UButton label="KSH" variant="subtle" color="neutral" />
+            <UInputNumber v-model="state.amount" orientation="vertical" :min="10" block :max="150000" :step="1" />
           </UFieldGroup>
         </UFormField>
        
         <!-- Actions -->
-        <div class="flex items-center gap-3 w-full">
-          <UButton type="submit" :disabled="!canSubmit || submitting" :loading="submitting">
-            Pay with M-Pesa
-          </UButton>
+        <div class="flex justify-between  w-full">
+          <UButton 
+            type="submit" 
+            leading-icon="i-lucide-banknote"  
+            :disabled="!canSubmit || submitting" 
+            :loading="submitting"
+            variant="subtle"
+            label="Pay with Mpesa"/>
+           
           <UButton variant="ghost" color="neutral" :disabled="submitting || waiting" @click="resetFeedback()">
             Clear status
           </UButton>
         </div>
       </UForm>
-
+</UCard>
       <USeparator />
   <UModal 
   v-model:open="open"
@@ -385,7 +397,7 @@ const countdown = computed(() => {
     </div>
   </template>
   <template #footer>
-    <UButton color="primary" icon="i-lucide-dollar-sign" :loading="submitting" @click="confirmAndSubmit">
+    <UButton color="primary" :loading="submitting" @click="confirmAndSubmit">
       Confirm
     </UButton>
     <UButton variant="ghost" color="neutral" :disabled="submitting" @click="cancelModal">

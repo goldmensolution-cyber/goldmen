@@ -25,12 +25,7 @@ const items = ref<NavigationMenuItem[]>([
     slot: 'main'
 
   },
-  {
-    label: 'Admin',
-    to: '/admin',
-    slot: 'main'
-
-  }],[
+  ],[
     {
       slot: 'signup'
     },
@@ -40,6 +35,7 @@ const items = ref<NavigationMenuItem[]>([
     class: 'visible'
   }]
 ])
+const user = useSupabaseUser()
 </script>
 
 <template>
@@ -54,5 +50,13 @@ const items = ref<NavigationMenuItem[]>([
          />
     </template>
     <UNavigationMenu :ui="{linkLabel: 'text-error'}" :items="items" />
+    <template #right>
+      <GoogleOneTap v-if="!user" />
+      <div v-else class="flex md:flex-row gap-3" >
+        <UButton label="My Dashboard" to="/dashboard" />
+        <UButton label="My Admin" to="/admin" />
+      </div>
+      
+    </template>
   </UHeader>
 </template>

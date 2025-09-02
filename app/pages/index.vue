@@ -18,14 +18,14 @@
 
     <!-- Stylized Paybill Number -->
     <section class="py-10 bg-white text-center">
-        <UCard class="mx-auto max-w-md">
+        <UCard class="mx-auto max-w-md ring-primary">
           <template #header>
-            <NuxtImg src="/images/lipa.png" class="object-cover w-full h-20" />
+            <NuxtImg src="/images/lipa.png" class="object-cover  w-full h-20" />
      </template>
            <h2 class="text-2xl font-semibold text-gray-800">Paybill Number</h2>
-  <UPinInput v-model="value" type="number" :length="6" highlight size="xl" /> 
+  <UPinInput v-model="value" type="number" disabled :length="6" highlight size="xl" /> 
         <h2 class="text-2xl font-semibold text-gray-800">Account Number(the airtime recepient)</h2>
-        <UInput default-value="07 XXXXX XXX" size="xl"/>
+        <UInput default-value="07 XXXXX XXX" disabled size="xl"/>
         <template #footer>
         <p class="text-gray-600 mt-2">Instant delivery to your phone number.No hidden charges.</p>
         </template>
@@ -35,7 +35,7 @@
     <!-- Provider Logos Marquee -->
     <section class="bg-gray-50 py-8 overflow-hidden">
       <UMarquee>
-    <NuxtImg v-for="provider in providers" :key="provider" :src="provider" class="size-20 shrink-0" />
+    <NuxtImg v-for="provider in providers" :key="provider" :src="provider" class="size-20 rounded-md hover:grayscale shrink-0" />
   </UMarquee>
     </section>
 

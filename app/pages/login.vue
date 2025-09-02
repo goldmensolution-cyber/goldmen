@@ -101,6 +101,7 @@ async function onSubmit(
 <template>
   <div class="flex items-center justify-center min-h-screen bg-neutral-100">
     <UPageCard class="w-full max-w-md">
+      <GoogleOneTap />
       <UAuthForm
         :schema="stage == 'login' ? schema : otpSchema"
         :fields="stage === 'login' ? fieldsLogin : fieldsOtp"

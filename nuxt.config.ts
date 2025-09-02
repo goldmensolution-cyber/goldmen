@@ -11,7 +11,15 @@ export default defineNuxtConfig({
     '@nuxthub/core',
     '@nuxtjs/supabase',
   ]
-  , runtimeConfig: {
+  , 
+  app: {
+        head: {
+          script: [
+            { src: 'https://accounts.google.com/gsi/client' }
+          ]
+        },
+      },
+    runtimeConfig: {
     // Server-only config
     mpesa: {
       env: process.env.MPESA_ENV || 'sandbox',
@@ -62,5 +70,5 @@ ui: {
   },
   css: ['~/assets/css/main.css'],
 
-  compatibilityDate: '2025-07-16'
+  compatibilityDate: '2025-07-16',
 })
