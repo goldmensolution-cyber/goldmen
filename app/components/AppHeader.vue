@@ -55,11 +55,15 @@ function handleLogout() {
         size="xl"
          />
     </template>
-    <template #body>
     <UNavigationMenu :ui="{linkLabel: 'text-error'}" :items="items" />
+    <template #body>
+    <UNavigationMenu :ui="{linkLabel: 'text-error'}" orientation="vertical" :items="items" />
     </template>
     <template #right>
-      <GoogleOneTap v-if="!user" />
+      <div v-if="!user" class="flex md:flex-row gap-3" >
+      <GoogleOneTap  />
+      <UButton label="Login" color="error" to="/login" />
+      </div>
       <div v-else class="flex md:flex-row gap-3" >
         <UButton label="My Dashboard" to="/dashboard" color="error" variant="link" />
         <UButton label="My Admin" to="/admin"  color="error" variant="link" />
