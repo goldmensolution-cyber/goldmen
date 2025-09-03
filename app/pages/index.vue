@@ -25,7 +25,7 @@
            <h2 class="text-2xl font-semibold text-gray-800">Paybill Number</h2>
   <UPinInput v-model="value" type="number" disabled :length="6" highlight size="xl" /> 
         <h2 class="text-2xl font-semibold text-gray-800">Account Number(the airtime recepient)</h2>
-        <UInput default-value="07 XXXXX XXX" disabled size="xl"/>
+        <UInput default-value="072 3456789" disabled highlight size="xl"/>
         <template #footer>
         <p class="text-gray-600 mt-2">Instant delivery to your phone number.No hidden charges.</p>
         </template>
@@ -52,8 +52,10 @@
         </div>
       </div>
     </section>
+    <section class="flex mx-auto justify-center p-4">
 <iframe width="560" height="315" src="https://www.youtube.com/embed/1nycv75SJL8?si=VW4-ikejS6v96iEl" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-    <!-- FAQ Section -->
+</section>    
+<!-- FAQ Section -->
     <section class="bg-gray-100 py-16 px-4">
       <h2 class="text-3xl font-bold text-center mb-12">FAQs</h2>
       <div class="max-w-3xl mx-auto space-y-6">
