@@ -8,6 +8,10 @@ declare global {
 export default defineNuxtPlugin(() => {
   window.handleSignInWithGoogle = function(response) {
     const supabase = useSupabaseClient()
+    const user = useSupabaseUser()
+    // If user is already logged in, do nothing
+    if (user.value) return
+    // If we have a credential, sign in with it
     if (response.credential) {
       supabase.auth.signInWithIdToken({
         provider: 'google',
