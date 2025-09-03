@@ -55,7 +55,7 @@ const fieldsOtp = [
 const providers = [
   {
     label: 'Continue with Google',
-    icon: 'i-simple-icons-google',
+    icon: 'i-logos-google-icon',
     onClick: async () => {
       await supabase.auth.signInWithOAuth({
         provider: 'google',
@@ -101,7 +101,6 @@ async function onSubmit(
 <template>
   <div class="flex items-center justify-center min-h-screen bg-neutral-100">
     <UPageCard class="w-full max-w-md">
-      <GoogleOneTap />
       <UAuthForm
         :schema="stage == 'login' ? schema : otpSchema"
         :fields="stage === 'login' ? fieldsLogin : fieldsOtp"

@@ -40,6 +40,7 @@ const supabase = useSupabaseClient()
 
 function handleLogout() {
   supabase.auth.signOut()
+  navigateTo('/')
 }
 </script>
 
