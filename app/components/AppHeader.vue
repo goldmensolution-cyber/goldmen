@@ -53,8 +53,8 @@ const user = useSupabaseUser()
     <template #right>
       <GoogleOneTap v-if="!user" />
       <div v-else class="flex md:flex-row gap-3" >
-        <UButton label="My Dashboard" to="/dashboard" />
-        <UButton label="My Admin" to="/admin" />
+        <UButton label="My Dashboard" to="/dashboard" color="error" variant="link" />
+        <UButton label="My Admin" to="/admin"  color="error" variant="link" />
       </div>
       
     </template>

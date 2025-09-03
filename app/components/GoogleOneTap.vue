@@ -35,7 +35,9 @@ function handleSignInWithGoogle(response) {
     supabase.auth.signInWithIdToken({
       provider: 'google',
       token: response.credential,
-    });
+    }
+    ,redirectTo('/confirm')
+  );
   }
 }
 
