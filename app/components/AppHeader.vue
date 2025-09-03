@@ -55,7 +55,9 @@ function handleLogout() {
         size="xl"
          />
     </template>
+    <template #body>
     <UNavigationMenu :ui="{linkLabel: 'text-error'}" :items="items" />
+    </template>
     <template #right>
       <GoogleOneTap v-if="!user" />
       <div v-else class="flex md:flex-row gap-3" >
