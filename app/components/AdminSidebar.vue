@@ -10,7 +10,7 @@ const items: NavigationMenuItem[][] = [[{
   icon: 'i-lucide-inbox',
   badge: '4'
 }, {
-  label: 'Contacts',
+  label: 'Customers',
   icon: 'i-lucide-users'
 }, {
   label: 'Settings',
