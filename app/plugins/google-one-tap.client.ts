@@ -6,19 +6,24 @@ declare global {
 
 // No filepath: Place in a Nuxt plugin (e.g., plugins/google-one-tap.client.ts)
 export default defineNuxtPlugin(() => {
-  window.handleSignInWithGoogle = function(response) {
-    const supabase = useSupabaseClient()
-    const user = useSupabaseUser()
-    // If user is already logged in, do nothing
-    if (user.value) return
-    // If we have a credential, sign in with it
+  const supabase = useSupabaseClient()
+  const user = useSupabaseUser()
+
+  window.handleSignInWithGoogle = async function (response) {
+    if (user.value) return // already signed in
+
     if (response.credential) {
-      supabase.auth.signInWithIdToken({
+      const { error } = await supabase.auth.signInWithIdToken({
         provider: 'google',
         token: response.credential,
-      }).then(({ error }) => {
-        if (!error) window.location.reload()
       })
+
+      if (error) {
+        console.error('Google One Tap login failed:', error)
+      } else {
+        console.log('Google One Tap login success')
+        // ✅ no reload needed, user state will update
+      }
     }
   }
 })
