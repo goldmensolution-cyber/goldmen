@@ -265,7 +265,7 @@ const countdown = computed(() => {
     <template #header>
       <h1 class="text-center font-extrabold text-6xl">Buy Airtime</h1>
       <!-- Provider Logos Marquee -->
-    <section class="bg-gray-50 py-8 overflow-hidden">
+    <section class=" py-8 overflow-hidden">
       <UMarquee>
     <NuxtImg v-for="provider in providers" :key="provider" :src="provider" class="size-20 rounded-md hover:grayscale shrink-0" />
   </UMarquee>
@@ -301,13 +301,15 @@ const countdown = computed(() => {
           </template>
       </UAlert>
 
-      <UCard>
+      <UCard variant="subtle" class="bg-primary-50">
       <UForm :schema="schema" :state="state" class="" @submit="onFormSubmit($event, $event?.event)">
          <!-- Payer -->
         <UFormField 
         name="initiatorPhone" 
         help="You will receive mpesa PIN prompt here" 
-        label="Your M-Pesa number (payer)" required>
+        label="Your M-Pesa number (payer)" 
+        class="w-full"
+        required>
               <UInput
                 v-model="state.initiatorPhone"
                 v-maska="'#### ### ###'" 
@@ -316,6 +318,7 @@ const countdown = computed(() => {
                 autocomplete="tel"
                 inputmode="tel"
                 size="xl"
+                class="w-full"
               >
             <template v-if="state.initiatorPhone.length > 9" #trailing>
               <UBadge 
@@ -330,7 +333,7 @@ const countdown = computed(() => {
               </UInput>
         </UFormField>
         <!-- Recipient -->
-        <UFormField name="accountPhone"  help="The phone number receiving the airtime(could be same as above)" label="Recipient phone" required>
+        <UFormField class="w-full" name="accountPhone"  help="The phone number receiving the airtime(could be same as above)" label="Recipient phone" required>
               <UInput
                 v-model="state.accountPhone"
                 v-maska="'#### ### ###'" 
@@ -339,7 +342,8 @@ const countdown = computed(() => {
                 autocomplete="tel"
                 inputmode="tel"
                  size="xl"
-
+                 block
+             class="w-full"
               >
               <template v-if="state.accountPhone.length > 9 " #trailing>
               <UBadge 
@@ -351,36 +355,38 @@ const countdown = computed(() => {
         </UFormField>
 
         <!-- Amount -->
-        <UFormField name="amount" help="Specify a whole number" label="Amount (KES)" required >
+        <UFormField name="amount" block help="Specify a whole number" label="Amount (KES)" required >
           <UFieldGroup
                 size="xl"
+                 class="w-full"
 >
             <UButton label="KSH" variant="subtle" color="neutral" />
-            <UInputNumber v-model="state.amount" orientation="vertical" :min="10" block :max="150000" :step="1" />
+            <UInputNumber v-model="state.amount" orientation="vertical" :min="10" block  class="w-full" :max="150000" :step="1" />
           </UFieldGroup>
         </UFormField>
        
         <!-- Actions -->
-        <div class="flex justify-between  w-full">
           <UButton 
             type="submit" 
             leading-icon="i-lucide-banknote"  
             :disabled="!canSubmit || submitting" 
             :loading="submitting"
-            variant="subtle"
+            variant="solid"
+            size="xl"
+            color="success"
+            block
             label="Pay with Mpesa"/>
            
-          <UButton variant="ghost" color="neutral" :disabled="submitting || waiting" @click="resetFeedback()">
+          <!-- <UButton variant="ghost" color="neutral" :disabled="submitting || waiting" @click="resetFeedback()">
             Clear status
-          </UButton>
-        </div>
+          </UButton> -->
       </UForm>
 </UCard>
       <USeparator />
       <!-- Info panel with steps -->
       <UAlert 
       variant="soft" 
-      color="primary" 
+      color="info" 
       icon="i-heroicons-information-circle"
       title="How to pay with M-Pesa (STK Push)">
         <template #description>

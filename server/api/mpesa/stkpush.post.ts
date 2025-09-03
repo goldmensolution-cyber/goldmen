@@ -1,6 +1,6 @@
 // server/api/mpesa/stkpush.post.ts
 import { createError, readBody } from 'h3'
-import { and, eq, useDrizzle, tables  } from '~~/server/utils/drizzle'
+import { and,gte, eq, useDrizzle, tables  } from '~~/server/utils/drizzle'
 
 import { initiateStkPush, normalizeMsisdn } from '~~/server/utils/mpesa'
 import { waitForResult } from '~~/server/utils/waiter'
@@ -29,7 +29,7 @@ export default eventHandler(async (event): Promise<InitiateStkPushResponse> => {
 
   const db = useDrizzle()
 
-  // Idempotency guard: if a SUCCESS already exists for same tuple, return it.
+  // Idempotency guard: if a SUCCESS already exists for same tuple and is younger than a minute, return it.
   const existingSuccess = await db
     .select()
     .from(tables.transactions)
@@ -38,7 +38,9 @@ export default eventHandler(async (event): Promise<InitiateStkPushResponse> => {
       eq(tables.transactions.recipientPhone, accountPhone),
       eq(tables.transactions.amount, amount),
       eq(tables.transactions.reference, reference),
-    ))
+      eq(tables.transactions.status, 'SUCCESS'),
+      gte(tables.transactions.createdAt, new Date(Date.now() - 60000)) // last minute
+    )) 
     .all()
 
   const firstNonFailed = existingSuccess.find(t => t.status !== 'FAILED')
