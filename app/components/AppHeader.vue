@@ -36,6 +36,11 @@ const items = ref<NavigationMenuItem[]>([
   }]
 ])
 const user = useSupabaseUser()
+const supabase = useSupabaseClient()
+
+function handleLogout() {
+  supabase.auth.signOut()
+}
 </script>
 
 <template>
@@ -55,6 +60,7 @@ const user = useSupabaseUser()
       <div v-else class="flex md:flex-row gap-3" >
         <UButton label="My Dashboard" to="/dashboard" color="error" variant="link" />
         <UButton label="My Admin" to="/admin"  color="error" variant="link" />
+        <UButton label="Logout" color="error" @click="handleLogout" />
       </div>
       
     </template>
