@@ -15,12 +15,11 @@
     <!-- The Google "Continue with" button -->
     <div
       class="g_id_signin"
-      data-type="standard"
-      data-shape="rectangular"
+      data-type="icon"
+      data-shape="square"
       data-theme="outline"
       data-text="continue_with"
       data-size="large"
-      data-logo_alignment="left"
     />
   </div>
 </template>

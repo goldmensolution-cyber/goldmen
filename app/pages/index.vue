@@ -30,7 +30,7 @@
            <h2 class="text-2xl font-semibold text-gray-800">Paybill Number</h2>
   <UPinInput v-model="value" type="number" disabled :length="7" highlight size="xl" /> 
         <h2 class="text-2xl font-semibold text-gray-800">Account Number(the airtime recepient)</h2>
-        <UInput default-value="072 3456789" disabled highlight size="xl"/>
+        <UButton label="072 3456789" variant="outline" class="text-black" size="xl"/>
         <template #footer>
         <p class="text-gray-600 mt-2">Instant delivery to your phone number.No hidden charges.</p>
         </template>
