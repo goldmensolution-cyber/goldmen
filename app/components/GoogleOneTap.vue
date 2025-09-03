@@ -35,9 +35,13 @@ function handleSignInWithGoogle(response) {
     supabase.auth.signInWithIdToken({
       provider: 'google',
       token: response.credential,
-    }
-    ,redirectTo('/confirm')
-  );
+    }).then(({ error }) => {
+      if (!error) {
+        window.location.reload(); // Ensures Nuxt sees the new session
+      } else {
+        console.error(error);
+      }
+    });
   }
 }
 
