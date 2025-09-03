@@ -5,6 +5,13 @@ import type { FormSubmitEvent } from '#ui/types'
 import { useToast } from '#imports'
 import { vMaska } from 'maska/vue'
 
+const providers = [
+  '/images/airtel.jpg',
+  '/images/equitel.jpg',
+  '/images/faiba.png',
+  '/images/safaricom.png',
+  '/images/telkom.png'
+]
 // --- Types ---
 type ApiResponse = {
   status: 'SUCCESS' | 'FAILED' | 'TIMEOUT' | 'ALREADY_PAID' | 'CANCELLED'
@@ -257,29 +264,16 @@ const countdown = computed(() => {
   <UCard class="max-w-2xl mx-auto mt-8">
     <template #header>
       <h1 class="text-center font-extrabold text-6xl">Buy Airtime</h1>
+      <!-- Provider Logos Marquee -->
+    <section class="bg-gray-50 py-8 overflow-hidden">
+      <UMarquee>
+    <NuxtImg v-for="provider in providers" :key="provider" :src="provider" class="size-20 rounded-md hover:grayscale shrink-0" />
+  </UMarquee>
+    </section>
     </template>
     
     <div class="space-y-6">
-      <!-- Info panel with steps -->
-      <UAlert 
-      variant="soft" 
-      color="primary" 
-      icon="i-heroicons-information-circle"
-      title="How to pay with M-Pesa (STK Push)">
-        <template #description>
-        <div class="space-y-2">
-          <ol class="list-decimal pl-5 space-y-1 text-sm text-muted-foreground">
-            <li>Enter the recipient phone and amount.</li>
-            <li>Enter your Safaricom number (payer) and tap Pay.</li>
-            <li>Approve the STK prompt on your phone using your M-Pesa PIN.</li>
-            <li>Wait here for confirmation. If you cancel, we’ll let you know.</li>
-          </ol>
-          <p class="text-xs text-muted-foreground">
-            Tips: Phone formats accepted include 07XXXXXXXX, 7XXXXXXXX, 2547XXXXXXXX, +2547XXXXXXXX.
-          </p>
-        </div>
-        </template>
-      </UAlert>
+      
 
       <!-- Real-time status while waiting -->
       <div v-if="waiting" class="rounded-lg border p-4 space-y-3">
@@ -383,6 +377,26 @@ const countdown = computed(() => {
       </UForm>
 </UCard>
       <USeparator />
+      <!-- Info panel with steps -->
+      <UAlert 
+      variant="soft" 
+      color="primary" 
+      icon="i-heroicons-information-circle"
+      title="How to pay with M-Pesa (STK Push)">
+        <template #description>
+        <div class="space-y-2">
+          <ol class="list-decimal pl-5 space-y-1 text-sm text-muted-foreground">
+            <li>Enter the recipient phone and amount.</li>
+            <li>Enter your Safaricom number (payer) and tap Pay.</li>
+            <li>Approve the STK prompt on your phone using your M-Pesa PIN.</li>
+            <li>Wait here for confirmation. If you cancel, we’ll let you know.</li>
+          </ol>
+          <p class="text-xs text-muted-foreground">
+            Tips: Phone formats accepted include 07XXXXXXXX, 7XXXXXXXX, 2547XXXXXXXX, +2547XXXXXXXX.
+          </p>
+        </div>
+        </template>
+      </UAlert>
   <UModal 
   v-model:open="open"
   title="Confirm Payment">
