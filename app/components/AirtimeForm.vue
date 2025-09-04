@@ -375,7 +375,7 @@ const countdown = computed(() => {
             size="xl"
             color="success"
             block
-            label="Pay with Mpesa"/>
+            label="Buy Airtime"/>
            
           <!-- <UButton variant="ghost" color="neutral" :disabled="submitting || waiting" @click="resetFeedback()">
             Clear status
