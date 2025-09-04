@@ -65,6 +65,24 @@ export type Database = {
         }
         Relationships: []
       }
+      kyanda_callback: {
+        Row: {
+          created_at: string
+          data: Json | null
+          id: number
+        }
+        Insert: {
+          created_at?: string
+          data?: Json | null
+          id?: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json | null
+          id?: number
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
