@@ -7,7 +7,7 @@ const supabase = await serverSupabaseClient(event);
 
   const { error } = await supabase
     .from('kyanda_callback')
-    .insert([{data}]);
+    .insert([{data, created_at: new Date().toISOString() }]);
 
   if (error) {
     console.error('Supabase insert error:', error);
