@@ -5,16 +5,14 @@ export default defineEventHandler(async (event) => {
   const data = await readBody(event);
 const supabase = await serverSupabaseClient(event);
 
-  // Insert the callback data into the 'kyanda_callbacks' table
   const { error } = await supabase
     .from('kyanda_callback')
-    .insert([data]);
+    .insert([{data}]);
 
   if (error) {
-    // Optionally log or handle the error
     console.error('Supabase insert error:', error);
   }
-
+  console.log('Callback data saved to Supabase:', data);
   return {
     status: 'success',
   };
