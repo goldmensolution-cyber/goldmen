@@ -46,37 +46,36 @@ function handleLogout() {
 </script>
 
 <template>
-  <UHeader>
+  <UHeader
+  :ui="{ root: 'font-playfair'}">
     <template #title>
       <UButton 
         label="Goldmen Solutions" 
         variant="ghost" 
         icon="i-lucide-signal" 
         color="error"
-        :ui="{label: 'font-playfair'}"
+        :ui="{label: 'font-playfair font-extrabold'}"
         size="xl"
          />
     </template>
-    <UNavigationMenu :ui="{linkLabel: 'text-error'}" :items="items" />
+    <UNavigationMenu :ui="{linkLabel: 'text-error'}" highlight highlight-color="error" :items="items" />
     <div v-if="user" class="flex md:flex-row gap-3" >
-        <UButton label="My Dashboard" to="/dashboard" color="error" variant="link" />
-        <UButton label="My Admin" to="/admin"  color="error" variant="link" />
-        <UButton label="Logout" color="error" @click="handleLogout" />
+        <UButton v-if="user.role=='admin'" label="My Dashboard" to="/dashboard" color="error" variant="link" />
+        <UButton label="My Profile" to="/profile"  color="error" variant="link" />
+        <UButton label="Logout" color="error" variant="outline" @click="handleLogout" />
       </div>
     <template #body>
     <UNavigationMenu :ui="{linkLabel: 'text-error'}" orientation="vertical" :items="items" />
     <div v-if="user" class="flex md:flex-col gap-3" >
-        <UButton label="My Dashboard" to="/dashboard" color="error" variant="link" />
-        <UButton label="My Admin" to="/admin"  color="error" variant="link" />
-        <UButton label="Logout" color="error" @click="handleLogout" />
+        <UButton v-if="user.role=='admin'" label="My Dashboard" to="/dashboard" color="error" variant="link" />
+        <UButton label="My Profile" to="/profile"  color="error" variant="link" />
+        <UButton label="Logout" color="error" variant="outline" @click="handleLogout" />
       </div>
     </template>
     <template #right>
       <div v-if="!user" class="flex md:flex-row gap-3" >
       <UButton label="Login" color="error" to="/login" />
-      </div>
-      
-      
+      </div>  
     </template>
   </UHeader>
 </template>

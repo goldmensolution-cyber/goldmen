@@ -67,7 +67,7 @@
     <section class="bg-gray-100 py-16 px-4">
       <h2 class="text-3xl font-bold text-center mb-12">FAQs</h2>
       <!-- <div class="max-w-3x mx-auto space-y-6"> -->
-        <UAccordion :items="faqs"  :ui="{}" />
+        <UAccordion :items="faqs"  :ui="{root: 'text-4xl'}" />
       <!-- </div> -->
     </section>
   </div>
