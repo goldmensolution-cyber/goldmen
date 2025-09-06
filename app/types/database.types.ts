@@ -83,6 +83,45 @@ export type Database = {
         }
         Relationships: []
       }
+      kyanda_error_codes: {
+        Row: {
+          code: string
+          description: string | null
+          severity: string | null
+          short_message: string | null
+        }
+        Insert: {
+          code: string
+          description?: string | null
+          severity?: string | null
+          short_message?: string | null
+        }
+        Update: {
+          code?: string
+          description?: string | null
+          severity?: string | null
+          short_message?: string | null
+        }
+        Relationships: []
+      }
+      mpesa_callback: {
+        Row: {
+          created_at: string
+          data: Json | null
+          id: number
+        }
+        Insert: {
+          created_at?: string
+          data?: Json | null
+          id?: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json | null
+          id?: number
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -149,55 +188,19 @@ export type Database = {
         }
         Relationships: []
       }
-      raw_callbacks: {
-        Row: {
-          body: Json | null
-          http_headers: Json | null
-          id: string
-          idempotency_key: string | null
-          processed: boolean | null
-          provider: string
-          received_at: string | null
-          transaction_id: string | null
-        }
-        Insert: {
-          body?: Json | null
-          http_headers?: Json | null
-          id?: string
-          idempotency_key?: string | null
-          processed?: boolean | null
-          provider: string
-          received_at?: string | null
-          transaction_id?: string | null
-        }
-        Update: {
-          body?: Json | null
-          http_headers?: Json | null
-          id?: string
-          idempotency_key?: string | null
-          processed?: boolean | null
-          provider?: string
-          received_at?: string | null
-          transaction_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "raw_callbacks_transaction_id_fkey"
-            columns: ["transaction_id"]
-            isOneToOne: false
-            referencedRelation: "transactions"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       transactions: {
         Row: {
+          amount: number | null
           amount_integer: number
           biller_receipt: string | null
+          canonical_status: string | null
+          category: string | null
           checkout_request_id: string | null
           created_at: string | null
           currency: string
           description: string | null
+          direction: string | null
+          external_id: string | null
           id: string
           initiator_phone: string
           kyanda_message: string | null
@@ -207,7 +210,12 @@ export type Database = {
           meta: Json | null
           mpesa_receipt: string | null
           network: string
+          parent_transaction_id: string | null
+          payer_first_name: string | null
+          payer_last_name: string | null
+          payer_middle_name: string | null
           provider: string
+          provider_status_code: string | null
           recipient_phone: string
           reference: string | null
           result_code: number | null
@@ -215,16 +223,22 @@ export type Database = {
           status: string
           telco_reference: string | null
           transaction_date: string | null
+          type: string | null
           updated_at: string | null
           user_id: string | null
         }
         Insert: {
+          amount?: number | null
           amount_integer: number
           biller_receipt?: string | null
+          canonical_status?: string | null
+          category?: string | null
           checkout_request_id?: string | null
           created_at?: string | null
           currency?: string
           description?: string | null
+          direction?: string | null
+          external_id?: string | null
           id?: string
           initiator_phone: string
           kyanda_message?: string | null
@@ -234,7 +248,12 @@ export type Database = {
           meta?: Json | null
           mpesa_receipt?: string | null
           network: string
+          parent_transaction_id?: string | null
+          payer_first_name?: string | null
+          payer_last_name?: string | null
+          payer_middle_name?: string | null
           provider: string
+          provider_status_code?: string | null
           recipient_phone: string
           reference?: string | null
           result_code?: number | null
@@ -242,16 +261,22 @@ export type Database = {
           status?: string
           telco_reference?: string | null
           transaction_date?: string | null
+          type?: string | null
           updated_at?: string | null
           user_id?: string | null
         }
         Update: {
+          amount?: number | null
           amount_integer?: number
           biller_receipt?: string | null
+          canonical_status?: string | null
+          category?: string | null
           checkout_request_id?: string | null
           created_at?: string | null
           currency?: string
           description?: string | null
+          direction?: string | null
+          external_id?: string | null
           id?: string
           initiator_phone?: string
           kyanda_message?: string | null
@@ -261,7 +286,12 @@ export type Database = {
           meta?: Json | null
           mpesa_receipt?: string | null
           network?: string
+          parent_transaction_id?: string | null
+          payer_first_name?: string | null
+          payer_last_name?: string | null
+          payer_middle_name?: string | null
           provider?: string
+          provider_status_code?: string | null
           recipient_phone?: string
           reference?: string | null
           result_code?: number | null
@@ -269,14 +299,80 @@ export type Database = {
           status?: string
           telco_reference?: string | null
           transaction_date?: string | null
+          type?: string | null
           updated_at?: string | null
           user_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "fk_transactions_parent"
+            columns: ["parent_transaction_id"]
+            isOneToOne: false
+            referencedRelation: "mv_failed_topups"
+            referencedColumns: ["payment_id"]
+          },
+          {
+            foreignKeyName: "fk_transactions_parent"
+            columns: ["parent_transaction_id"]
+            isOneToOne: false
+            referencedRelation: "mv_failed_topups"
+            referencedColumns: ["topup_id"]
+          },
+          {
+            foreignKeyName: "fk_transactions_parent"
+            columns: ["parent_transaction_id"]
+            isOneToOne: false
+            referencedRelation: "transactions"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
-      [_ in never]: never
+      mv_daily_payments: {
+        Row: {
+          day: string | null
+          payments_count: number | null
+          payments_total_kes: number | null
+        }
+        Relationships: []
+      }
+      mv_failed_topups: {
+        Row: {
+          kyanda_message: string | null
+          kyanda_status_code: string | null
+          parent_transaction_id: string | null
+          payment_amount: number | null
+          payment_date: string | null
+          payment_id: string | null
+          topup_amount: number | null
+          topup_date: string | null
+          topup_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_transactions_parent"
+            columns: ["parent_transaction_id"]
+            isOneToOne: false
+            referencedRelation: "mv_failed_topups"
+            referencedColumns: ["payment_id"]
+          },
+          {
+            foreignKeyName: "fk_transactions_parent"
+            columns: ["parent_transaction_id"]
+            isOneToOne: false
+            referencedRelation: "mv_failed_topups"
+            referencedColumns: ["topup_id"]
+          },
+          {
+            foreignKeyName: "fk_transactions_parent"
+            columns: ["parent_transaction_id"]
+            isOneToOne: false
+            referencedRelation: "transactions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       citext: {
