@@ -5,7 +5,7 @@
     description="Get airtime for Safaricom, Airtel, Telkom, Equitel and Faiba using our M-Pesa Paybill. Fast, reliable and secure."
     :links="links"
     :style="{ backgroundImage: `url('pic.jpeg')` }"
-    :ui="{root: 'text-white', title: 'text-white text-4xl',description: 'text-elevated'}"
+    :ui="{root: 'text-white', title: 'text-white text-4xl',description: 'text-elevated' ,headline: 'text-error'}"
     headline="Fast and easy"
     class="bg-cover bg-center    text-white backdrop:blur"
   />
