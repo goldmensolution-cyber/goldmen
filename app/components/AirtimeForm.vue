@@ -51,7 +51,7 @@ function detectProvider(input: string): { key: string, label: string, color: Bad
   const p4 = local.slice(0, 4)
   // Prefixes
   const safaricom = [
-  ...generatePrefixRange('0110', '0115'),
+  ...generatePrefixRange('0110', '0119'),
   ...generatePrefixRange('0700', '0729'),
   ...generatePrefixRange('0745', '0746'),
   '0748',
@@ -60,7 +60,7 @@ function detectProvider(input: string): { key: string, label: string, color: Bad
   ...generatePrefixRange('0790', '0799'),
 ];
   const airtel = [
-  ...generatePrefixRange('0100', '0106'),
+  ...generatePrefixRange('0100', '0109'),
   ...generatePrefixRange('0740', '0743'),
   ...generatePrefixRange('0750', '0756'),
   '0762',
@@ -99,7 +99,7 @@ type FormState = z.infer<typeof schema>
 const state = reactive<FormState>({
   initiatorPhone: '',
   accountPhone: '',
-  amount: 10,
+  amount: 20,
 })
 
 const submitting = ref(false)
@@ -361,7 +361,7 @@ const countdown = computed(() => {
                  class="w-full"
 >
             <UButton label="KSH" variant="subtle" color="neutral" />
-            <UInputNumber v-model="state.amount" orientation="vertical" :min="10" block  class="w-full" :max="150000" :step="1" />
+            <UInputNumber v-model="state.amount" orientation="vertical" :min="20" block  class="w-full" :max="150000" :step="1" />
           </UFieldGroup>
         </UFormField>
        

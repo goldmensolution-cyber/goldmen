@@ -81,7 +81,8 @@ const links = [
   {
     label: 'Buy Airtime',
     icon: 'i-lucide-banknote',
-    to: '/airtime'
+    to: '/airtime',
+    color: 'error' as const
   }
 ]
 const providers = [
