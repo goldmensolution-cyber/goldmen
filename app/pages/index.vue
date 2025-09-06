@@ -41,7 +41,7 @@
         <h2 class="text-2xl font-semibold text-gray-800">Account Number</h2>
                 <h2 class="text-2xl font-extrabold text-gray-800">Your number</h2>
                 <USeparator label="or" />
-                 <UButton label="Buy Online" to="A/airtime" />
+                 <UButton label="Buy Online" to="/airtime" />
         <template #footer>
         <p class="text-gray-600 mt-2">Instant delivery to your phone number.No hidden charges.</p>
         </template>

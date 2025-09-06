@@ -53,6 +53,7 @@ function handleLogout() {
         variant="ghost" 
         icon="i-lucide-signal" 
         color="error"
+        :ui="{label: 'font-playfair'}"
         size="xl"
          />
     </template>
