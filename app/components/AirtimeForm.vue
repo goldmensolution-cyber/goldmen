@@ -261,7 +261,7 @@ const countdown = computed(() => {
 </script>
 
 <template>
-  <UCard class="max-w-2xl mx-auto mt-8 ring-primary  mb-8">
+  <UCard class="max-w-2xl mx-auto mt-8 ring-primary  mb-8 shadow-lg">
     <template #header>
       <h1 class="text-center font-extrabold text-6xl">Buy Airtime</h1>
       <!-- Provider Logos Marquee -->

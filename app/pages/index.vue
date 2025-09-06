@@ -12,22 +12,7 @@
       class="rounded-lg shadow-2xl ring  ring-default"
     >
   </UPageHero>
-  <UPageSection :features="steps"/>
-    <!-- Hero Section -->
-    <!-- <section class="relative h-[90vh] bg-cover bg-center text-white" :style="{ backgroundImage: `url('pic.jpeg')` }">
-      <div class="absolute inset-0 bg-black/50"/>
-      <div class="relative z-10 flex flex-col items-center justify-center h-full text-center px-4">
-        <h1 class="text-4xl sm:text-6xl font-bold leading-tight max-w-3xl">
-          Buy Airtime, Data Bundles & SMS for All Networks
-        </h1>
-        <p class="mt-4 text-lg max-w-xl">
-          Get airtime for Safaricom, Airtel, Telkom, Equitel and Faiba using our M-Pesa Paybill. Fast, reliable and secure.
-        </p>
-        <UButton class="mt-8" size="xl" to="/airtime">
-          Buy Airtime
-        </UButton>
-      </div>
-    </section> -->
+    
 <!-- Provider Logos Marquee -->
     <section class="bg-gray-50 py-8 overflow-hidden">
       <UMarquee>
@@ -97,7 +82,7 @@ const steps = [
   {
     title: 'Go to M-Pesa',
     description: 'Open the M-Pesa menu on your SIM Toolkit or app.'
-    
+
   },
   {
     title: 'Select Lipa na M-Pesa',
