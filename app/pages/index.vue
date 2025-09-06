@@ -7,7 +7,7 @@
     :style="{ backgroundImage: `url('pic.jpeg')` }"
     :ui="{root: 'text-white', title: 'text-white text-4xl',description: 'text-elevated' ,headline: 'text-error'}"
     headline="Fast and easy"
-    class="bg-cover bg-center    text-white backdrop:blur"
+    class="bg-cover bg-center px-4 rounded-md     text-white backdrop:blur"
   />
     <!-- Hero Section -->
     <!-- <section class="relative h-[90vh] bg-cover bg-center text-white" :style="{ backgroundImage: `url('pic.jpeg')` }">
