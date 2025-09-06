@@ -83,7 +83,7 @@ const networks = ['Safaricom', 'Airtel', 'Telkom', 'Equitel', 'Faiba']
           </li>
         </ul>
 
-        <UDivider class="my-4" />
+        <USeparator class="my-4" />
 
         <div class="space-y-2">
           <h3 class="font-medium">Nationwide Service</h3>
@@ -91,7 +91,8 @@ const networks = ['Safaricom', 'Airtel', 'Telkom', 'Equitel', 'Faiba']
             We serve customers across all Kenyan counties with instant airtime delivery.
           </p>
           <!-- The illustrative Kenya map image would typically be added via <img>, but we avoid external assets here. -->
-          <UAlert icon="i-lucide-map" color="neutral" variant="soft" title="Kenya-wide coverage" description="All counties supported." />
+          <UAlert icon="i-lucide-map" color="neutral" variant="soft" title="Kenya-wide coverage" description="All counties supported."  />
+          <NuxtImg src="/kenya.JPG" />
         </div>
       </UCard>
     </div>
