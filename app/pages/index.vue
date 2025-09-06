@@ -1,18 +1,29 @@
 <template>
-  <UPage>
+  <div class="w-full">
     <UPageHero 
     title="Buy Airtime, Data Bundles & SMS for All Networks"
     description="Get airtime for Safaricom, Airtel, Telkom, Equitel and Faiba using our M-Pesa Paybill. Fast, reliable and secure."
     :links="links"
-    orientation="horizontal"
-    headline="Fast and easy">
-    <img
-      src="/pic.jpeg"
-      alt="App screenshot"
-      class="rounded-lg shadow-2xl ring  ring-default"
-    >
-  </UPageHero>
-    
+    :style="{ backgroundImage: `url('pic.jpeg')` }"
+    :ui="{root: 'text-white', title: 'text-white text-4xl',description: 'text-elevated'}"
+    headline="Fast and easy"
+    class="bg-cover bg-center    text-white backdrop:blur"
+  />
+    <!-- Hero Section -->
+    <!-- <section class="relative h-[90vh] bg-cover bg-center text-white" :style="{ backgroundImage: `url('pic.jpeg')` }">
+      <div class="absolute inset-0 bg-black/50"/>
+      <div class="relative z-10 flex flex-col items-center justify-center h-full text-center px-4">
+        <h1 class="text-4xl sm:text-6xl font-bold leading-tight max-w-3xl">
+          Buy Airtime, Data Bundles & SMS for All Networks
+        </h1>
+        <p class="mt-4 text-lg max-w-xl">
+          Get airtime for Safaricom, Airtel, Telkom, Equitel and Faiba using our M-Pesa Paybill. Fast, reliable and secure.
+        </p>
+        <UButton class="mt-8" size="xl" to="/airtime">
+          Buy Airtime
+        </UButton>
+      </div>
+    </section> -->
 <!-- Provider Logos Marquee -->
     <section class="bg-gray-50 py-8 overflow-hidden">
       <UMarquee>
@@ -27,8 +38,10 @@
      </template>
            <h2 class="text-2xl font-semibold text-gray-800">Paybill Number</h2>
   <UPinInput v-model="value" type="number" disabled :length="7" highlight size="xl" /> 
-        <h2 class="text-2xl font-semibold text-gray-800">Account Number(the airtime recepient)</h2>
-                <h2 class="text-2xl font-extrabold text-gray-800">072 3456789</h2>
+        <h2 class="text-2xl font-semibold text-gray-800">Account Number</h2>
+                <h2 class="text-2xl font-extrabold text-gray-800">Your number</h2>
+                <USeparator label="or" />
+                 <UButton label="Buy Online" to="A/airtime" />
         <template #footer>
         <p class="text-gray-600 mt-2">Instant delivery to your phone number.No hidden charges.</p>
         </template>
@@ -53,11 +66,11 @@
 <!-- FAQ Section -->
     <section class="bg-gray-100 py-16 px-4">
       <h2 class="text-3xl font-bold text-center mb-12">FAQs</h2>
-      <div class="max-w-3xl mx-auto space-y-6">
-        <UAccordion :items="faqs"  />
-      </div>
+      <!-- <div class="max-w-3x mx-auto space-y-6"> -->
+        <UAccordion :items="faqs"  :ui="{}" />
+      <!-- </div> -->
     </section>
-  </UPage>
+  </div>
 </template>
 <script setup lang="ts">
 
@@ -82,7 +95,7 @@ const steps = [
   {
     title: 'Go to M-Pesa',
     description: 'Open the M-Pesa menu on your SIM Toolkit or app.'
-
+    
   },
   {
     title: 'Select Lipa na M-Pesa',
