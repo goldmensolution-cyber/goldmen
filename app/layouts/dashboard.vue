@@ -6,7 +6,7 @@
 </template>
 
 
-<UNavigationMenu :items="sidebar" />
+<UNavigationMenu :items="sidebar" orientation="vertical" />
 </UDashboardSidebar>
 
 
