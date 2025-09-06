@@ -1,16 +1,18 @@
 <template>
-  <div class="w-full">
+  <UPage>
     <UPageHero 
     title="Buy Airtime, Data Bundles & SMS for All Networks"
     description="Get airtime for Safaricom, Airtel, Telkom, Equitel and Faiba using our M-Pesa Paybill. Fast, reliable and secure."
     :links="links"
+    orientation="horizontal"
     headline="Fast and easy">
     <img
       src="/pic.jpeg"
       alt="App screenshot"
-      class="rounded-lg shadow-2xl ring ring-default"
+      class="rounded-lg shadow-2xl ring  ring-default"
     >
   </UPageHero>
+  <UPageSection :features="steps"/>
     <!-- Hero Section -->
     <!-- <section class="relative h-[90vh] bg-cover bg-center text-white" :style="{ backgroundImage: `url('pic.jpeg')` }">
       <div class="absolute inset-0 bg-black/50"/>
@@ -70,10 +72,12 @@
         <UAccordion :items="faqs"  />
       </div>
     </section>
-  </div>
+  </UPage>
 </template>
-
 <script setup lang="ts">
+
+
+
 const value = ref([4,1,6,6,2,8,3])
 const links = [
   {
@@ -93,6 +97,7 @@ const steps = [
   {
     title: 'Go to M-Pesa',
     description: 'Open the M-Pesa menu on your SIM Toolkit or app.'
+    
   },
   {
     title: 'Select Lipa na M-Pesa',
@@ -118,5 +123,6 @@ const faqs = [
     content: 'You will receive a notification. If deducted, your money will be reversed automatically.'
   }
 ]
+
 </script>
 

@@ -22,10 +22,7 @@ const columns: FooterColumn[] = [
         label: 'About Us',
         to: 'about',
       },
-      {
-        label: 'Contact Us',
-        to: '/contact'
-      }
+      
     ]
   },
   {
@@ -43,6 +40,10 @@ const columns: FooterColumn[] = [
         label: 'FAQs',
         to: '/faq',
       },
+      {
+        label: 'Contact Us',
+        to: '/contact'
+      }
       
     ]
   },
@@ -87,15 +88,16 @@ const columns: FooterColumn[] = [
 </script>
 
 <template>
-  <UFooter :ui="{ bottom: 'py-0 lg:py-0'}">
+  <UFooter :ui="{root:'bg-error-400 text-black', bottom: 'py-0 lg:py-0 '}">
     <template #top>
-  <UFooterColumns :columns="columns" :ui="{root: 'mb-0 flex md:flex-row w-full  justify between', center: 'w-full', left: 'w-1/4vw h-full'}">
+  <UFooterColumns :columns="columns" :ui="{root: 'bg-inherit mb-0 flex md:flex-row w-full flex-col  justify between', center: 'w-full', left: 'w-fit h-full'}">
     <template #left>
       <UAlert 
         title="Goldmen Solutions"
         description="For your Airtime needs"
-        icon="i-lucide-signal"
         variant="soft"
+        :ui="{title: 'font-extrabold text-3xl'}"
+        class="h-full bg-transparent flex"
         color="neutral"/>
     </template>
   </UFooterColumns>
