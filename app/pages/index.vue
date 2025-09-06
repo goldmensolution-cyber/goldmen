@@ -1,7 +1,18 @@
 <template>
   <div class="w-full">
+    <UPageHero 
+    title="Buy Airtime, Data Bundles & SMS for All Networks"
+    description="Get airtime for Safaricom, Airtel, Telkom, Equitel and Faiba using our M-Pesa Paybill. Fast, reliable and secure."
+    :links="links"
+    headline="Fast and easy">
+    <img
+      src="/pic.jpeg"
+      alt="App screenshot"
+      class="rounded-lg shadow-2xl ring ring-default"
+    >
+  </UPageHero>
     <!-- Hero Section -->
-    <section class="relative h-[90vh] bg-cover bg-center text-white" :style="{ backgroundImage: `url('pic.jpeg')` }">
+    <!-- <section class="relative h-[90vh] bg-cover bg-center text-white" :style="{ backgroundImage: `url('pic.jpeg')` }">
       <div class="absolute inset-0 bg-black/50"/>
       <div class="relative z-10 flex flex-col items-center justify-center h-full text-center px-4">
         <h1 class="text-4xl sm:text-6xl font-bold leading-tight max-w-3xl">
@@ -14,7 +25,7 @@
           Buy Airtime
         </UButton>
       </div>
-    </section>
+    </section> -->
 <!-- Provider Logos Marquee -->
     <section class="bg-gray-50 py-8 overflow-hidden">
       <UMarquee>
@@ -30,9 +41,7 @@
            <h2 class="text-2xl font-semibold text-gray-800">Paybill Number</h2>
   <UPinInput v-model="value" type="number" disabled :length="7" highlight size="xl" /> 
         <h2 class="text-2xl font-semibold text-gray-800">Account Number(the airtime recepient)</h2>
-        <UButton variant="outline" class="text-black" size="xl">
                 <h2 class="text-2xl font-extrabold text-gray-800">072 3456789</h2>
-          </UButton>
         <template #footer>
         <p class="text-gray-600 mt-2">Instant delivery to your phone number.No hidden charges.</p>
         </template>
@@ -66,6 +75,13 @@
 
 <script setup lang="ts">
 const value = ref([4,1,6,6,2,8,3])
+const links = [
+  {
+    label: 'Buy Airtime',
+    icon: 'i-lucide-banknote',
+    to: '/airtime'
+  }
+]
 const providers = [
   '/images/airtel.jpg',
   '/images/equitel.jpg',

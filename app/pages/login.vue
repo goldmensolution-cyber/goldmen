@@ -93,7 +93,7 @@ async function onSubmit(
       return;
     }
     toast.add({ title: 'Logged in', color: 'success' });
-    navigateTo('/dashboard');
+    navigateTo('/');
   }
 }
 </script>

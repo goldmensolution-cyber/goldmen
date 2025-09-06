@@ -301,7 +301,7 @@ const countdown = computed(() => {
           </template>
       </UAlert>
 
-      <UCard variant="subtle" class="bg-primary-50">
+      <UCard variant="subtle" class="bg-primary-50 ring-primary">
       <UForm :schema="schema" :state="state" class="" @submit="onFormSubmit($event, $event?.event)">
          <!-- Payer -->
         <UFormField 

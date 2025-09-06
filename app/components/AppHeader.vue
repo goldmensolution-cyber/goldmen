@@ -40,6 +40,7 @@ const supabase = useSupabaseClient()
 
 function handleLogout() {
   supabase.auth.signOut()
+  //reload page
   navigateTo('/')
 }
 </script>
@@ -71,7 +72,6 @@ function handleLogout() {
     </template>
     <template #right>
       <div v-if="!user" class="flex md:flex-row gap-3" >
-      <GoogleOneTap  />
       <UButton label="Login" color="error" to="/login" />
       </div>
       
