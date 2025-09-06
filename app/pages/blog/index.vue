@@ -8,7 +8,7 @@ const { data: posts } = await useAsyncData('posts', () => queryCollection('blog'
     <UPageBody>
       <UContainer>
         <UBlogPosts>
-          <lazyUBlogPost
+          <UBlogPost
             v-for="(post, index) in posts"
             :key="index"
             v-bind="post"
