@@ -6,7 +6,7 @@ const { data: posts } = await useAsyncData('posts', () => queryCollection('blog'
   <UPage>
     <UPageBody>
       <UContainer>
-        <UBlogPosts>
+        <lazyUBlogPosts>
           <UBlogPost
             v-for="(post, index) in posts"
             :key="index"
@@ -14,7 +14,7 @@ const { data: posts } = await useAsyncData('posts', () => queryCollection('blog'
             :to="post.path"
             :image="post.cover"
           />
-        </UBlogPosts>
+        </lazyUBlogPosts>
       </UContainer>
     </UPageBody>
   </UPage>
