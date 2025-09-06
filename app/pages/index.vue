@@ -1,7 +1,7 @@
 <template>
   <div class="w-full">
     <UPageHero 
-    title="Buy Airtime, Data Bundles & SMS for All Networks"
+    title="Buy Airtime for All Networks"
     description="Get airtime for Safaricom, Airtel, Telkom, Equitel and Faiba using our M-Pesa Paybill. Fast, reliable and secure."
     :links="links"
     :style="{ backgroundImage: `url('pic.jpeg')` }"
