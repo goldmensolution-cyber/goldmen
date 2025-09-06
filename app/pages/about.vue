@@ -75,12 +75,7 @@ const networks = ['Safaricom', 'Airtel', 'Telkom', 'Equitel', 'Faiba']
               <UBadge v-for="n in networks" :key="n" variant="subtle">{{ n }}</UBadge>
             </div>
           </li>
-          <li class="text-sm text-muted-foreground">
-            Hosted at
-            <UButton variant="link" to="https://goldmen.co.ke" target="_blank">goldmen.co.ke</UButton>
-            or
-            <UButton variant="link" to="https://goldmen.pages.dev" target="_blank">goldmen.pages.dev</UButton>
-          </li>
+          
         </ul>
 
         <USeparator class="my-4" />
