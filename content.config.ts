@@ -16,6 +16,17 @@ export default defineContentConfig({
       tags: z.array(z.string()).optional(),
       cover: z.string().optional()
     })
-  }),   
-  }
+  }), 
+  help: defineCollection({
+    type: 'page',
+    source: 'help/*.md',
+    schema: z.object({
+      title: z.string(),
+      slug: z.string().min(1).max(100),
+      date: z.string().datetime(),
+      excerpt: z.string().optional(),
+
+  })
+  }),
+}
 })
