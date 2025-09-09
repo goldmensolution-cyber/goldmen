@@ -108,7 +108,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
             </UButton>
           </div>
 
-          <UDivider />
+          <USeparator />
 
           <div class="space-y-1 text-sm">
             <p>

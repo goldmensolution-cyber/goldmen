@@ -2,6 +2,7 @@ onlyBuiltDependencies:
   - '@tailwindcss/oxide'
   - better-sqlite3
   - esbuild
+  - maplibre-gl
   - sharp
   - vue-demi
   - workerd

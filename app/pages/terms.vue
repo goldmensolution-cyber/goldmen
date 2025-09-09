@@ -103,7 +103,7 @@ const sections = [
           </div>
         </div>
 
-        <UDivider />
+        <USeparator />
 
         <div class="flex flex-wrap items-center gap-2">
           <UButton to="/" variant="outline">Home</UButton>

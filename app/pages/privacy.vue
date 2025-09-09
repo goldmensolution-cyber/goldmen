@@ -115,7 +115,7 @@ const email = 'goldmen.solution@gmail.com'
           </p>
         </section>
 
-        <UDivider />
+        <USeparator />
         <div class="flex flex-wrap gap-2">
           <UButton to="/" variant="outline">Home</UButton>
           <UButton to="/terms" variant="ghost">Terms of Service</UButton>

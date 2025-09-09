@@ -56,6 +56,7 @@
         <UAccordion :items="faqs"  :ui="{root: 'text-4xl'}" />
       <!-- </div> -->
     </section>
+    <BlogSection />
   </div>
 </template>
 <script setup lang="ts">
