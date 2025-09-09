@@ -24,6 +24,7 @@
     "@vueuse/nuxt": "13.9.0",
     "better-sqlite3": "^12.2.0",
     "date-fns": "^4.1.0",
+    "@unovis/vue": "^1.6.0",
     "drizzle-orm": "^0.44.5",
     "maska": "^3.2.0",
     "nuxt": "^4.1.1",
