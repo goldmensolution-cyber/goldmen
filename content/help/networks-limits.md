@@ -9,7 +9,7 @@ authors:
     avatar:
       src: "/images/support-avatar.png"
 to: "/help/networks-limits"
-image: "/images/help-networks-cover.png"
+image: "/viruses-mobile-security-8.jpeg"
 variant: "outline"
 orientation: "vertical"
 ---
