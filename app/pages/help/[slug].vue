@@ -9,6 +9,16 @@ definePageMeta({
 </script>
 
 <template>
+      <UPage>
+    <UPageHeader :title="page.title" :description="page.description" />
+
+    <UPageBody>
   <!-- Render the blog post as Prose & Vue components -->
   <ContentRenderer :value="post" />
+    </UPageBody>
+
+    <template #right>
+      <UContentToc :links="page.body.toc.links" />
+    </template>
+  </UPage>
 </template>
