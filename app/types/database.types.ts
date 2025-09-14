@@ -14,6 +14,104 @@ export type Database = {
   }
   public: {
     Tables: {
+      airtime_orders: {
+        Row: {
+          account_reference: string
+          amount: number
+          created_at: string
+          created_by: string | null
+          currency: Database["public"]["Enums"]["currency_enum"]
+          customer_msisdn: string | null
+          description: string | null
+          id: string
+          idempotency_key: string | null
+          kyanda_tx_id: string | null
+          metadata: Json
+          mpesa_payment_id: string | null
+          payment_status: Database["public"]["Enums"]["payment_status_enum"]
+          recipient_msisdn: string
+          requires_recon: boolean
+          telco_code: Database["public"]["Enums"]["telco_enum"]
+          updated_at: string
+          vend_status: Database["public"]["Enums"]["vend_status_enum"]
+          vendor_id: string
+          vendor_reference: string | null
+        }
+        Insert: {
+          account_reference: string
+          amount: number
+          created_at?: string
+          created_by?: string | null
+          currency?: Database["public"]["Enums"]["currency_enum"]
+          customer_msisdn?: string | null
+          description?: string | null
+          id?: string
+          idempotency_key?: string | null
+          kyanda_tx_id?: string | null
+          metadata?: Json
+          mpesa_payment_id?: string | null
+          payment_status?: Database["public"]["Enums"]["payment_status_enum"]
+          recipient_msisdn: string
+          requires_recon?: boolean
+          telco_code: Database["public"]["Enums"]["telco_enum"]
+          updated_at?: string
+          vend_status?: Database["public"]["Enums"]["vend_status_enum"]
+          vendor_id: string
+          vendor_reference?: string | null
+        }
+        Update: {
+          account_reference?: string
+          amount?: number
+          created_at?: string
+          created_by?: string | null
+          currency?: Database["public"]["Enums"]["currency_enum"]
+          customer_msisdn?: string | null
+          description?: string | null
+          id?: string
+          idempotency_key?: string | null
+          kyanda_tx_id?: string | null
+          metadata?: Json
+          mpesa_payment_id?: string | null
+          payment_status?: Database["public"]["Enums"]["payment_status_enum"]
+          recipient_msisdn?: string
+          requires_recon?: boolean
+          telco_code?: Database["public"]["Enums"]["telco_enum"]
+          updated_at?: string
+          vend_status?: Database["public"]["Enums"]["vend_status_enum"]
+          vendor_id?: string
+          vendor_reference?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "airtime_orders_telco_code_fkey"
+            columns: ["telco_code"]
+            isOneToOne: false
+            referencedRelation: "telcos"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "airtime_orders_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_orders_kyanda"
+            columns: ["kyanda_tx_id"]
+            isOneToOne: true
+            referencedRelation: "kyanda_transactions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_orders_mpesa"
+            columns: ["mpesa_payment_id"]
+            isOneToOne: true
+            referencedRelation: "mpesa_payments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       audit_log: {
         Row: {
           action: string
@@ -38,30 +136,39 @@ export type Database = {
         }
         Relationships: []
       }
-      jobs: {
+      inbound_webhooks: {
         Row: {
-          attempts: number | null
-          created_at: string | null
+          error: string | null
+          event_type: string | null
+          external_id: string | null
           id: string
-          job_type: string
-          next_run: string | null
           payload: Json
+          processed: boolean
+          processed_at: string | null
+          received_at: string
+          source: string
         }
         Insert: {
-          attempts?: number | null
-          created_at?: string | null
+          error?: string | null
+          event_type?: string | null
+          external_id?: string | null
           id?: string
-          job_type: string
-          next_run?: string | null
           payload: Json
+          processed?: boolean
+          processed_at?: string | null
+          received_at?: string
+          source: string
         }
         Update: {
-          attempts?: number | null
-          created_at?: string | null
+          error?: string | null
+          event_type?: string | null
+          external_id?: string | null
           id?: string
-          job_type?: string
-          next_run?: string | null
           payload?: Json
+          processed?: boolean
+          processed_at?: string | null
+          received_at?: string
+          source?: string
         }
         Relationships: []
       }
@@ -104,6 +211,83 @@ export type Database = {
         }
         Relationships: []
       }
+      kyanda_transactions: {
+        Row: {
+          amount: number | null
+          biller_receipt: string | null
+          category: string | null
+          created_at: string
+          destination_msisdn: string | null
+          id: string
+          merchant_id: string | null
+          occurred_at: string | null
+          phone_number_msisdn: string | null
+          raw_payload: Json
+          source_msisdn: string | null
+          status_code: string | null
+          status_text: string | null
+          telco_reference: string | null
+          transaction_id: string | null
+          transaction_ref: string | null
+          unique_ref: string | null
+          updated_at: string
+          vend_status: Database["public"]["Enums"]["vend_status_enum"]
+          vendor_id: string
+        }
+        Insert: {
+          amount?: number | null
+          biller_receipt?: string | null
+          category?: string | null
+          created_at?: string
+          destination_msisdn?: string | null
+          id?: string
+          merchant_id?: string | null
+          occurred_at?: string | null
+          phone_number_msisdn?: string | null
+          raw_payload: Json
+          source_msisdn?: string | null
+          status_code?: string | null
+          status_text?: string | null
+          telco_reference?: string | null
+          transaction_id?: string | null
+          transaction_ref?: string | null
+          unique_ref?: string | null
+          updated_at?: string
+          vend_status?: Database["public"]["Enums"]["vend_status_enum"]
+          vendor_id: string
+        }
+        Update: {
+          amount?: number | null
+          biller_receipt?: string | null
+          category?: string | null
+          created_at?: string
+          destination_msisdn?: string | null
+          id?: string
+          merchant_id?: string | null
+          occurred_at?: string | null
+          phone_number_msisdn?: string | null
+          raw_payload?: Json
+          source_msisdn?: string | null
+          status_code?: string | null
+          status_text?: string | null
+          telco_reference?: string | null
+          transaction_id?: string | null
+          transaction_ref?: string | null
+          unique_ref?: string | null
+          updated_at?: string
+          vend_status?: Database["public"]["Enums"]["vend_status_enum"]
+          vendor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "kyanda_transactions_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mpesa_callback: {
         Row: {
           created_at: string
@@ -121,6 +305,141 @@ export type Database = {
           id?: number
         }
         Relationships: []
+      }
+      mpesa_payments: {
+        Row: {
+          account_reference: string
+          amount: number
+          business_shortcode: string
+          callback_raw: Json | null
+          callback_url: string
+          checkout_request_id: string | null
+          created_at: string
+          customer_message: string | null
+          id: string
+          merchant_request_id: string | null
+          mpesa_receipt_number: string | null
+          paid_amount: number | null
+          party_a_msisdn: string
+          party_b_shortcode: string
+          payer_msisdn: string | null
+          phone_number_msisdn: string
+          response_code: string | null
+          response_description: string | null
+          result_code: number | null
+          result_desc: string | null
+          status: Database["public"]["Enums"]["payment_status_enum"]
+          transaction_desc: string | null
+          transaction_time: string | null
+          transaction_type: string
+          updated_at: string
+        }
+        Insert: {
+          account_reference: string
+          amount: number
+          business_shortcode?: string
+          callback_raw?: Json | null
+          callback_url: string
+          checkout_request_id?: string | null
+          created_at?: string
+          customer_message?: string | null
+          id?: string
+          merchant_request_id?: string | null
+          mpesa_receipt_number?: string | null
+          paid_amount?: number | null
+          party_a_msisdn: string
+          party_b_shortcode?: string
+          payer_msisdn?: string | null
+          phone_number_msisdn: string
+          response_code?: string | null
+          response_description?: string | null
+          result_code?: number | null
+          result_desc?: string | null
+          status?: Database["public"]["Enums"]["payment_status_enum"]
+          transaction_desc?: string | null
+          transaction_time?: string | null
+          transaction_type?: string
+          updated_at?: string
+        }
+        Update: {
+          account_reference?: string
+          amount?: number
+          business_shortcode?: string
+          callback_raw?: Json | null
+          callback_url?: string
+          checkout_request_id?: string | null
+          created_at?: string
+          customer_message?: string | null
+          id?: string
+          merchant_request_id?: string | null
+          mpesa_receipt_number?: string | null
+          paid_amount?: number | null
+          party_a_msisdn?: string
+          party_b_shortcode?: string
+          payer_msisdn?: string | null
+          phone_number_msisdn?: string
+          response_code?: string | null
+          response_description?: string | null
+          result_code?: number | null
+          result_desc?: string | null
+          status?: Database["public"]["Enums"]["payment_status_enum"]
+          transaction_desc?: string | null
+          transaction_time?: string | null
+          transaction_type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          channel: string
+          created_at: string
+          id: string
+          level: string
+          message: string
+          order_id: string | null
+          seen_at: string | null
+          title: string | null
+          user_id: string | null
+        }
+        Insert: {
+          channel?: string
+          created_at?: string
+          id?: string
+          level?: string
+          message: string
+          order_id?: string | null
+          seen_at?: string | null
+          title?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          channel?: string
+          created_at?: string
+          id?: string
+          level?: string
+          message?: string
+          order_id?: string | null
+          seen_at?: string | null
+          title?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "airtime_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notifications_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "v_orders_dashboard"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -161,30 +480,24 @@ export type Database = {
         }
         Relationships: []
       }
-      providers: {
+      telcos: {
         Row: {
-          config: Json | null
-          created_at: string | null
-          enabled: boolean | null
-          id: string
-          kind: string
-          updated_at: string | null
+          active: boolean
+          code: Database["public"]["Enums"]["telco_enum"]
+          display_name: string
+          vendor_name: string
         }
         Insert: {
-          config?: Json | null
-          created_at?: string | null
-          enabled?: boolean | null
-          id: string
-          kind: string
-          updated_at?: string | null
+          active?: boolean
+          code: Database["public"]["Enums"]["telco_enum"]
+          display_name: string
+          vendor_name: string
         }
         Update: {
-          config?: Json | null
-          created_at?: string | null
-          enabled?: boolean | null
-          id?: string
-          kind?: string
-          updated_at?: string | null
+          active?: boolean
+          code?: Database["public"]["Enums"]["telco_enum"]
+          display_name?: string
+          vendor_name?: string
         }
         Relationships: []
       }
@@ -327,6 +640,27 @@ export type Database = {
           },
         ]
       }
+      vendors: {
+        Row: {
+          code: string
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       mv_daily_payments: {
@@ -369,6 +703,58 @@ export type Database = {
             columns: ["parent_transaction_id"]
             isOneToOne: false
             referencedRelation: "transactions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      v_orders_dashboard: {
+        Row: {
+          account_reference: string | null
+          amount: number | null
+          created_at: string | null
+          created_by: string | null
+          currency: Database["public"]["Enums"]["currency_enum"] | null
+          customer_msisdn: string | null
+          description: string | null
+          id: string | null
+          kyanda_tx_id: string | null
+          metadata: Json | null
+          mpesa_payment_id: string | null
+          mpesa_receipt_number: string | null
+          order_state: string | null
+          payment_status:
+            | Database["public"]["Enums"]["payment_status_enum"]
+            | null
+          recipient_msisdn: string | null
+          requires_recon: boolean | null
+          status_text: string | null
+          telco_code: Database["public"]["Enums"]["telco_enum"] | null
+          transaction_id: string | null
+          transaction_ref: string | null
+          transaction_time: string | null
+          updated_at: string | null
+          vend_status: Database["public"]["Enums"]["vend_status_enum"] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "airtime_orders_telco_code_fkey"
+            columns: ["telco_code"]
+            isOneToOne: false
+            referencedRelation: "telcos"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "fk_orders_kyanda"
+            columns: ["kyanda_tx_id"]
+            isOneToOne: true
+            referencedRelation: "kyanda_transactions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_orders_mpesa"
+            columns: ["mpesa_payment_id"]
+            isOneToOne: true
+            referencedRelation: "mpesa_payments"
             referencedColumns: ["id"]
           },
         ]
@@ -443,8 +829,27 @@ export type Database = {
     Enums: {
       auth_provider: "password" | "phone" | "google"
       currency_code: "KES"
+      currency_enum: "KES"
       payment_provider: "MPESA"
+      payment_status_enum:
+        | "initiated"
+        | "awaiting_customer"
+        | "paid"
+        | "cancelled"
+        | "timed_out"
+        | "failed"
+        | "reversed"
+        | "refunded"
+        | "unknown"
+      telco_enum: "SAFARICOM" | "AIRTEL" | "TELKOM" | "EQUITEL" | "FAIBA"
       txn_status: "PENDING" | "SUCCESS" | "FAILED" | "CANCELLED" | "EXPIRED"
+      vend_status_enum:
+        | "submitted"
+        | "pending"
+        | "success"
+        | "failed"
+        | "reversed"
+        | "unknown"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -574,8 +979,29 @@ export const Constants = {
     Enums: {
       auth_provider: ["password", "phone", "google"],
       currency_code: ["KES"],
+      currency_enum: ["KES"],
       payment_provider: ["MPESA"],
+      payment_status_enum: [
+        "initiated",
+        "awaiting_customer",
+        "paid",
+        "cancelled",
+        "timed_out",
+        "failed",
+        "reversed",
+        "refunded",
+        "unknown",
+      ],
+      telco_enum: ["SAFARICOM", "AIRTEL", "TELKOM", "EQUITEL", "FAIBA"],
       txn_status: ["PENDING", "SUCCESS", "FAILED", "CANCELLED", "EXPIRED"],
+      vend_status_enum: [
+        "submitted",
+        "pending",
+        "success",
+        "failed",
+        "reversed",
+        "unknown",
+      ],
     },
   },
 } as const
