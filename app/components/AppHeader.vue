@@ -54,7 +54,7 @@ function handleLogout() {
       class="h-6 w-auto" 
       />
     </template>
-    <UNavigationMenu :ui="{linkLabel: 'text-error'}" highlight highlight-color="error" :items="items" />
+    <UNavigationMenu color="error" highlight highlight-color="error" :items="items" />
     <div v-if="user" class="flex md:flex-row gap-3" >
         <UButton v-if="user.role=='admin'" label="My Dashboard" to="/dashboard" color="error" variant="link" />
         <UButton label="My Profile" to="/profile"  color="error" variant="link" />
