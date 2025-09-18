@@ -4,7 +4,7 @@
     <div>
         <AppHeader  />
         <slot />
-            <USeparator icon="i-lucide-signal" type="dashed" class="h-px" />
+            <USeparator icon="i-lucide-signal" type="solid" size="sm" color="warning" />
         <AppFooter  />
 </div>
 </template>

@@ -96,7 +96,7 @@ const columns: FooterColumn[] = [
         title="Goldmen Solutions"
         description="For your Airtime needs"
         variant="soft"
-        :ui="{title: 'font-extrabold text-3xl'}"
+        :ui="{title: 'font-extrabold  text-3xl'}"
         class="h-full bg-transparent flex"
         color="neutral"/>
     </template>
