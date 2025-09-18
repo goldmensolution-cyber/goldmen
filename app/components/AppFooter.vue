@@ -90,6 +90,7 @@ const columns: FooterColumn[] = [
 <template>
   <UFooter :ui="{root:'bg-error text-white', bottom: 'py-0 lg:py-0 '}">
     <template #top>
+       <USeparator icon="i-lucide-signal" type="solid" size="sm" color="warning" />
   <UFooterColumns :columns="columns" :ui="{root: 'bg-inherit mb-0 flex md:flex-row w-full flex-col text-white  justify between', center: 'w-full', left: 'w-fit h-full'}">
     <template #left>
       <UAlert 
