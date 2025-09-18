@@ -88,9 +88,9 @@ const columns: FooterColumn[] = [
 </script>
 
 <template>
-  <UFooter :ui="{root:'bg-error-400 text-black', bottom: 'py-0 lg:py-0 '}">
+  <UFooter :ui="{root:'bg-error text-white', bottom: 'py-0 lg:py-0 '}">
     <template #top>
-  <UFooterColumns :columns="columns" :ui="{root: 'bg-inherit mb-0 flex md:flex-row w-full flex-col  justify between', center: 'w-full', left: 'w-fit h-full'}">
+  <UFooterColumns :columns="columns" :ui="{root: 'bg-inherit mb-0 flex md:flex-row w-full flex-col text-white  justify between', center: 'w-full', left: 'w-fit h-full'}">
     <template #left>
       <UAlert 
         title="Goldmen Solutions"
