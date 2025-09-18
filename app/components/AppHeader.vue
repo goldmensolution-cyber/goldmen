@@ -49,10 +49,11 @@ function handleLogout() {
   <UHeader
   :ui="{ root: 'font-playfair'}">
     <template #title>
-     <NuxtImg
+     <!-- <NuxtImg
       src="/brand.png"
       class="h-6 w-auto" 
-      />
+      /> -->
+      <UUser :avatar="{src: '/brandicon.png', class: 'rounded-none'}" name="Goldmen" class="font-medium text-error" :ui="{description: 'font-medium text-error',name: 'text-error' }" description="Solutions" />
     </template>
     <UNavigationMenu color="error" highlight highlight-color="error" :items="items" />
     <div v-if="user" class="flex md:flex-row gap-3" >
