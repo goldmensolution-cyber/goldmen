@@ -28,7 +28,7 @@ export default defineAppConfig({
           variants: {
             active: {
               true: {
-                link: 'text-error font-medium'
+                link: 'text-default font-medium'
               },
               false: {
                 link: [
