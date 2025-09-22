@@ -56,7 +56,7 @@
               </div>
             </template>
           </UCard>
-        <UCard class="mx-auto max-w-md ring-primary divide-y-0">
+        <UCard class="mx-auto max-w-md ring-primary divide-y-0 hidden">
           <template #header>
             <NuxtImg src="/images/lipa.png" class="object-cover  w-full h-20" />
      </template>
