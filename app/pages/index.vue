@@ -86,14 +86,8 @@
     </section>
     <section class="flex mx-auto justify-center p-4">
 <iframe width="560" height="315" src="https://youtube.com/embed/KHnEVzDsb1A" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-</section>    
-<!-- FAQ Section -->
-    <section class="bg-gray-100 py-16 px-4">
-      <h2 class="text-3xl font-bold text-center mb-12">FAQs</h2>
-      <!-- <div class="max-w-3x mx-auto space-y-6"> -->
-        <UAccordion :items="faqs"  :ui="{root: 'text-4xl'}" />
-      <!-- </div> -->
-    </section>
+</section> 
+<UHeader title="Help Articles" />   
     <BlogSection />
   </div>
 </template>
@@ -160,20 +154,7 @@ const steps = [
   }
 ]
 
-const faqs = [
-  {
-    label: 'Can I send airtime to any network?',
-    content: 'Yes. goldmen supports airtime purchases for all Kenyan networks.'
-  },
-  {
-    label: 'Is there a fee for using goldmen?',
-    content: 'No extra fee is charged — standard M-Pesa Paybill rates apply.'
-  },
-  {
-    label: 'What happens if my payment fails?',
-    content: 'You will receive a notification. If deducted, your money will be reversed automatically.'
-  }
-]
+
 
 </script>
 
