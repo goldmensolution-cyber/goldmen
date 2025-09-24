@@ -20,7 +20,7 @@
 
     <section class="py-10 bg-white text-center">
         <UPageGrid>
-       <UCard variant="outline" class="h-full w-full flex flex-col">
+       <UCard variant="outline" class="h-full w-full flex flex-col ring-primary">
             <template #header>
               <div class="flex items-center justify-between">
                 <div>
@@ -44,13 +44,13 @@
                 class="w-full"
               />
 
-              <UAlert variant="subtle" class="mt-6" icon="i-lucide-info" description="your mobile number as the account/reference for instant top-up."/>
+              <UAlert variant="subtle" class="mt-6" icon="i-lucide-info" title="Your mobile number as the account/reference for instant top-up."/>
             </div>
 
             <template #footer>
               <div class="flex gap-3 justify-end p-4 sm:px-6">
-                <UButton color="error" size="md" :to="{ hash: '#how-to-pay' }">
-                  Pay via Paybill
+                <UButton color="primary" size="md" :to="{ hash: '#how-to-pay' }">
+                  Pay via Mpesa Paybill
                 </UButton>
                 <UButton variant="outline" color="error" size="md" to="/airtime">
                   Use Airtime Form
@@ -58,7 +58,7 @@
               </div>
             </template>
           </UCard>
-          <UCard variant="outline" class="h-full w-full flex flex-col">
+          <UCard variant="outline" class="h-full w-full flex flex-col ring-error">
             <template #header>
               <div class="flex items-center justify-between">
                 <div>
@@ -82,7 +82,7 @@
                 class="w-full"
               />
 
-              <UAlert variant="subtle" class="mt-6" icon="i-lucide-info" description="your mobile number as the account/reference for instant top-up."/>
+              <UAlert variant="subtle" class="mt-6" icon="i-lucide-info" title="Your mobile number as the account/reference for instant top-up."/>
             </div>
 
             <template #footer>

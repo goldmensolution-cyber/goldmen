@@ -87,8 +87,7 @@ useSeoMeta({
     <!-- Hero like 30secondsofcode -->
     <UPageHeader
       title="Discover helpful guides to level up your mobile life"
-      description="Tech, AI, Safaricom, and airtime tutorials for Kenya — from Goldmen.co.ke."
-      headline="Blog"
+      description="Tech, AI, Safaricom, and airtime tutorials "
     >
       <div class="mt-4 grid gap-3 sm:flex">
         <UInput
