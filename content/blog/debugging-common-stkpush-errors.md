@@ -11,6 +11,7 @@ tags:
   - stkpush
   - errors
 cover: /AI Man and Woman 6.jpeg
+category: 'Api'
 ---
 
 ## Typical lifecycle

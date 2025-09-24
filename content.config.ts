@@ -14,6 +14,7 @@ export default defineContentConfig({
       excerpt: z.string().optional(),
       author: z.string().default('Bonface Muthoni'), // default to main author
       tags: z.array(z.string()).optional(),
+      category: z.string().optional(),
       cover: z.string().optional()
     })
   }), 
@@ -26,6 +27,7 @@ export default defineContentConfig({
       image: z.string(),
       date: z.string().datetime(),
       excerpt: z.string().optional(),
+      category: z.string().optional(),
 
   })
   }),

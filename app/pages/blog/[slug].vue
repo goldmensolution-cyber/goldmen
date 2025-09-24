@@ -1,33 +1,84 @@
 <script setup lang="ts">
+import { format } from 'date-fns'
+
 const route = useRoute()
 
-definePageMeta({
-  layout: 'blogpage'
-})
+// Fetch the current page by path
+const { data: page } = await useAsyncData(route.path, () =>
+  queryCollection('blog').path(route.path).first()
+)
 
-const { data: page } = await useAsyncData(route.path, () => {
-  return queryCollection('blog').path(route.path).first()
-})
+// 404 if not found
+if (!page.value) {
+  throw createError({ statusCode: 404, statusMessage: 'Article not found', fatal: true })
+}
 
-const { data: surround } = await useAsyncData(`${route.path}-surround`, () => {
-  return queryCollectionItemSurroundings('blog', route.path)
+// Prev/next surroundings
+const { data: surround } = await useAsyncData(`${route.path}-surround`, () =>
+  queryCollectionItemSurroundings('blog', route.path, { fields: ['title', 'path'] })
+)
+
+// SEO
+useSeoMeta({
+  title: `${page.value.title} — Goldmen Blog`,
+  description: page.value.excerpt || undefined,
+  ogTitle: page.value.title,
+  ogDescription: page.value.excerpt || undefined,
+  ogImage: page.value.cover || undefined,
+  twitterCard: 'summary_large_image'
 })
 </script>
 
 <template>
-  <UPage>
-    <UPageHeader :title="page.title" :description="page.description" />
+  <UPage v-if="page" >
+    <UPageHeader
+      :title="page.title"
+      :description="page.excerpt"
+    >
+      <template #bottom>
+        <div class="flex flex-wrap items-center gap-3 text-sm text-muted">
+          <UBadge v-if="page.category" color="primary" variant="subtle" class="capitalize">
+            {{ page.category }}
+          </UBadge>
+
+          <span class="inline-flex items-center gap-1">
+            <UIcon name="i-lucide-calendar" />
+            {{ page.date ? format(new Date(page.date), 'PPP') : '' }}
+          </span>
+
+          <span v-if="page.author" class="inline-flex items-center gap-1">
+            <UIcon name="i-lucide-user" />
+            by {{ page.author }}
+          </span>
+
+          <div class="flex flex-wrap gap-2">
+            <UBadge
+              v-for="t in page.tags || []"
+              :key="t"
+              color="neutral"
+              variant="outline"
+              class="text-xs"
+            >
+              #{{ t }}
+            </UBadge>
+          </div>
+        </div>
+      </template>
+    </UPageHeader>
 
     <UPageBody>
-      <ContentRenderer :value="page" />
+      <!-- Main content -->
+      <ContentRenderer v-if="page.body" :value="page" />
 
-      <USeparator />
-
-      <UContentSurround :surround="surround" />
+      <USeparator v-if="(surround || []).filter(Boolean).length" class="my-8" />
+      <UContentSurround :surround="(surround as any)" />
     </UPageBody>
 
-    <template #right>
+    <template v-if="page?.body?.toc?.links?.length" #right>
       <UContentToc :links="page.body.toc.links" />
+    </template>
+    <template #left>
+      <p>.</p>
     </template>
   </UPage>
 </template>

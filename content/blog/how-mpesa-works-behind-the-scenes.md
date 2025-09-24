@@ -6,6 +6,7 @@ excerpt: A technical but approachable explanation of M-Pesa's main flows (Lipa
   na M-Pesa, Paybill, Buy Goods), and how merchants integrate with Safaricom's
   APIs.
 author: Bonface Muthoni
+category: Mpesa
 tags:
   - mpesa
   - safaricom

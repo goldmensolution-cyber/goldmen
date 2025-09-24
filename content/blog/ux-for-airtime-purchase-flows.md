@@ -4,6 +4,7 @@ slug: "ux-for-airtime-purchase-flows"
 date: 2025-08-13
 excerpt: "User experience guide for fast, reliable, and trust-building airtime purchase flows — mobile-first design, failure messaging, and checkout optimizations for Kenyan users."
 author: "Bonface Muthoni"
+category: Help
 tags: ["ux", "design", "airtime", "payments"]
 cover: "/images/hero-bg.jpeg"
 ---

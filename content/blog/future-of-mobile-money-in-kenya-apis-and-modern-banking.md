@@ -11,6 +11,7 @@ tags:
   - mpesa
   - innovation
 cover: /images/hero-bg.jpeg
+category: mpesa
 ---
 
 ## Trends to watch

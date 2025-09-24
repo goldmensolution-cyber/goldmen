@@ -4,6 +4,7 @@ slug: "safaricom-developer-sandbox-best-practices"
 date: 2025-08-13
 excerpt: "Practical sandbox usage tips: avoiding rate limits, simulating user behavior, and structuring tests for Daraja integrations."
 author: "Bonface Muthoni"
+category: APIs
 tags: ["safaricom", "sandbox", "testing", "mpesa"]
 cover: "/images/hero-bg.jpeg"
 ---
