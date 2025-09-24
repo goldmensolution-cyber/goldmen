@@ -17,17 +17,19 @@
   </UMarquee>
     </section>
     <!-- Stylized Paybill Number -->
+
     <section class="py-10 bg-white text-center">
-       <UCard variant="outline" class="h-full flex flex-col">
+        <UPageGrid>
+       <UCard variant="outline" class="h-full w-full flex flex-col">
             <template #header>
               <div class="flex items-center justify-between">
                 <div>
-                  <h3 class="text-xl font-semibold">Pay via Paybill</h3>
-                  <p class="text-sm text-muted">Business number: <strong class="text-error">4166283</strong></p>
+                  <h3 class="text-xl font-semibold">Pay via Mpesa Paybill</h3>
+                  <p class="text-sm text-muted">Business number: <strong class="text-primary">4166283</strong></p>
                 </div>
                 <div class="flex items-center gap-3">
                   <UIcon name="i-lucide-signal" class="size-5" />
-                  <UIcon name="i-lucide-phone" class="size-5" />
+                  <UIcon name="i-custom-safaricom" class="size-5" />
                 </div>
               </div>
             </template>
@@ -36,13 +38,13 @@
               <!-- Vertical stepper (red) -->
               <UStepper
                 :items="paybillSteps"
-                color="error"
+                color="primary"
                 orientation="vertical"
                 size="md"
                 class="w-full"
               />
 
-              <UAlert variant="subtle" class="mt-6" icon="i-lucide-info">Use your mobile number as the account/reference for instant top-up.</UAlert>
+              <UAlert variant="subtle" class="mt-6" icon="i-lucide-info" description="your mobile number as the account/reference for instant top-up."/>
             </div>
 
             <template #footer>
@@ -56,6 +58,47 @@
               </div>
             </template>
           </UCard>
+          <UCard variant="outline" class="h-full w-full flex flex-col">
+            <template #header>
+              <div class="flex items-center justify-between">
+                <div>
+                  <h3 class="text-xl font-semibold">Pay via Airtel Money</h3>
+                  <p class="text-sm text-muted">Business number: <strong class="text-error">4166283</strong></p>
+                </div>
+                <div class="flex items-center gap-3">
+                  <UIcon name="i-lucide-signal" class="size-5" />
+                  <UIcon name="i-custom-airtel" class="size-5" />
+                </div>
+              </div>
+            </template>
+
+            <div class="p-4 sm:p-6 grow">
+              <!-- Vertical stepper (red) -->
+              <UStepper
+                :items="AirtelpaybillSteps"
+                color="error"
+                orientation="vertical"
+                size="md"
+                class="w-full"
+              />
+
+              <UAlert variant="subtle" class="mt-6" icon="i-lucide-info" description="your mobile number as the account/reference for instant top-up."/>
+            </div>
+
+            <template #footer>
+              <div class="flex gap-3 justify-end p-4 sm:px-6">
+                <UButton color="error" size="md" :to="{ hash: '#how-to-pay' }">
+                  Pay via Paybill
+                </UButton>
+                <UButton variant="outline" color="error" size="md" to="/airtime">
+                  Use Airtime Form
+                </UButton>
+              </div>
+            </template>
+          </UCard>
+          <iframe width="315" height="560" src="https://youtube.com/embed/cgzS3tIHMbU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+          </UPageGrid>
         <UCard class="mx-auto max-w-md ring-primary divide-y-0 hidden">
           <template #header>
             <NuxtImg src="/images/lipa.png" class="object-cover  w-full h-20" />
@@ -117,6 +160,33 @@ const paybillSteps = ref([
   {
     title: 'Enter Business Number',
     description: 'Use <strong>4166283</strong> as the business number',
+    icon: 'i-lucide-hash'
+  },
+  {
+    title: 'Enter Reference',
+    description: 'Use your phone number as the reference',
+    icon: 'i-lucide-user'
+  },
+  {
+    title: 'Enter Amount & Confirm',
+    description: 'Confirm the details and complete the payment',
+    icon: 'i-lucide-check'
+  }
+])
+const AirtelpaybillSteps = ref([
+  {
+    title: 'Open Airtel Money',
+    description: 'Tap Paybill',
+    icon: 'i-lucide-smartphone'
+  },
+  {
+    title: 'Select Mpesa Paybill',
+    description: 'Choose "Mpesa Paybill" from the menu',
+    icon: 'i-lucide-list' 
+  },
+  {
+    title: 'Enter Business Number',
+    description: 'Use 4166283 as the business number',
     icon: 'i-lucide-hash'
   },
   {

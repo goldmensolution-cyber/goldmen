@@ -10,7 +10,7 @@ tags:
   - debugging
   - stkpush
   - errors
-cover: /AI Man and Woman 6.jpeg
+cover: /pic.jpeg
 category: 'Api'
 ---
 

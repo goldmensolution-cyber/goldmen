@@ -10,7 +10,7 @@ tags:
   - open-banking
   - mpesa
   - innovation
-cover: /images/hero-bg.jpeg
+cover: /pic.jpeg
 category: mpesa
 ---
 

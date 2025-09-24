@@ -1,3 +1,13 @@
+---
+title: "hat is Meant By Digital security Today"
+slug: "what-is-meant-by-mobile-security-today"
+date: 2025-08-13
+excerpt: "Mobile security is a system of security software and habits that keeps your data out of the hands of hackers"
+author: "Bonface Muthoni"
+category: Tech
+tags: ["regulation", "compliance", "cbk", "payments"]
+cover: /pic.jpeg
+---
 # What Is Meant By Mobile Security Today?
 
 Our tablets, laptops, and smartphones aren’t just for making calls, checking email, and sending text messages—they’re increasingly becoming the primary way we shop online, bank, and even work. It’s easy to forget how much we entrust to these devices, because they play such a large role in our daily lives.

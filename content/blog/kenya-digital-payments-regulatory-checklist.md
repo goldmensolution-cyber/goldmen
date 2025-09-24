@@ -6,7 +6,7 @@ excerpt: "A practical checklist for small businesses and startups integrating mo
 author: "Bonface Muthoni"
 category: Payments
 tags: ["regulation", "compliance", "cbk", "payments"]
-cover: "/images/hero-bg.jpeg"
+cover: /pic.jpeg
 ---
 
 ## Quick disclaimer
