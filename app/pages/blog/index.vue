@@ -144,7 +144,7 @@ useSeoMeta({
         </NuxtLink>
       </div>
 
-      <div class="mt-8 flex justify-center">
+      <!-- <div class="mt-8 flex justify-center">
         <UPagination
           v-model:page="(page as any)"
           :total="total || 0 || totalPages"
@@ -152,7 +152,7 @@ useSeoMeta({
           :to="(p: number) => ({ query: { ...route.query, page: p } })"
           show-edges
         />
-      </div>
+      </div> -->
     </UPageSection>
   </UPage>
 </template>
