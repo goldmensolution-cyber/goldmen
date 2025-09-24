@@ -19,6 +19,7 @@
     <!-- Stylized Paybill Number -->
 
     <section class="py-10 bg-white text-center">
+            <h2 class="text-3xl font-bold text-error text-center mb-12">How to Buy Airtime</h2>
         <UPageGrid>
        <UCard variant="outline" class="h-full w-full flex flex-col ring-primary">
             <template #header>
@@ -115,7 +116,7 @@
       </UCard>
       </section>
     <!-- How to Buy Steps -->
-    <section class="bg-white py-16 px-4">
+    <section class="bg-white py-16 px-4 hidden">
       <h2 class="text-3xl font-bold text-center mb-12">How to Buy Airtime</h2>
       <div class="max-w-4xl mx-auto grid md:grid-cols-3 gap-8">
         <div v-for="(step, index) in steps" :key="index" class="text-center">
