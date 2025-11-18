@@ -76,6 +76,10 @@ useSeoMeta({
 
     <template v-if="page?.body?.toc?.links?.length" #right>
       <UContentToc :links="page.body.toc.links" />
+      
+    </template>
+    <template v-else #right>
+      <p>.</p>
     </template>
     <template #left>
       <p>.</p>

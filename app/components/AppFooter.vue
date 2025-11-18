@@ -14,10 +14,7 @@ const columns: FooterColumn[] = [
         label: 'Buy Airtime',
         to: '/airtime',
       },
-      {
-        label: 'Blog',
-        to: '/blog',
-      },
+     
       {
         label: 'About Us',
         to: 'about',

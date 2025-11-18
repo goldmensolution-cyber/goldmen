@@ -97,7 +97,7 @@
               </div>
             </template>
           </UCard>
-          <iframe width="315" height="560" src="https://youtube.com/embed/cgzS3tIHMbU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          <video width="315" height="560" src="/goldmenvideo.mp4" controls autoplay />
 
           </UPageGrid>
         <UCard class="mx-auto max-w-md ring-primary divide-y-0 hidden">
