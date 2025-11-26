@@ -30,9 +30,7 @@ const items = ref<NavigationMenuItem[]>([
     {
       label: 'Download App',
       icon: 'i-logos-android-icon',
-      external: true,
-      download: "app-debug.apk",
-      to: '/app-debug.apk',      
+      
     },
     
   {
