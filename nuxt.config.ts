@@ -11,6 +11,7 @@ export default defineNuxtConfig({
     '@nuxthub/core',
     '@nuxtjs/supabase',
     '@vueuse/nuxt',
+    '@vueuse/motion/nuxt'
   ]
   , 
   app: {
