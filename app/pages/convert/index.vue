@@ -1,84 +1,99 @@
 <template>
-  <div class="container mx-auto p-6">
-    <h1 class="text-2xl font-semibold mb-6">Convert to M-PESA</h1>
+  <div class="min-h-screen flex items-center justify-center bg-gray-50 p-6">
+    <div class="w-full max-w-5xl">
+      <h1 class="text-3xl font-semibold text-center mb-8">Convert to M-PESA</h1>
 
-    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      <div
-        class="card p-5 rounded-lg shadow flex flex-col justify-between"
-        :style="{ borderTop: '4px solid ' + providers.safaricom.color }"
-      >
-        <div class="flex items-center gap-4">
-          <div class="w-14 h-14 flex items-center justify-center rounded-md" :style="{ background: providers.safaricom.color + '22' }">
-            <!-- simple provider icon -->
-            <div class="text-white font-bold" :style="{ color: providers.safaricom.color }">S</div>
+      <!-- <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"> -->
+        <div class="flex gap-6 flex-row"
+>        <NuxtLink
+          v-motion-fade
+          :to="`/convert/safaricom`"
+          class="card group block p-6 rounded-xl shadow-sm bg-white hover:shadow-lg transition"
+        >
+          <div class="flex items-center gap-4">
+            <div :style="{ background: providers.safaricom.color + '22' }" class="w-16  h-16 top-5 rounded-md flex items-center justify-center">
+              <img src="/images/safaricom.png" alt="Safaricom" class="w-16 h-16 object-contain" />
+            </div>
+            <div>
+              <div class="text-lg font-medium">Convert Safaricom airtime to M-PESA</div>
+              <div class="text-sm text-gray-500 mt-1">Fast safaricom airtime conversion</div>
+            </div>
           </div>
-          <div>
-            <div class="text-lg font-medium">Convert Safaricom airtime to M-PESA</div>
-            <div class="text-sm text-gray-500">Fast safaricom airtime conversion</div>
-          </div>
-        </div>
 
-        <div class="mt-4">
-          <NuxtLink :to="`/convert/safaricom`" class="inline-block w-full text-center py-2 rounded bg-green-600 text-white hover:bg-green-700">
+          <button :style="{ background: providers.safaricom.color }" class="mt-6 w-full py-2 text-white rounded-md">
             Convert Safaricom
-          </NuxtLink>
-        </div>
-      </div>
+          </button>
+        </NuxtLink>
 
-      <div
-        class="card p-5 rounded-lg shadow flex flex-col justify-between"
-        :style="{ borderTop: '4px solid ' + providers.airtel.color }"
-      >
-        <div class="flex items-center gap-4">
-          <div class="w-14 h-14 flex items-center justify-center rounded-md" :style="{ background: providers.airtel.color + '22' }">
-            <div class="text-white font-bold" :style="{ color: providers.airtel.color }">A</div>
+        <NuxtLink
+          v-motion-fade
+          :to="`/convert/airtel`"
+          class="card group block p-6 rounded-xl shadow-sm bg-white hover:shadow-lg transition"
+        >
+          <div class="flex items-center gap-4">
+            <div :style="{ background: providers.airtel.color + '22' }" class="w-16 h-16 rounded-md flex items-center justify-center">
+              <img src="/images/airtel.jpg" alt="Airtel" class="w-10 h-10 object-contain" />
+            </div>
+            <div>
+              <div class="text-lg font-medium">Convert Airtel airtime to M-PESA</div>
+              <div class="text-sm text-gray-500 mt-1">Airtel conversions made easy</div>
+            </div>
           </div>
-          <div>
-            <div class="text-lg font-medium">Convert Airtel airtime to M-PESA</div>
-            <div class="text-sm text-gray-500">Airtel conversions made easy</div>
-          </div>
-        </div>
 
-        <div class="mt-4">
-          <NuxtLink :to="`/convert/airtel`" class="inline-block w-full text-center py-2 rounded bg-red-600 text-white hover:bg-red-700">
+          <button :style="{ background: providers.airtel.color }" class="mt-6 w-full py-2 text-white rounded-md">
             Convert Airtel
-          </NuxtLink>
-        </div>
-      </div>
+          </button>
+        </NuxtLink>
 
-      <div
-        class="card p-5 rounded-lg shadow flex flex-col justify-between"
-        :style="{ borderTop: '4px solid ' + providers.bonga.color }"
-      >
-        <div class="flex items-center gap-4">
-          <div class="w-14 h-14 flex items-center justify-center rounded-md" :style="{ background: providers.bonga.color + '22' }">
-            <div class="text-white font-bold" :style="{ color: providers.bonga.color }">B</div>
+        <NuxtLink
+          v-motion-fade
+          :to="`/convert/bonga`"
+          class="card group block p-6 rounded-xl shadow-sm bg-white hover:shadow-lg transition"
+        >
+          <div class="flex items-center gap-4">
+            <div :style="{ background: providers.bonga.color + '22' }" class="w-16 h-16 rounded-md flex items-center justify-center">
+              <img src="/images/bonga.jpeg" alt="Bonga" class="w-10 h-10 object-contain" />
+            </div>
+            <div>
+              <div class="text-lg font-medium">Convert Bonga points to M-PESA</div>
+              <div class="text-sm text-gray-500 mt-1">Redeem your Bonga points</div>
+            </div>
           </div>
-          <div>
-            <div class="text-lg font-medium">Convert Bonga points to M-PESA</div>
-            <div class="text-sm text-gray-500">Redeem your Bonga points</div>
-          </div>
-        </div>
 
-        <div class="mt-4">
-          <NuxtLink :to="`/convert/bonga`" class="inline-block w-full text-center py-2 rounded bg-blue-600 text-white hover:bg-blue-700">
+          <button :style="{ background: providers.bonga.color }" class="mt-6 w-full py-2 text-white rounded-md">
             Convert Bonga
-          </NuxtLink>
-        </div>
+          </button>
+        </NuxtLink>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-const providers = {
+import { reactive } from 'vue'
+
+const providers = reactive({
   safaricom: { color: '#27ae60' },
   airtel: { color: '#d93025' },
   bonga: { color: '#1e90ff' }
-}
+})
+
+// v-motion preset objects for slide in with small stagger
+// const safariMotion = {
+//   initial: { y: 30, opacity: 0, scale: 0.98 },
+//   enter: { y: 0, opacity: 1, scale: 1, transition: { duration: 400, delay: 80 } }
+// }
+// const airtelMotion = {
+//   initial: { y: 30, opacity: 0, scale: 0.98 },
+//   enter: { y: 0, opacity: 1, scale: 1, transition: { duration: 400, delay: 160 } }
+// }
+// const bongaMotion = {
+//   initial: { y: 30, opacity: 0, scale: 0.98 },
+//   enter: { y: 0, opacity: 1, scale: 1, transition: { duration: 400, delay: 240 } }
+// }
 </script>
 
 <style scoped>
 .container { max-width: 1100px; }
-.card { background: white; }
+.card { border-top: 4px solid transparent; }
 </style>

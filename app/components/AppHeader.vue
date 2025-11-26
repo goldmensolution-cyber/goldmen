@@ -16,12 +16,7 @@ const items = ref<NavigationMenuItem[]>([
     label: 'Convert Airtime to mpesa',
     to: '/convert'
   },
-  {
-    label: 'About Us',
-    to: '/about',
-    slot: 'main'
-
-  },
+  
   {
     label: 'Blog',
     to: '/blog',
@@ -34,8 +29,10 @@ const items = ref<NavigationMenuItem[]>([
     },
     {
       label: 'Download App',
-      icon: 'i-logos-android-icon'
-
+      icon: 'i-logos-android-icon',
+      external: true,
+      download: "app-debug.apk",
+      to: '/app-debug.apk',      
     },
     
   {
