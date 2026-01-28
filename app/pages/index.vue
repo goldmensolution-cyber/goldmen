@@ -18,6 +18,20 @@
     </section>
     <!-- Stylized Paybill Number -->
 
+    <!-- Download on Google Play -->
+    <section class="py-10 bg-white text-center">
+      <h2 class="text-2xl font-bold text-gray-800 mb-6">Get the Goldmen App</h2>
+      <a 
+        href="https://play.google.com/store/apps/details?id=ke.co.goldmen.goldmen" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-3 bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-900 transition duration-300"
+      >
+        <UIcon name="i-logos-google-play" class="size-6" />
+        <span>Download on Google Play</span>
+      </a>
+    </section>
+
     <section class="py-10 bg-white text-center">
             <h2 class="text-3xl font-bold text-error text-center mb-12">How to Buy Airtime</h2>
         <UPageGrid>

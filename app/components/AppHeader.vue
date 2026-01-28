@@ -30,6 +30,8 @@ const items = ref<NavigationMenuItem[]>([
     {
       label: 'Download App',
       icon: 'i-logos-android-icon',
+      to: 'https://play.google.com/store/apps/details?id=ke.co.goldmen.goldmen',
+      target: '_blank'
       
     },
     
@@ -50,7 +52,11 @@ function handleLogout() {
 
 <template>
   <UHeader
-  :ui="{ root: 'font-open-sans'}">
+  :ui="{ root: 'font-open-sans'}"
+  :toggle="{
+    size: 'xl'
+      
+    }">
     <template #title>
      <!-- <NuxtImg
       src="/brand.png"
