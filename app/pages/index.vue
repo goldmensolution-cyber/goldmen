@@ -27,7 +27,7 @@
         rel="noopener noreferrer"
         class="inline-flex items-center gap-3 bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-900 transition duration-300"
       >
-        <UIcon name="i-logos-google-play" class="size-6" />
+        <UIcon name="i-logos-google-play-icon" class="size-6" />
         <span>Download on Google Play</span>
       </a>
     </section>
