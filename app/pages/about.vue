@@ -52,7 +52,7 @@ const networks = ['Safaricom', 'Airtel', 'Telkom', 'Equitel', 'Faiba']
         <USeparator class="my-4" />
 
         <div class="flex flex-wrap items-center gap-2">
-          <UButton color="primary" to="/airtime" :disabled="true">Buy Airtime (Coming from main app)</UButton>
+          <UButton color="primary" to="/airtime" :disabled="true">Paybill Guide (Coming from main app)</UButton>
           <UButton variant="outline" to="/contact">Contact Us</UButton>
         </div>
       </UCard>

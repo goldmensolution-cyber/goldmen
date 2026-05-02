@@ -14,7 +14,7 @@
     
     <section>
       <h2>How do I make a purchase?</h2>
-      <p>Simply go to “Buy Airtime,” enter the phone number, amount, and use the M-Pesa Paybill flow to complete payment. Airtime is delivered instantly.</p>
+      <p>Go to the Paybill Guide page and follow the M-Pesa instructions. Use business number <strong>4166283</strong>, your phone number as the reference, then enter the amount and confirm with your M-Pesa PIN.</p>
     </section>
     
     <section>

@@ -8,7 +8,7 @@ const items = ref<NavigationMenuItem[]>([
     slot: 'main',
   },
   {
-    label: 'Buy Airtime',
+    label: 'Paybill Guide',
     to: '/airtime',
     slot: 'main'
   

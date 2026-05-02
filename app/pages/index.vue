@@ -1,8 +1,8 @@
 <template>
   <div class="w-full">
     <UPageHero 
-    title="Buy Airtime for All Networks"
-    description="Get airtime for Safaricom, Airtel, Telkom, Equitel and Faiba using our M-Pesa Paybill. Fast, reliable and secure."
+    title="Airtime Paybill Instructions"
+    description="Use M-Pesa Paybill 4166283 to top up airtime for Safaricom, Airtel, Telkom, Equitel and Faiba."
     :links="links"
     :style="{ backgroundImage: `url('pic.jpeg')` }"
     :ui="{root: 'text-white', title: 'text-white text-4xl',description: 'text-elevated' ,headline: 'text-error'}"
@@ -33,7 +33,7 @@
     </section>
 
     <section class="py-10 bg-white text-center">
-            <h2 class="text-3xl font-bold text-error text-center mb-12">How to Buy Airtime</h2>
+            <h2 class="text-3xl font-bold text-error text-center mb-12">How to Use the Paybill Guide</h2>
         <UPageGrid>
        <UCard variant="outline" class="h-full w-full flex flex-col ring-primary">
             <template #header>
@@ -68,7 +68,7 @@
                   Pay via Mpesa Paybill
                 </UButton>
                 <UButton variant="outline" color="error" size="md" to="/airtime">
-                  Use Airtime Form
+                  View Paybill Guide
                 </UButton>
               </div>
             </template>
@@ -106,7 +106,7 @@
                   Pay via Paybill
                 </UButton>
                 <UButton variant="outline" color="error" size="md" to="/airtime">
-                  Use Airtime Form
+                  View Paybill Guide
                 </UButton>
               </div>
             </template>
@@ -131,7 +131,7 @@
       </section>
     <!-- How to Buy Steps -->
     <section class="bg-white py-16 px-4 hidden">
-      <h2 class="text-3xl font-bold text-center mb-12">How to Buy Airtime</h2>
+      <h2 class="text-3xl font-bold text-center mb-12">How to Use the Paybill Guide</h2>
       <div class="max-w-4xl mx-auto grid md:grid-cols-3 gap-8">
         <div v-for="(step, index) in steps" :key="index" class="text-center">
           <div class="w-16 h-16 mx-auto flex items-center justify-center bg-blue-100 text-blue-600 font-bold rounded-full mb-4">
@@ -155,7 +155,7 @@
 const value = ref([4,1,6,6,2,8,3])
 const links = [
   {
-    label: 'Buy Airtime',
+    label: 'Paybill Guide',
     icon: 'i-lucide-banknote',
     to: '/airtime',
     color: 'error' as const
