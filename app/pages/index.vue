@@ -155,7 +155,7 @@
 const value = ref([4,1,6,6,2,8,3])
 const links = [
   {
-    label: 'Paybill Guide',
+    label: 'Paybill Guides',
     icon: 'i-lucide-banknote',
     to: '/airtime',
     color: 'error' as const
