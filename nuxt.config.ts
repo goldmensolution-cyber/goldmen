@@ -31,9 +31,7 @@ export default defineNuxtConfig({
       passkey: process.env.MPESA_PASSKEY || '',
       callbackUrl: process.env.MPESA_CALLBACK_URL || 'https://knowing-husky-reliably.ngrok-free.app/api/mpesa/callback',
     },},
-    hub: {
-    database: true
-  },
+  
   content: {
     preview: {
       api: 'https://api.nuxt.studio'
@@ -72,11 +70,5 @@ ui: {
   css: ['~/assets/css/main.css'],
 
   compatibilityDate: '2026-05-03',
-  nitro: {
-    preset: 'cloudflare_module',
-    cloudflare: {
-      deployConfig: true,
-      nodeCompat: true
-    }
-  }
+
 })
