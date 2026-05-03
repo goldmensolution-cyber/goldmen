@@ -1,20 +1,23 @@
-name: Deploy to NuxtHub
-on: push
+name: CI Build
+on:
+  push:
+    branches:
+      - main
+  pull_request:
 
 jobs:
-  deploy:
-    name: "Deploy to NuxtHub"
+  build:
+    name: Build Nuxt App
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      id-token: write
 
     steps:
       - uses: actions/checkout@v4
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
-       
+
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
@@ -24,10 +27,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Ensure NuxtHub module is installed
-        run: pnpx nuxthub@latest ensure
+      - name: Build Nuxt
+        run: pnpm build
 
-      - name: Build & Deploy to NuxtHub
-        uses: nuxt-hub/action@v2
-        with:
-          project-key: goldmen-u63e
+      - name: Verify build output exists
+        run: |
+          test -d .output || (echo "Build output not found" && exit 1)

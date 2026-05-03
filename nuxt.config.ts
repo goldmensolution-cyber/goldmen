@@ -8,7 +8,6 @@ export default defineNuxtConfig({
     '@nuxt/content',
     '@nuxt/image',
     '@nuxtjs/ngrok',
-    '@nuxthub/core',
     '@nuxtjs/supabase',
     '@vueuse/nuxt',
     '@vueuse/motion/nuxt'
@@ -72,5 +71,12 @@ ui: {
   },
   css: ['~/assets/css/main.css'],
 
-  compatibilityDate: '2025-07-16',
+  compatibilityDate: '2026-05-03',
+  nitro: {
+    preset: 'cloudflare_module',
+    cloudflare: {
+      deployConfig: true,
+      nodeCompat: true
+    }
+  }
 })
