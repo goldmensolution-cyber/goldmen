@@ -2,43 +2,48 @@
 import type { NavigationMenuItem } from '@nuxt/ui'
 const items = ref<NavigationMenuItem[]>([
   [
-  {
-    label: 'Home',
-    to: '/',
-    slot: 'main',
-  },
-  {
-    label: 'Paybill Guide',
-    to: '/airtime',
-    slot: 'main'
-  
-  },{
-    label: 'Convert Airtime to mpesa',
-    to: '/convert'
-  },
-  
-  {
-    label: 'Blog',
-    to: '/blog',
-    slot: 'main'
-
-  },
-  ],[
     {
-      slot: 'signup'
+      label: 'Home',
+      to: '/',
+      slot: 'main',
+    },
+    {
+      label: 'Business Administration',
+      to: '/business-administration',
+      slot: 'main',
+    },
+    {
+      label: 'Paybill Guide',
+      to: '/help',
+      slot: 'main',
+    },
+    {
+      label: 'Convert to Mpesa',
+      to: '/convert',
+      slot: 'main',
+    },
+    {
+      label: 'Knowledge Blog',
+      to: '/blog',
+      slot: 'main',
+    },
+  ], [
+    {
+      slot: 'signup',
     },
     {
       label: 'Download App',
       icon: 'i-logos-android-icon',
       to: 'https://play.google.com/store/apps/details?id=ke.co.goldmen.goldmen',
-      target: '_blank'
-      
+      target: '_blank',
+      rel: 'noopener noreferrer',
+      class: 'rounded-full bg-error px-3 py-2 text-white hover:bg-error/90',
     },
-    
-  {
-    slot: 'burger',
-    class: 'visible'
-  }]
+    {
+      slot: 'burger',
+      class: 'visible',
+    },
+  ],
 ])
 const user = useSupabaseUser()
 const supabase = useSupabaseClient()
