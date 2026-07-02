@@ -32,12 +32,7 @@ const items = ref<NavigationMenuItem[]>([
       slot: 'signup',
     },
     {
-      label: 'Download App',
-      icon: 'i-logos-android-icon',
-      to: 'https://play.google.com/store/apps/details?id=ke.co.goldmen.goldmen',
-      target: '_blank',
-      rel: 'noopener noreferrer',
-      class: 'rounded-full bg-error px-3 py-2 text-white hover:bg-error/90',
+      slot: 'downloadApp',
     },
     {
       slot: 'burger',
@@ -62,6 +57,18 @@ function handleLogout() {
     size: 'xl'
       
     }">
+    <template #downloadApp>
+      <UButton
+        label="Download App"
+        icon="i-logos-android-icon"
+        to="https://play.google.com/store/apps/details?id=ke.co.goldmen.goldmen"
+        target="_blank"
+        rel="noopener noreferrer"
+        color="error"
+        class="w-full justify-center rounded-full sm:w-auto"
+      />
+    </template>
+
     <template #title>
      <!-- <NuxtImg
       src="/brand.png"
