@@ -93,7 +93,11 @@ ui: {
     colorMode: false
   },
   css: ['~/assets/css/main.css'],
-
+  nitro: {
+    prerender: {
+      crawlLinks: false
+    }
+  },
   compatibilityDate: '2026-05-03',
 
 })
