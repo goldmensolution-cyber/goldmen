@@ -1,14 +1,16 @@
 <script setup lang="ts">
-const user = useSupabaseUser();
+const user = import.meta.client ? useSupabaseUser() : ref(null);
 const toast = useToast();
-const { pluck } = useSupabaseCookieRedirect();
+const redirect = import.meta.client ? useSupabaseCookieRedirect() : { pluck: () => null };
 
-watch(user, () => {
-  if (user.value) {
-    toast.add({ title: 'Authentication successful', color: 'success' });
-    navigateTo(pluck() || '/profile');
-  }
-}, { immediate: true });
+if (import.meta.client) {
+  watch(user, () => {
+    if (user.value) {
+      toast.add({ title: 'Authentication successful', color: 'success' });
+      navigateTo(redirect.pluck() || '/profile');
+    }
+  }, { immediate: true });
+}
 </script>
 
 <template>

@@ -45,12 +45,16 @@ const items = ref<NavigationMenuItem[]>([
     },
   ],
 ])
-const user = useSupabaseUser()
-const supabase = useSupabaseClient()
+const user = import.meta.client ? useSupabaseUser() : ref(null)
+const supabase = import.meta.client ? useSupabaseClient() : null
 
 function handleLogout() {
+  if (!supabase) {
+    navigateTo('/')
+    return
+  }
+
   supabase.auth.signOut()
-  //reload page
   navigateTo('/')
 }
 </script>

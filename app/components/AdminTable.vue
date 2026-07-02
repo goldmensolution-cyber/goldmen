@@ -181,7 +181,7 @@ const pagination = ref({
   pageIndex: 0,
   pageSize: 10
 })
-const user = useSupabaseUser()
+const user = import.meta.client ? useSupabaseUser() : ref(null)
 </script>
 
 <template>

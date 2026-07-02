@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import * as z from 'zod';
 import type { FormSubmitEvent } from '@nuxt/ui';
-const supabase = useSupabaseClient();
+const supabase = import.meta.client ? useSupabaseClient() : null;
 const toast = useToast();
 const email = ref('');
 
@@ -57,6 +57,11 @@ const providers = [
     label: 'Continue with Google',
     icon: 'i-logos-google-icon',
     onClick: async () => {
+      if (!supabase) {
+        toast.add({ title: 'Unavailable', description: 'Authentication is unavailable during build.', color: 'warning' });
+        return;
+      }
+
       await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: { redirectTo: `${location.origin}/confirm` },
@@ -69,6 +74,11 @@ const providers = [
 async function onSubmit(
   event: FormSubmitEvent<z.infer<typeof otpSchema> | z.infer<typeof schema>>
 ) {
+  if (!supabase) {
+    toast.add({ title: 'Unavailable', description: 'Authentication is unavailable during build.', color: 'warning' });
+    return;
+  }
+
   if (stage.value === 'login') {
     const { error, data } = await supabase.auth.signInWithPassword({
       email: (event.data as { email: string; password: string }).email,
