@@ -37,7 +37,7 @@ const items = ref<NavigationMenuItem[]>([
       to: 'https://play.google.com/store/apps/details?id=ke.co.goldmen.goldmen',
       target: '_blank',
       rel: 'noopener noreferrer',
-      class: 'rounded-full bg-error px-3 py-2 text-white md:text-white hover:bg-error/90',
+      class: 'rounded-full  px-3 py-2 text-white md:text-white border-error',
     },
     {
       slot: 'burger',
