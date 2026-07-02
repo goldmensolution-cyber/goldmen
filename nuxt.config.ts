@@ -1,8 +1,13 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
- 
-
+  nitro: {
+    prerender: {
+      // Disables the crawler from attempting to statically build these pages
+      crawlLinks: false, 
+      ignore: ['/blog', '/login', '/convert', '/help']
+    }
+  },
   modules: [
     '@nuxt/ui',
     '@nuxt/eslint',
