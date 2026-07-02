@@ -19,7 +19,7 @@
     "@nuxt/image": "1.11.0",
     "@nuxt/ui": "^4.7.1",
     "@nuxtjs/ngrok": "3.0.1",
-    "@nuxtjs/supabase": "2.0.9",
+    "@nuxtjs/supabase": "1.6.1",
     "@unovis/vue": "^1.6.7",
     "@vueuse/motion": "^3.0.3",
     "@vueuse/nuxt": "13.9.0",
