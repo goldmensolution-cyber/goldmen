@@ -1,13 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  nitro: {
-    prerender: {
-      // Disables the crawler from attempting to statically build these pages
-      crawlLinks: false, 
-      ignore: ['/blog', '/login', '/convert', '/help']
-    }
-  },
+
   modules: [
     '@nuxt/ui',
     '@nuxt/eslint',
@@ -43,6 +37,31 @@ export default defineNuxtConfig({
       api: 'https://api.nuxt.studio'
     }
   },
+  routeRules: {
+  '/': { prerender: true },
+  '/blog': { prerender: true },
+  '/blog/**': { prerender: true },
+  '/help': { prerender: true },
+
+  '/dashboard/**': {
+    prerender: false,
+    ssr: false
+  },
+
+  '/admin/**': {
+    prerender: false,
+    ssr: false
+  },
+
+  '/profile/**': {
+    prerender: false,
+    ssr: false
+  },
+
+  '/login': { prerender: false },
+  '/signup': { prerender: false },
+  '/confirm': { prerender: false }
+},
   supabase:{
     redirectOptions: {
       login: '/login',
