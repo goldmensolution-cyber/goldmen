@@ -21,7 +21,7 @@ importers:
         specifier: 1.11.0
         version: 1.11.0(@netlify/blobs@9.1.2)(db0@0.3.4(better-sqlite3@12.11.1)(drizzle-orm@0.44.7(@opentelemetry/api@1.9.0)(better-sqlite3@12.11.1)(postgres@3.4.9)))(ioredis@5.11.1)(magicast@0.5.3)(srvx@0.11.18)
       '@nuxt/ui':
-        specifier: ^4.9.0
+        specifier: ^4.8.0
         version: 4.9.0(97f4b68605e5b7c6132c97e3350b8cf1)
       '@nuxtjs/ngrok':
         specifier: 3.0.1
