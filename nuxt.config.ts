@@ -63,12 +63,14 @@ export default defineNuxtConfig({
   '/confirm': { prerender: false }
 },
   supabase:{
+    // Disable automatic redirects from the Supabase auth module
+    redirect: false,
     redirectOptions: {
       login: '/login',
       callback: '/confirm',
       exclude: ['/login', '/signup', '/confirm', '/blog/*','/'],
       include: ['/dashboard','/admin/*'],
-    saveRedirectToCookie: true,
+      saveRedirectToCookie: false,
     }
   },
   
