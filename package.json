@@ -13,33 +13,33 @@
     "lint:fix": "eslint --fix ."
   },
   "dependencies": {
-    "@iconify-json/lucide": "^1.2.115",
-    "@iconify-json/simple-icons": "^1.2.88",
+    "@iconify-json/lucide": "^1.2.105",
+    "@iconify-json/simple-icons": "^1.2.80",
     "@nuxt/content": "3.6.3",
     "@nuxt/image": "1.11.0",
-    "@nuxt/ui": "4.7.1",
+    "@nuxt/ui": "^4.7.1",
     "@nuxtjs/ngrok": "3.0.1",
     "@nuxtjs/supabase": "1.6.1",
-    "@unovis/vue": "^1.6.7",
+    "@unovis/vue": "^1.6.5",
     "@vueuse/motion": "^3.0.3",
     "@vueuse/nuxt": "13.9.0",
-    "better-sqlite3": "^12.11.1",
-    "date-fns": "^4.4.0",
+    "better-sqlite3": "^12.9.0",
+    "date-fns": "^4.1.0",
     "drizzle-orm": "^0.44.7",
     "maska": "^3.2.0",
-    "nuxt": "4.4.4",
+    "nuxt": "^4.4.4",
     "postgres": "^3.4.9",
-    "vue": "^3.5.39",
-    "zod": "^4.4.3"
+    "vue": "^3.5.33",
+    "zod": "^4.4.2"
   },
   "devDependencies": {
     "@iconify-json/heroicons": "^1.2.3",
     "@iconify-json/logos": "^1.2.11",
-    "@nuxt/eslint": "^1.16.0",
+    "@nuxt/eslint": "^1.15.2",
     "drizzle-kit": "^0.31.10",
     "eslint": "^9.39.4",
     "typescript": "^5.9.3",
-    "wrangler": "^4.107.0"
+    "wrangler": "^4.87.0"
   },
   "packageManager": "pnpm@10.15.1+sha512.34e538c329b5553014ca8e8f4535997f96180a1d0f614339357449935350d924e22f8614682191264ec33d1462ac21561aff97f6bb18065351c162c7e8f6de67"
 }
