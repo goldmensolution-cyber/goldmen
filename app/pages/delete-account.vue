@@ -100,7 +100,7 @@ async function exportData() {
 }
 </script>
 
-<style scoped>
+<!-- <style scoped>
 .container {
     max-width: 760px;
     margin: 40px auto;
@@ -123,4 +123,4 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 .error { color: #c0392b; margin-top: 12px; }
 .nav-actions { display:flex; justify-content: flex-end; margin-top: 14px; }
 @media (max-width: 800px) { .actions-grid { grid-template-columns: 1fr; } }
-</style>
+</style> -->
