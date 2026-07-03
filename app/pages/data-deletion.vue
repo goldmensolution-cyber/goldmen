@@ -55,7 +55,7 @@ function goBack() {
 }
 </script>
 
-<!-- <style scoped>
+<style scoped>
 .container { max-width: 760px; margin: 40px auto; padding: 22px; border: 1px solid #eee; border-radius: 8px; background: #fff; font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
 h1 { margin: 0 0 8px; font-size: 22px; }
 .desc { margin: 0 0 16px; color: #555; }
@@ -66,4 +66,4 @@ h1 { margin: 0 0 8px; font-size: 22px; }
 button { padding: 8px 12px; border-radius: 6px; border: 1px solid #bbb; background: #f5f5f5; cursor: pointer; }
 .link { display: inline-block; padding: 8px 12px; border-radius: 6px; border: 1px solid transparent; background: transparent; color: #0b66ff; text-decoration: none; }
 @media (max-width: 700px) { .nav-actions { flex-direction: column-reverse; align-items: stretch; } }
-</style> -->
+</style>
