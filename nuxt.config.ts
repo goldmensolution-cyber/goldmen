@@ -10,7 +10,8 @@ export default defineNuxtConfig({
     '@nuxtjs/ngrok',
     '@nuxtjs/supabase',
     '@vueuse/nuxt',
-    '@vueuse/motion/nuxt'
+    '@vueuse/motion/nuxt',
+    'nuxt-studio',
   ]
   , 
   app: {
