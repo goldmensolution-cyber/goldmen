@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive, ref } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import { z } from 'zod'
 import type { FormSubmitEvent } from '#ui/types'
 import { vMaska } from 'maska/vue'
@@ -180,6 +180,23 @@ function isLikelyKenyanMobile(value: string) {
 
 const payerNumber = ref('')
 const loadingProfile = ref(true)
+const phoneModalOpen = ref(false)
+const isSavingPhone = ref(false)
+const phoneFormState = reactive({ phoneNumber: '' })
+
+const isAuthenticated = computed(() => Boolean(user.value))
+const needsPhoneNumber = computed(() => isAuthenticated.value && !loadingProfile.value && payerNumber.value.length === 0)
+
+function openPhoneModal() {
+  phoneFormState.phoneNumber = payerNumber.value ? toLocal(payerNumber.value) : ''
+  phoneModalOpen.value = true
+}
+
+watch(needsPhoneNumber, (needsValue) => {
+  if (needsValue) {
+    openPhoneModal()
+  }
+}, { flush: 'post' })
 
 await useAsyncData('airtime-profile', async () => {
   if (!user.value) {
@@ -224,6 +241,16 @@ const schema = z.object({
 })
 
 type FormState = z.infer<typeof schema>
+
+const phoneSchema = z.object({
+  phoneNumber: z
+    .string()
+    .refine(isLikelyKenyanMobile, {
+      message: 'Enter a valid Kenyan mobile number.'
+    })
+})
+
+type PhoneFormState = z.infer<typeof phoneSchema>
 
 const state = reactive<FormState>({
   recipient: '',
@@ -272,6 +299,46 @@ function onFormSubmit(
 
   lastEvent.value = event
   confirmOpen.value = true
+}
+
+async function savePhoneNumber(event: FormSubmitEvent<PhoneFormState>) {
+  if (!user.value) {
+    return
+  }
+
+  isSavingPhone.value = true
+
+  try {
+    const normalizedPhone = normalizePhone(event.data.phoneNumber)
+
+    const { error } = await supabase
+      .from('profiles')
+      .update({ phone_number: normalizedPhone })
+      .eq('id', user.value.id)
+
+    if (error) {
+      throw error
+    }
+
+    payerNumber.value = normalizedPhone
+    phoneModalOpen.value = false
+
+    toast.add({
+      title: 'Phone number saved',
+      description: 'Your profile number has been updated.',
+      color: 'success',
+      icon: 'i-lucide-check-circle'
+    })
+  } catch (error) {
+    toast.add({
+      title: 'Unable to save phone number',
+      description: error instanceof Error ? error.message : 'Please try again.',
+      color: 'error',
+      icon: 'i-lucide-circle-x'
+    })
+  } finally {
+    isSavingPhone.value = false
+  }
 }
 
 async function purchase() {
@@ -346,8 +413,35 @@ async function purchase() {
     <UContainer class="max-w-2xl py-8">
       <div class="space-y-6">
 
+        <UCard
+          v-if="!isAuthenticated"
+          variant="subtle"
+          class="border border-primary-200 dark:border-primary-800"
+        >
+          <div class="flex items-start gap-4">
+            <div class="flex size-12 items-center justify-center rounded-xl bg-primary-100 dark:bg-primary-900">
+              <UIcon name="i-lucide-lock" class="size-6 text-primary-600" />
+            </div>
+
+            <div class="flex-1 space-y-4">
+              <div>
+                <p class="font-semibold">Sign in to buy airtime</p>
+                <p class="mt-1 text-sm text-muted">
+                  You need an account before you can purchase airtime and verify the payer number.
+                </p>
+              </div>
+
+              <div class="flex flex-wrap gap-2">
+                <UButton to="/login" color="error" size="lg">Sign in</UButton>
+                <UButton to="/register" color="neutral" variant="outline" size="lg">Create account</UButton>
+              </div>
+            </div>
+          </div>
+        </UCard>
+
         <!-- Verified Payer Number -->
         <UCard
+          v-else
           variant="subtle"
           class="border border-error-200 dark:border-error-800"
         >
@@ -362,23 +456,37 @@ async function purchase() {
             </div>
 
             <div class="flex-1">
-              <div class="flex items-center gap-2">
-                <p class="font-semibold">
-                  Paying With
-                </p>
+              <div class="flex items-start justify-between gap-3">
+                <div class="flex items-center gap-2">
+                  <p class="font-semibold">
+                    Paying With
+                  </p>
 
-                <UBadge
-                  color="success"
-                  variant="soft"
-                  label="Verified"
-                />
+                  <UBadge
+                    :color="payerNumber ? 'success' : 'warning'"
+                    variant="soft"
+                    :label="payerNumber ? 'Verified' : 'Required'"
+                  />
+                </div>
+
+                <UButton
+                  v-if="isAuthenticated"
+                  color="neutral"
+                  variant="ghost"
+                  size="sm"
+                  icon="i-lucide-pencil"
+                  type="button"
+                  @click="openPhoneModal"
+                >
+                  Edit
+                </UButton>
               </div>
 
               <p
                 v-if="!loadingProfile"
                 class="mt-2 text-2xl font-bold tracking-wide"
               >
-                {{ toLocal(payerNumber) }}
+                {{ payerNumber ? toLocal(payerNumber) : 'Add your phone number' }}
               </p>
 
               <USkeleton
@@ -387,15 +495,19 @@ async function purchase() {
               />
 
               <p class="mt-2 text-sm text-muted">
-                Your M-Pesa STK Push will be sent to this number.
-                To change it, update your profile.
+                <span v-if="payerNumber">
+                  Your M-Pesa STK Push will be sent to this number.
+                </span>
+                <span v-else>
+                  Add your phone number to continue with airtime purchases.
+                </span>
               </p>
             </div>
           </div>
         </UCard>
 
         <!-- Purchase Form -->
-        <UCard>
+        <UCard v-if="isAuthenticated">
 
           <template #header>
             <div class="flex items-center gap-2">
@@ -563,6 +675,56 @@ async function purchase() {
     </UContainer>
 
     <!-- Confirmation -->
+
+    <UModal
+      v-model:open="phoneModalOpen"
+      :title="payerNumber ? 'Update payer number' : 'Add your phone number'"
+    >
+      <template #body>
+        <UForm
+          id="phone-number-form"
+          :schema="phoneSchema"
+          :state="phoneFormState"
+          class="space-y-4"
+          @submit="savePhoneNumber"
+        >
+          <UFormField
+            name="phoneNumber"
+            label="Phone number"
+            description="We’ll save this to your profile for airtime purchases."
+            required
+          >
+            <UInput
+              v-model="phoneFormState.phoneNumber"
+              v-maska="'#### ### ###'"
+              class="w-full"
+              size="xl"
+              icon="i-lucide-phone"
+              autocomplete="tel"
+              inputmode="tel"
+              placeholder="0712 345 678"
+            />
+          </UFormField>
+        </UForm>
+      </template>
+
+      <template #footer>
+        <div class="flex w-full justify-end gap-3">
+          <UButton color="neutral" variant="ghost" type="button" @click="phoneModalOpen = false">
+            Cancel
+          </UButton>
+
+          <UButton
+            color="error"
+            type="submit"
+            form="phone-number-form"
+            :loading="isSavingPhone"
+          >
+            Save number
+          </UButton>
+        </div>
+      </template>
+    </UModal>
 
     <UModal
       v-model:open="confirmOpen"
