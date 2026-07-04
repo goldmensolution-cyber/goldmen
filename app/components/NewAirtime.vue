@@ -183,23 +183,26 @@ const loadingProfile = ref(true)
 
 await useAsyncData('airtime-profile', async () => {
   if (!user.value) {
+    loadingProfile.value = false
     return
   }
 
-  const { data, error } = await supabase
-    .from('profiles')
-    .select('phone_number,full_name')
-    .eq('id', user.value.id)
-    .single()
+  try {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('phone_number,full_name')
+      .eq('id', user.value.id)
+      .single()
 
-  if (error) {
-    throw error
+    if (error) {
+      throw error
+    }
+
+    payerNumber.value = data.phone_number ?? ''
+    return data
+  } finally {
+    loadingProfile.value = false
   }
-
-  payerNumber.value = data.phone_number ?? ''
-  loadingProfile.value = false
-
-  return data
 })
 
 /* -------------------------------------------------------------------------- */
@@ -493,7 +496,8 @@ async function purchase() {
                   :label="`KES ${amount}`"
                   :variant="state.amount === amount ? 'solid' : 'soft'"
                   :color="state.amount === amount ? 'warning' : 'neutral'"
-                  @onclick="state.amount = amount"
+                  type="button"
+                  @click="state.amount = amount"
                 />
 
               </div>
