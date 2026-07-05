@@ -4,6 +4,5 @@
 <template>
   <div class="space-y-8">
     <NewAirtime />
-    <AirtimePurchaseInstructions />
   </div>
 </template>
