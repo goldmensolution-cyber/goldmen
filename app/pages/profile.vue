@@ -86,7 +86,7 @@ const phoneSchema = z.object({
 type PhoneFormState = z.infer<typeof phoneSchema>
 
 async function loadProfile() {
-  if (!user.value) {
+  if (!user.value?.id) {
     loadingProfile.value = false
     return
   }
@@ -151,7 +151,7 @@ watch(
 )
 
 async function savePhoneNumber(event: FormSubmitEvent<PhoneFormState>) {
-  if (!user.value) {
+  if (!user.value?.id) {
     return
   }
 

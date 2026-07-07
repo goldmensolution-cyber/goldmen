@@ -219,7 +219,7 @@ watch(needsPhoneNumber, (needsValue) => {
 }, { flush: 'post' })
 
 await useAsyncData('airtime-profile', async () => {
-  if (!user.value) {
+  if (!user.value?.id) {
     loadingProfile.value = false
     return
   }
@@ -348,7 +348,7 @@ function onFormSubmit(
 }
 
 async function savePhoneNumber(event: FormSubmitEvent<PhoneFormState>) {
-  if (!user.value) {
+  if (!user.value?.id) {
     return
   }
 
