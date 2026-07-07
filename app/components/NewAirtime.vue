@@ -184,11 +184,31 @@ const phoneModalOpen = ref(false)
 const isSavingPhone = ref(false)
 const phoneFormState = reactive({ phoneNumber: '' })
 
+const profile = reactive({
+  phone_number: null as string | null,
+  additional_numbers: [] as string[],
+  full_name: null as string | null,
+  email: null as string | null
+})
+
 const isAuthenticated = computed(() => Boolean(user.value))
-const needsPhoneNumber = computed(() => isAuthenticated.value && !loadingProfile.value && payerNumber.value.length === 0)
+const needsPhoneNumber = computed(
+  () => isAuthenticated.value && !loadingProfile.value && payerNumber.value.length === 0
+)
+
+const profileName = computed(() => {
+  return (
+    profile.full_name ||
+    user.value?.user_metadata?.name ||
+    user.value?.email ||
+    'Your profile'
+  )
+})
 
 function openPhoneModal() {
-  phoneFormState.phoneNumber = payerNumber.value ? toLocal(payerNumber.value) : ''
+  phoneFormState.phoneNumber = payerNumber.value
+    ? toLocal(payerNumber.value)
+    : toLocal(profile.phone_number ?? '')
   phoneModalOpen.value = true
 }
 
@@ -207,16 +227,41 @@ await useAsyncData('airtime-profile', async () => {
   try {
     const { data, error } = await supabase
       .from('profiles')
-      .select('phone_number,full_name')
+      .select('phone_number,full_name,email,additional_numbers')
       .eq('id', user.value.id)
-      .single()
+      .maybeSingle()
 
     if (error) {
       throw error
     }
 
-    payerNumber.value = data.phone_number ?? ''
-    return data
+    if (data) {
+      profile.phone_number =
+        data.phone_number ?? user.value.user_metadata?.phone ?? null
+      profile.full_name = data.full_name ?? user.value.user_metadata?.name ?? null
+      profile.email = data.email ?? user.value.email ?? null
+      profile.additional_numbers = Array.isArray(data.additional_numbers)
+        ? data.additional_numbers.filter(Boolean).map(String)
+        : []
+      payerNumber.value =
+        data.phone_number ?? user.value.user_metadata?.phone ?? ''
+    } else {
+      profile.phone_number = user.value.user_metadata?.phone ?? null
+      profile.additional_numbers = []
+      profile.full_name = user.value.user_metadata?.name ?? null
+      profile.email = user.value.email ?? null
+      payerNumber.value = user.value.user_metadata?.phone ?? ''
+    }
+  } catch (error) {
+    toast.add({
+      title: 'Unable to load profile',
+      description:
+        error instanceof Error
+          ? error.message
+          : 'There was a problem loading your profile data.',
+      color: 'error',
+      icon: 'i-lucide-circle-x'
+    })
   } finally {
     loadingProfile.value = false
   }
@@ -276,6 +321,7 @@ const quickAmounts = [
 
 const canSubmit = computed(() => {
   return (
+    !loadingProfile.value &&
     isLikelyKenyanMobile(state.recipient) &&
     Number.isInteger(state.amount) &&
     state.amount >= 10 &&
@@ -310,16 +356,42 @@ async function savePhoneNumber(event: FormSubmitEvent<PhoneFormState>) {
 
   try {
     const normalizedPhone = normalizePhone(event.data.phoneNumber)
+    const currentPhone = profile.phone_number ?? ''
+    const numbers = Array.isArray(profile.additional_numbers)
+      ? [...profile.additional_numbers]
+      : []
+
+    const previousNumbers = new Set(
+      numbers.filter(Boolean).map((entry) => String(entry))
+    )
+
+    if (currentPhone && currentPhone !== normalizedPhone) {
+      previousNumbers.add(currentPhone)
+    }
+
+    previousNumbers.delete(normalizedPhone)
+
+    const additionalNumbers = Array.from(previousNumbers)
 
     const { error } = await supabase
       .from('profiles')
-      .update({ phone_number: normalizedPhone })
-      .eq('id', user.value.id)
+      .upsert(
+        {
+          id: user.value.id,
+          phone_number: normalizedPhone,
+          full_name: profile.full_name ?? user.value.user_metadata?.name ?? null,
+          email: profile.email ?? user.value.email ?? null,
+          additional_numbers: additionalNumbers
+        },
+        { onConflict: 'id' }
+      )
 
     if (error) {
       throw error
     }
 
+    profile.phone_number = normalizedPhone
+    profile.additional_numbers = additionalNumbers
     payerNumber.value = normalizedPhone
     phoneModalOpen.value = false
 
