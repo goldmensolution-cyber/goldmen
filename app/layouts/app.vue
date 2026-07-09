@@ -1,3 +1,4 @@
+<!-- app/layouts/app.vue -->
 <script setup lang="ts">
 import type { NavigationMenuItem } from '@nuxt/ui'
 
@@ -39,7 +40,7 @@ async function logout() {
 </script>
 
 <template>
-  <UDashboardGroup>
+  <UDashboardGroup class="min-h-screen">
     <UDashboardSidebar
       v-model:open="open"
       collapsible
@@ -82,8 +83,10 @@ async function logout() {
       </template>
     </UDashboardSidebar>
 
-    <div class="min-h-screen flex-1">
-      <slot />
+    <div class="flex min-h-0 flex-1 flex-col overflow-hidden">
+      <div class="min-h-0 flex-1 overflow-y-auto">
+        <slot />
+      </div>
     </div>
   </UDashboardGroup>
 </template>

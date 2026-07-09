@@ -1,5 +1,6 @@
+<!-- app/pages/profile.vue -->
 <script setup lang="ts">
-import { computed, reactive, ref, watch } from 'vue'
+import { computed, reactive, ref, watch, onMounted } from 'vue'
 import { z } from 'zod'
 import type { FormSubmitEvent } from '#ui/types'
 
@@ -53,30 +54,42 @@ const payerNumber = computed(() => {
 })
 
 const additionalNumbers = computed(() => {
-  return (profile.value?.additional_numbers ?? []).filter(Boolean)
+  return Array.isArray(profile.value?.additional_numbers)
+    ? profile.value.additional_numbers.filter(Boolean)
+    : []
 })
 
+async function refreshProfile() {
+  if (!user.value?.id || !import.meta.client) {
+    return
+  }
+
+  try {
+    await ensureProfile()
+    await loadProfile()
+  } catch (error) {
+    toast.add({
+      title: 'Unable to load profile',
+      description:
+        error instanceof Error
+          ? error.message
+          : 'Please refresh and try again.',
+      color: 'error',
+      icon: 'i-lucide-circle-x'
+    })
+  }
+}
+
+onMounted(refreshProfile)
+
 watch(
-  user,
-  async (current) => {
-    if (!current) {
+  () => user.value?.id,
+  async (id) => {
+    if (!id || !import.meta.client) {
       return
     }
 
-    try {
-      await ensureProfile()
-      await loadProfile()
-    } catch (error) {
-      toast.add({
-        title: 'Unable to load profile',
-        description:
-          error instanceof Error
-            ? error.message
-            : 'Please refresh and try again.',
-        color: 'error',
-        icon: 'i-lucide-circle-x'
-      })
-    }
+    await refreshProfile()
   },
   { immediate: true }
 )
@@ -97,6 +110,7 @@ async function onSavePhoneNumber(event: FormSubmitEvent<PhoneFormState>) {
 
   try {
     await savePhoneNumber(event.data.phoneNumber)
+    await loadProfile()
     phoneModalOpen.value = false
 
     toast.add({
@@ -120,14 +134,14 @@ async function onSavePhoneNumber(event: FormSubmitEvent<PhoneFormState>) {
 </script>
 
 <template>
-  <UPage>
+  <div class="space-y-6 p-4 pb-16 lg:p-6">
     <UPageHero
       title="Profile"
       description="Review and update the phone number used for airtime purchases."
       icon="i-lucide-user"
     />
 
-    <UContainer class="max-w-3xl py-8">
+    <UContainer class="max-w-3xl pb-16">
       <UCard>
         <template #header>
           <div class="flex items-center gap-2">
@@ -161,7 +175,7 @@ async function onSavePhoneNumber(event: FormSubmitEvent<PhoneFormState>) {
                 :loading="loading"
                 @click="openPhoneModal"
               >
-                {{ profile.value?.phone_number ? 'Update' : 'Add' }} number
+                {{ profile?.phone_number ? 'Update' : 'Add' }} number
               </UButton>
             </div>
           </div>
@@ -236,5 +250,5 @@ async function onSavePhoneNumber(event: FormSubmitEvent<PhoneFormState>) {
         </div>
       </template>
     </UModal>
-  </UPage>
+  </div>
 </template>
