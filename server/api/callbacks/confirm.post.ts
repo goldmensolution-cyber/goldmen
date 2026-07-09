@@ -112,27 +112,30 @@ export default defineEventHandler(async (event) => {
 
     // try to attach user by phone if profile exists
     if (msisdn) {
-      const { data: profileData } = await supabase
-        .from('profiles')
-        .select('user_id')
-        .eq('phone', msisdn)
-        .limit(1)
-        .maybeSingle();
+  const { data: profileData } = await supabase
+    .from('profiles')
+    .select('id')
+    .eq('phone_number', msisdn)
+    .maybeSingle()
 
-      if (profileData && (profileData as unknown as { user_id?: string }).user_id) {
-        const profileUserId = (profileData as unknown as { user_id?: string }).user_id as string;
-        // update the transaction to link to the user
-        const keyValue = chosenOnConflict === 'checkout_request_id'
-          ? (transactionRow.checkout_request_id as string | null)
-          : chosenOnConflict === 'mpesa_receipt'
-            ? (transactionRow.mpesa_receipt as string | null)
-            : (transactionRow.external_id as string | null);
+  if (profileData?.id) {
+    const profileUserId = profileData.id
 
-        if (keyValue) {
-          await supabase.from('transactions').update({ user_id: profileUserId }).eq(chosenOnConflict, keyValue);
-        }
-      }
+    const keyValue =
+      chosenOnConflict === 'checkout_request_id'
+        ? (transactionRow.checkout_request_id as string | null)
+        : chosenOnConflict === 'mpesa_receipt'
+          ? (transactionRow.mpesa_receipt as string | null)
+          : (transactionRow.external_id as string | null)
+
+    if (keyValue) {
+      await supabase
+        .from('transactions')
+        .update({ user_id: profileUserId })
+        .eq(chosenOnConflict, keyValue)
     }
+  }
+}
 
     // Daraja expects numeric ResultCode
     return { ResultCode: 0, ResultDesc: 'Accepted' };
