@@ -880,7 +880,8 @@ async function purchase() {
           <UButton
             color="neutral"
             variant="ghost"
-            @onclick="confirmOpen = false"
+            type="button"
+            @click="confirmOpen = false"
           >
             Cancel
           </UButton>
