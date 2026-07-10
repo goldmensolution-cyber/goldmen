@@ -88,11 +88,17 @@ function openPhoneModal() {
   phoneModalOpen.value = true
 }
 async function handlePhoneNumberSaved() {
-  if (!user.value?.id) {
-    return
+  try {
+    await ensureProfile()
+    await loadProfile()
+  } catch (error) {
+    toast.add({
+      title: 'Unable to refresh profile',
+      description: error instanceof Error ? error.message : 'Please refresh and try again.',
+      color: 'error',
+      icon: 'i-lucide-circle-x'
+    })
   }
-
-  await loadProfile()
 }
 </script>
 

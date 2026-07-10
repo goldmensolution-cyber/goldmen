@@ -196,22 +196,34 @@ const needsPhoneNumber = computed(
   () => isAuthenticated.value && !loadingProfile.value && payerNumber.value.length === 0
 )
 
-function openPhoneModal() {
-  phoneModalInitialValue.value = payerNumber.value
-    ? toLocal(payerNumber.value)
-    : toLocal(profile.phone_number ?? '')
-  phoneModalOpen.value = true
+async function resolveActiveUser() {
+  if (user.value?.id) {
+    return user.value
+  }
+
+  if (!supabase) {
+    return null
+  }
+
+  const { data: { user: authUser }, error } = await supabase.auth.getUser()
+
+  if (error) {
+    throw error
+  }
+
+  return authUser
 }
 
-watch(needsPhoneNumber, (needsValue) => {
-  if (needsValue) {
-    openPhoneModal()
-  }
-}, { flush: 'post' })
+async function loadProfileFromSupabase() {
+  const activeUser = await resolveActiveUser()
 
-await useAsyncData('airtime-profile', async () => {
-  if (!user.value?.id) {
+  if (!activeUser?.id) {
     loadingProfile.value = false
+    profile.phone_number = null
+    profile.additional_numbers = []
+    profile.full_name = null
+    profile.email = null
+    payerNumber.value = ''
     return
   }
 
@@ -219,7 +231,7 @@ await useAsyncData('airtime-profile', async () => {
     const { data, error } = await supabase
       .from('profiles')
       .select('phone_number,full_name,email,additional_numbers')
-      .eq('id', user.value.id)
+      .eq('id', activeUser.id)
       .maybeSingle()
 
     if (error) {
@@ -227,21 +239,19 @@ await useAsyncData('airtime-profile', async () => {
     }
 
     if (data) {
-      profile.phone_number =
-        data.phone_number ?? user.value.user_metadata?.phone ?? null
-      profile.full_name = data.full_name ?? user.value.user_metadata?.name ?? null
-      profile.email = data.email ?? user.value.email ?? null
+      profile.phone_number = data.phone_number ?? activeUser.user_metadata?.phone ?? null
+      profile.full_name = data.full_name ?? activeUser.user_metadata?.name ?? null
+      profile.email = data.email ?? activeUser.email ?? null
       profile.additional_numbers = Array.isArray(data.additional_numbers)
         ? data.additional_numbers.filter(Boolean).map(String)
         : []
-      payerNumber.value =
-        data.phone_number ?? user.value.user_metadata?.phone ?? ''
+      payerNumber.value = data.phone_number ?? activeUser.user_metadata?.phone ?? ''
     } else {
-      profile.phone_number = user.value.user_metadata?.phone ?? null
+      profile.phone_number = activeUser.user_metadata?.phone ?? null
       profile.additional_numbers = []
-      profile.full_name = user.value.user_metadata?.name ?? null
-      profile.email = user.value.email ?? null
-      payerNumber.value = user.value.user_metadata?.phone ?? ''
+      profile.full_name = activeUser.user_metadata?.name ?? null
+      profile.email = activeUser.email ?? null
+      payerNumber.value = activeUser.user_metadata?.phone ?? ''
     }
   } catch (error) {
     toast.add({
@@ -256,6 +266,23 @@ await useAsyncData('airtime-profile', async () => {
   } finally {
     loadingProfile.value = false
   }
+}
+
+function openPhoneModal() {
+  phoneModalInitialValue.value = payerNumber.value
+    ? toLocal(payerNumber.value)
+    : toLocal(profile.phone_number ?? '')
+  phoneModalOpen.value = true
+}
+
+watch(needsPhoneNumber, (needsValue) => {
+  if (needsValue) {
+    openPhoneModal()
+  }
+}, { flush: 'post' })
+
+await useAsyncData('airtime-profile', async () => {
+  await loadProfileFromSupabase()
 })
 
 /* -------------------------------------------------------------------------- */
@@ -336,11 +363,12 @@ function closeConfirmation() {
   confirmOpen.value = false
 }
 
-function handlePhoneNumberSaved(payload: { phoneNumber: string; additionalNumbers: string[] }) {
+async function handlePhoneNumberSaved(payload: { phoneNumber: string; additionalNumbers: string[] }) {
   profile.phone_number = payload.phoneNumber
   profile.additional_numbers = payload.additionalNumbers
   payerNumber.value = payload.phoneNumber
   phoneModalOpen.value = false
+  await loadProfileFromSupabase()
 }
 
 async function purchase() {

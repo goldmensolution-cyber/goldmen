@@ -52,8 +52,28 @@ export function useProfileBootstrap() {
   const loading = ref(false)
   const error = ref<string | null>(null)
 
+  async function resolveActiveUser() {
+    if (user.value?.id) {
+      return user.value
+    }
+
+    if (!supabase) {
+      return null
+    }
+
+    const { data: { user: authUser }, error: authError } = await supabase.auth.getUser()
+
+    if (authError) {
+      throw authError
+    }
+
+    return authUser
+  }
+
   async function loadProfile(): Promise<ProfileRow | null> {
-    if (!user.value?.id) {
+    const activeUser = await resolveActiveUser()
+
+    if (!activeUser?.id) {
       profile.value = null
       return null
     }
@@ -65,7 +85,7 @@ export function useProfileBootstrap() {
       const { data, error: fetchError } = await supabase
         .from('profiles')
         .select('id,phone_number,full_name,email,additional_numbers')
-        .eq('id', user.value.id)
+        .eq('id', activeUser.id)
         .maybeSingle()
 
       if (fetchError) {
@@ -83,7 +103,9 @@ export function useProfileBootstrap() {
   }
 
   async function ensureProfile(): Promise<ProfileRow> {
-    if (!user.value?.id) {
+    const activeUser = await resolveActiveUser()
+
+    if (!activeUser?.id) {
       throw new Error('You must be signed in.')
     }
 
@@ -94,23 +116,23 @@ export function useProfileBootstrap() {
       const existing = await supabase
         .from('profiles')
         .select('id,phone_number,full_name,email,additional_numbers')
-        .eq('id', user.value.id)
+        .eq('id', activeUser.id)
         .maybeSingle()
 
       if (existing.error) {
         throw existing.error
       }
 
-      const fallbackPhone = user.value.user_metadata?.phone ?? user.value.user_metadata?.phone_number ?? null
-      const fallbackName = user.value.user_metadata?.name ?? user.value.user_metadata?.full_name ?? null
+      const fallbackPhone = activeUser.user_metadata?.phone ?? activeUser.user_metadata?.phone_number ?? null
+      const fallbackName = activeUser.user_metadata?.name ?? activeUser.user_metadata?.full_name ?? null
 
       const merged: ProfileRow = {
-        id: user.value.id,
+        id: activeUser.id,
         phone_number:
           existing.data?.phone_number ??
           (fallbackPhone ? normalizeKenyaPhone(String(fallbackPhone)) : null),
         full_name: existing.data?.full_name ?? (fallbackName ? String(fallbackName) : null),
-        email: existing.data?.email ?? user.value.email ?? null,
+        email: existing.data?.email ?? activeUser.email ?? null,
         additional_numbers: Array.isArray(existing.data?.additional_numbers)
           ? existing.data.additional_numbers.filter(Boolean).map(String)
           : []
