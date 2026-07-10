@@ -11,6 +11,7 @@ definePageMeta({
 
 const user = useSupabaseUser()
 const toast = useToast()
+const profilePhoneForm = useTemplateRef('profilePhoneForm')
 
 const {
   profile,
@@ -199,11 +200,14 @@ async function onSavePhoneNumber(event: FormSubmitEvent<PhoneFormState>) {
       </UCard>
     </UContainer>
 
-    <!-- app/pages/profile.vue: replace the current UModal with this -->
-<UModal v-model:open="phoneModalOpen" title="Save your payer phone number">
+    <!-- app/pages/profile.vue: replace the phone modal with this -->
+<UModal
+  v-model:open="phoneModalOpen"
+  title="Save your payer phone number"
+>
   <template #body>
     <UForm
-      id="profile-phone-form"
+      ref="profilePhoneForm"
       :schema="phoneSchema"
       :state="phoneFormState"
       class="space-y-4"
@@ -226,27 +230,31 @@ async function onSavePhoneNumber(event: FormSubmitEvent<PhoneFormState>) {
           placeholder="0712 345 678"
         />
       </UFormField>
-
-      <div class="flex w-full justify-end gap-3 pt-2">
-        <UButton
-          color="neutral"
-          variant="ghost"
-          type="button"
-          @click="phoneModalOpen = false"
-        >
-          Cancel
-        </UButton>
-
-        <UButton
-          color="error"
-          type="submit"
-          :loading="isSavingPhone"
-        >
-          Save number
-        </UButton>
-      </div>
     </UForm>
   </template>
+
+  <template #footer>
+    <div class="flex w-full justify-end gap-3">
+      <UButton
+        color="neutral"
+        variant="ghost"
+        type="button"
+        @click="phoneModalOpen = false"
+      >
+        Cancel
+      </UButton>
+
+      <UButton
+        color="error"
+        type="button"
+        :loading="isSavingPhone"
+        @click="profilePhoneForm?.submit()"
+      >
+        Save number
+      </UButton>
+    </div>
+  </template>
 </UModal>
+
   </div>
 </template>
