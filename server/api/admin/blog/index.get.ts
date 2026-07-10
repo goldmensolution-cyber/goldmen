@@ -1,27 +1,10 @@
-import { serverSupabaseClient, serverSupabaseUser } from '#supabase/server'
+// server/api/admin/blog/index.get.ts
+import { assertAdmin, getServiceSupabase } from '~/server/utils/adminBlog'
 
 export default defineEventHandler(async (event) => {
-  const user = await serverSupabaseUser(event)
-  if (!user) {
-    throw createError({ statusCode: 401, statusMessage: 'Unauthorized' })
-  }
+  await assertAdmin(event)
 
-  const supabase = await serverSupabaseClient(event)
-
-  const { data: profile, error: profileError } = await supabase
-    .from('profiles')
-    .select('is_admin')
-    .eq('id', user.id)
-    .maybeSingle()
-
-  if (profileError) {
-    throw profileError
-  }
-
-  if (!profile?.is_admin) {
-    throw createError({ statusCode: 403, statusMessage: 'Forbidden' })
-  }
-
+  const supabase = getServiceSupabase()
   const { data, error } = await supabase
     .from('blog_posts')
     .select('*')

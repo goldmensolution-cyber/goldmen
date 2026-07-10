@@ -97,10 +97,9 @@ watch(
 function openPhoneModal() {
   phoneFormState.phoneNumber = profile.value?.phone_number
     ? toLocalKenyaPhone(profile.value.phone_number)
-    : ''
+    : toLocalKenyaPhone(user.value?.user_metadata?.phone ?? '')
   phoneModalOpen.value = true
 }
-
 async function onSavePhoneNumber(event: FormSubmitEvent<PhoneFormState>) {
   if (!user.value?.id) {
     return
@@ -200,55 +199,54 @@ async function onSavePhoneNumber(event: FormSubmitEvent<PhoneFormState>) {
       </UCard>
     </UContainer>
 
-    <UModal v-model:open="phoneModalOpen" title="Save your payer phone number">
-      <template #body>
-        <UForm
-          id="profile-phone-form"
-          :schema="phoneSchema"
-          :state="phoneFormState"
-          class="space-y-4"
-          @submit="onSavePhoneNumber"
-        >
-          <UFormField
-            name="phoneNumber"
-            label="Phone number"
-            description="This number will be used for airtime purchases."
-            required
-          >
-            <UInput
-              v-model="phoneFormState.phoneNumber"
-              v-maska="'#### ### ###'"
-              class="w-full"
-              size="xl"
-              icon="i-lucide-phone"
-              autocomplete="tel"
-              inputmode="tel"
-              placeholder="0712 345 678"
-            />
-          </UFormField>
-        </UForm>
-      </template>
+    <!-- app/pages/profile.vue: replace the current UModal with this -->
+<UModal v-model:open="phoneModalOpen" title="Save your payer phone number">
+  <template #body>
+    <UForm
+      id="profile-phone-form"
+      :schema="phoneSchema"
+      :state="phoneFormState"
+      class="space-y-4"
+      @submit="onSavePhoneNumber"
+    >
+      <UFormField
+        name="phoneNumber"
+        label="Phone number"
+        description="This number will be used for airtime purchases."
+        required
+      >
+        <UInput
+          v-model="phoneFormState.phoneNumber"
+          v-maska="'#### ### ###'"
+          class="w-full"
+          size="xl"
+          icon="i-lucide-phone"
+          autocomplete="tel"
+          inputmode="tel"
+          placeholder="0712 345 678"
+        />
+      </UFormField>
 
-      <template #footer>
-        <div class="flex w-full justify-end gap-3">
-          <UButton
-            color="neutral"
-            variant="ghost"
-            type="button"
-            @click="phoneModalOpen = false"
-          >
-            Cancel
-          </UButton>
-          <UButton
-            color="error"
-            type="submit"
-            form="profile-phone-form"
-            :loading="isSavingPhone"
-          >
-            Save number
-          </UButton>
-        </div>
-      </template>
-    </UModal>
+      <div class="flex w-full justify-end gap-3 pt-2">
+        <UButton
+          color="neutral"
+          variant="ghost"
+          type="button"
+          @click="phoneModalOpen = false"
+        >
+          Cancel
+        </UButton>
+
+        <UButton
+          color="error"
+          type="submit"
+          :loading="isSavingPhone"
+        >
+          Save number
+        </UButton>
+      </div>
+    </UForm>
+  </template>
+</UModal>
   </div>
 </template>
