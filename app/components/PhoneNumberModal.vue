@@ -33,6 +33,24 @@ const supabase = useSupabaseClient()
 const user = useSupabaseUser()
 const toast = useToast()
 
+async function resolveActiveUser() {
+  if (user.value?.id) {
+    return user.value
+  }
+
+  if (!supabase) {
+    return null
+  }
+
+  const { data: { user: authUser }, error } = await supabase.auth.getUser()
+
+  if (error) {
+    throw error
+  }
+
+  return authUser
+}
+
 const phoneSchema = z.object({
   phoneNumber: z.string().trim().refine(isLikelyKenyanMobile, {
     message: 'Enter a valid Kenyan mobile number.'
@@ -75,24 +93,26 @@ function closeModal() {
 }
 
 async function onSubmit(event: FormSubmitEvent<PhoneFormState>) {
-  if (!user.value?.id || !supabase) {
-    toast.add({
-      title: 'Unable to save phone number',
-      description: 'Please sign in and try again.',
-      color: 'error',
-      icon: 'i-lucide-circle-x'
-    })
-    return
-  }
-
   isSubmitting.value = true
 
   try {
+    const activeUser = await resolveActiveUser()
+
+    if (!activeUser?.id || !supabase) {
+      toast.add({
+        title: 'Unable to save phone number',
+        description: 'Your signed-in session is not ready yet. Please wait a moment and try again.',
+        color: 'error',
+        icon: 'i-lucide-circle-x'
+      })
+      return
+    }
+
     const normalizedPhoneNumber = normalizeKenyaPhone(event.data.phoneNumber)
     const { data: currentProfile, error: fetchError } = await supabase
       .from('profiles')
       .select('id, phone_number, full_name, email, additional_numbers')
-      .eq('id', user.value.id)
+      .eq('id', activeUser.id)
       .maybeSingle()
 
     if (fetchError) {
@@ -114,10 +134,10 @@ async function onSubmit(event: FormSubmitEvent<PhoneFormState>) {
     const { error: upsertError } = await supabase
       .from('profiles')
       .upsert({
-        id: user.value.id,
+        id: activeUser.id,
         phone_number: normalizedPhoneNumber,
-        full_name: currentProfile?.full_name ?? user.value.user_metadata?.name ?? user.value.user_metadata?.full_name ?? null,
-        email: currentProfile?.email ?? user.value.email ?? null,
+        full_name: currentProfile?.full_name ?? activeUser.user_metadata?.name ?? activeUser.user_metadata?.full_name ?? null,
+        email: currentProfile?.email ?? activeUser.email ?? null,
         additional_numbers: Array.from(additionalNumbers)
       }, { onConflict: 'id' })
 
