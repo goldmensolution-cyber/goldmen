@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { computed, reactive, watch } from 'vue'
+import { reactive, watch, computed } from 'vue'
 import { z } from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui'
 import { vMaska } from 'maska/vue'
-import { useToast } from '#imports'
 import { isLikelyKenyanMobile } from '~/composables/useProfileBootstrap'
 
 const props = withDefaults(defineProps<{
@@ -26,15 +25,6 @@ const emit = defineEmits<{
   (e: 'save', value: string): void
 }>()
 
-const toast = useToast()
-
-const open = computed({
-  get: () => props.modelValue,
-  set: (value: boolean) => emit('update:modelValue', value)
-})
-
-const formId = 'phone-number-form'
-
 const phoneSchema = z.object({
   phoneNumber: z.string().trim().refine(isLikelyKenyanMobile, {
     message: 'Enter a valid Kenyan mobile number.'
@@ -45,6 +35,11 @@ type PhoneFormState = z.infer<typeof phoneSchema>
 
 const phoneFormState = reactive<PhoneFormState>({
   phoneNumber: ''
+})
+
+const open = computed({
+  get: () => props.modelValue,
+  set: (value: boolean) => emit('update:modelValue', value)
 })
 
 watch(
@@ -66,17 +61,12 @@ watch(
   }
 )
 
-function onSubmit(event: FormSubmitEvent<PhoneFormState>) {
-  emit('save', event.data.phoneNumber)
+function closeModal() {
+  emit('update:modelValue', false)
 }
 
-function onError() {
-  toast.add({
-    title: 'Check the phone number',
-    description: 'Enter a valid Kenyan mobile number before saving.',
-    color: 'warning',
-    icon: 'i-lucide-triangle-alert'
-  })
+function onSubmit(event: FormSubmitEvent<PhoneFormState>) {
+  emit('save', event.data.phoneNumber)
 }
 </script>
 
@@ -88,12 +78,10 @@ function onError() {
   >
     <template #body>
       <UForm
-        :id="formId"
         :schema="phoneSchema"
         :state="phoneFormState"
         class="space-y-4"
         @submit="onSubmit"
-        @error="onError"
       >
         <UFormField
           name="phoneNumber"
@@ -112,29 +100,26 @@ function onError() {
             placeholder="0712 345 678"
           />
         </UFormField>
+
+        <div class="flex justify-end gap-3 pt-2">
+          <UButton
+            color="neutral"
+            variant="ghost"
+            type="button"
+            @click="closeModal"
+          >
+            {{ cancelLabel }}
+          </UButton>
+
+          <UButton
+            color="primary"
+            type="submit"
+            :loading="loading"
+          >
+            {{ submitLabel }}
+          </UButton>
+        </div>
       </UForm>
-    </template>
-
-    <template #footer>
-      <div class="flex w-full justify-end gap-3">
-        <UButton
-          color="neutral"
-          variant="ghost"
-          type="button"
-          @click="open = false"
-        >
-          {{ cancelLabel }}
-        </UButton>
-
-        <UButton
-          :form="formId"
-          type="submit"
-          color="error"
-          :loading="loading"
-        >
-          {{ submitLabel }}
-        </UButton>
-      </div>
     </template>
   </UModal>
 </template>
