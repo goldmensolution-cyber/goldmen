@@ -7,11 +7,9 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@nuxt/content',
     '@nuxt/image',
-    '@nuxtjs/ngrok',
     '@nuxtjs/supabase',
     '@vueuse/nuxt',
     '@vueuse/motion/nuxt',
-    'nuxt-studio',
   ]
   , 
   app: {
@@ -33,11 +31,7 @@ export default defineNuxtConfig({
       callbackUrl: process.env.MPESA_CALLBACK_URL || 'https://knowing-husky-reliably.ngrok-free.app/api/mpesa/callback',
     },},
   
-  content: {
-    preview: {
-      api: 'https://api.nuxt.studio'
-    }
-  },
+ 
   routeRules: {
   '/': { prerender: true },
   '/blog': { prerender: true },
@@ -71,21 +65,12 @@ export default defineNuxtConfig({
       callback: '/confirm',
       exclude: ['/login', '/signup', '/confirm', '/blog/*','/'],
       include: ['/dashboard','/admin/*'],
-      saveRedirectToCookie: false,
+      saveRedirectToCookie: true,
     }
   },
   
-  ngrok: {
-      authtoken: process.env.NGROK_AUTHTOKEN,
-      domain: 'knowing-husky-reliably.ngrok-free.app'
-      
-    },
-   
-    vite: {
-    server: {
-      allowedHosts: ['knowing-husky-reliably.ngrok-free.app']
-    }
-  },
+ 
+    
   icon: {
       customCollections: [{
         prefix: 'custom',
