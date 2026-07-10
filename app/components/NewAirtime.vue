@@ -328,70 +328,19 @@ function onFormSubmit(
   confirmOpen.value = true
 }
 
-async function savePhoneNumber(phoneNumber: string) {
-  if (!user.value?.id) {
-    return
-  }
+function chooseQuickAmount(amount: number) {
+  state.amount = amount
+}
 
-  isSavingPhone.value = true
+function closeConfirmation() {
+  confirmOpen.value = false
+}
 
-  try {
-    const normalizedPhone = normalizePhone(phoneNumber)
-    const currentPhone = profile.phone_number ?? ''
-    const numbers = Array.isArray(profile.additional_numbers)
-      ? [...profile.additional_numbers]
-      : []
-
-    const previousNumbers = new Set(
-      numbers.filter(Boolean).map((entry) => String(entry))
-    )
-
-    if (currentPhone && currentPhone !== normalizedPhone) {
-      previousNumbers.add(currentPhone)
-    }
-
-    previousNumbers.delete(normalizedPhone)
-
-    const additionalNumbers = Array.from(previousNumbers)
-
-    const { error } = await supabase
-      .from('profiles')
-      .upsert(
-        {
-          id: user.value.id,
-          phone_number: normalizedPhone,
-          full_name: profile.full_name ?? user.value.user_metadata?.name ?? null,
-          email: profile.email ?? user.value.email ?? null,
-          additional_numbers: additionalNumbers
-        },
-        { onConflict: 'id' }
-      )
-
-    if (error) {
-      throw error
-    }
-
-    profile.phone_number = normalizedPhone
-    profile.additional_numbers = additionalNumbers
-    payerNumber.value = normalizedPhone
-    phoneModalOpen.value = false
-
-    toast.add({
-      title: 'Phone number saved',
-      description: 'Your profile number has been updated.',
-      color: 'success',
-      icon: 'i-lucide-check-circle'
-    })
-  } catch (error) {
-    toast.add({
-      title: 'Unable to save phone number',
-      description: error instanceof Error ? error.message : 'Please try again.',
-      color: 'error',
-      icon: 'i-lucide-circle-x'
-    })
-  } finally {
-    isSavingPhone.value = false
-  }
+function handlePhoneNumberSaved(payload: { phoneNumber: string; additionalNumbers: string[] }) {
+  profile.phone_number = payload.phoneNumber
+  profile.additional_numbers = payload.additionalNumbers
+  payerNumber.value = payload.phoneNumber
+  phoneModalOpen.value = false
 }
 
 async function purchase() {
@@ -662,7 +611,7 @@ async function purchase() {
                   :variant="state.amount === amount ? 'solid' : 'soft'"
                   :color="state.amount === amount ? 'warning' : 'neutral'"
                   type="button"
-                  @click="state.amount = amount"
+                  @click="() => chooseQuickAmount(amount)"
                 />
 
               </div>
@@ -735,7 +684,7 @@ async function purchase() {
       description="We’ll save this to your profile for airtime purchases."
       :initial-value="phoneModalInitialValue"
       :loading="isSavingPhone"
-      @save="savePhoneNumber"
+      @saved="handlePhoneNumberSaved"
     />
 
     <UModal
@@ -821,7 +770,7 @@ async function purchase() {
             color="neutral"
             variant="ghost"
             type="button"
-            @click="confirmOpen = false"
+            @click="closeConfirmation"
           >
             Cancel
           </UButton>

@@ -15,12 +15,10 @@ const {
   loading,
   ensureProfile,
   loadProfile,
-  savePhoneNumber,
   toLocalKenyaPhone
 } = useProfileBootstrap()
 
 const phoneModalOpen = ref(false)
-const isSavingPhone = ref(false)
 const phoneModalInitialValue = ref('')
 
 const profileName = computed(() => {
@@ -89,35 +87,12 @@ function openPhoneModal() {
     : toLocalKenyaPhone(user.value?.user_metadata?.phone ?? '')
   phoneModalOpen.value = true
 }
-async function onSavePhoneNumber(phoneNumber: string) {
+async function handlePhoneNumberSaved() {
   if (!user.value?.id) {
     return
   }
 
-  isSavingPhone.value = true
-
-  try {
-    await savePhoneNumber(phoneNumber)
-    await loadProfile()
-    phoneModalOpen.value = false
-
-    toast.add({
-      title: 'Phone number saved',
-      description: 'Your payer number has been updated.',
-      color: 'success',
-      icon: 'i-lucide-check-circle'
-    })
-  } catch (error) {
-    toast.add({
-      title: 'Unable to save phone number',
-      description:
-        error instanceof Error ? error.message : 'Please try again.',
-      color: 'error',
-      icon: 'i-lucide-circle-x'
-    })
-  } finally {
-    isSavingPhone.value = false
-  }
+  await loadProfile()
 }
 </script>
 
@@ -193,8 +168,8 @@ async function onSavePhoneNumber(phoneNumber: string) {
       title="Save your payer phone number"
       description="This number will be used for airtime purchases."
       :initial-value="phoneModalInitialValue"
-      :loading="isSavingPhone"
-      @save="onSavePhoneNumber"
+      :loading="loading"
+      @saved="handlePhoneNumberSaved"
     />
 
   </div>

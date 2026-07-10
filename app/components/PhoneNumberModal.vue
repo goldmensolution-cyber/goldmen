@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import { reactive, watch, computed } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import { z } from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui'
 import { vMaska } from 'maska/vue'
-import { isLikelyKenyanMobile } from '~/composables/useProfileBootstrap'
+import {
+  isLikelyKenyanMobile,
+  normalizeKenyaPhone
+} from '~/composables/useProfileBootstrap'
 
 const props = withDefaults(defineProps<{
   modelValue: boolean
@@ -15,6 +18,7 @@ const props = withDefaults(defineProps<{
   cancelLabel?: string
 }>(), {
   description: 'We’ll save this to your profile for airtime purchases.',
+  initialValue: '',
   loading: false,
   submitLabel: 'Save number',
   cancelLabel: 'Cancel'
@@ -22,8 +26,12 @@ const props = withDefaults(defineProps<{
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: boolean): void
-  (e: 'save', value: string): void
+  (e: 'saved', payload: { phoneNumber: string; additionalNumbers: string[] }): void
 }>()
+
+const supabase = useSupabaseClient()
+const user = useSupabaseUser()
+const toast = useToast()
 
 const phoneSchema = z.object({
   phoneNumber: z.string().trim().refine(isLikelyKenyanMobile, {
@@ -36,6 +44,7 @@ type PhoneFormState = z.infer<typeof phoneSchema>
 const phoneFormState = reactive<PhoneFormState>({
   phoneNumber: ''
 })
+const isSubmitting = ref(false)
 
 const open = computed({
   get: () => props.modelValue,
@@ -65,8 +74,80 @@ function closeModal() {
   emit('update:modelValue', false)
 }
 
-function onSubmit(event: FormSubmitEvent<PhoneFormState>) {
-  emit('save', event.data.phoneNumber)
+async function onSubmit(event: FormSubmitEvent<PhoneFormState>) {
+  if (!user.value?.id || !supabase) {
+    toast.add({
+      title: 'Unable to save phone number',
+      description: 'Please sign in and try again.',
+      color: 'error',
+      icon: 'i-lucide-circle-x'
+    })
+    return
+  }
+
+  isSubmitting.value = true
+
+  try {
+    const normalizedPhoneNumber = normalizeKenyaPhone(event.data.phoneNumber)
+    const { data: currentProfile, error: fetchError } = await supabase
+      .from('profiles')
+      .select('id, phone_number, full_name, email, additional_numbers')
+      .eq('id', user.value.id)
+      .maybeSingle()
+
+    if (fetchError) {
+      throw fetchError
+    }
+
+    const existingAdditionalNumbers = Array.isArray(currentProfile?.additional_numbers)
+      ? currentProfile.additional_numbers.filter(Boolean).map(String)
+      : []
+
+    const additionalNumbers = new Set<string>(existingAdditionalNumbers)
+
+    if (currentProfile?.phone_number && currentProfile.phone_number !== normalizedPhoneNumber) {
+      additionalNumbers.add(currentProfile.phone_number)
+    }
+
+    additionalNumbers.delete(normalizedPhoneNumber)
+
+    const { error: upsertError } = await supabase
+      .from('profiles')
+      .upsert({
+        id: user.value.id,
+        phone_number: normalizedPhoneNumber,
+        full_name: currentProfile?.full_name ?? user.value.user_metadata?.name ?? user.value.user_metadata?.full_name ?? null,
+        email: currentProfile?.email ?? user.value.email ?? null,
+        additional_numbers: Array.from(additionalNumbers)
+      }, { onConflict: 'id' })
+
+    if (upsertError) {
+      throw upsertError
+    }
+
+    emit('saved', {
+      phoneNumber: normalizedPhoneNumber,
+      additionalNumbers: Array.from(additionalNumbers)
+    })
+
+    closeModal()
+
+    toast.add({
+      title: 'Phone number saved',
+      description: 'Your payer number has been updated.',
+      color: 'success',
+      icon: 'i-lucide-check-circle'
+    })
+  } catch (error) {
+    toast.add({
+      title: 'Unable to save phone number',
+      description: error instanceof Error ? error.message : 'Please try again.',
+      color: 'error',
+      icon: 'i-lucide-circle-x'
+    })
+  } finally {
+    isSubmitting.value = false
+  }
 }
 </script>
 
@@ -114,7 +195,7 @@ function onSubmit(event: FormSubmitEvent<PhoneFormState>) {
           <UButton
             color="primary"
             type="submit"
-            :loading="loading"
+            :loading="isSubmitting || loading"
           >
             {{ submitLabel }}
           </UButton>
