@@ -1,5 +1,5 @@
 // server/api/admin/blog/[id].delete.ts
-import { assertAdmin, getServiceSupabase } from '~/server/utils/adminBlog'
+import { assertAdmin, getServiceSupabase } from '~~/server/utils/adminBlog'
 
 export default defineEventHandler(async (event) => {
   await assertAdmin(event)

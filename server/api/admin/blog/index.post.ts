@@ -1,6 +1,6 @@
 // server/api/admin/blog/index.post.ts
 import { readBody } from 'h3'
-import { assertAdmin, getServiceSupabase, slugify } from '~/server/utils/adminBlog'
+import { assertAdmin, getServiceSupabase, slugify } from '~~/server/utils/adminBlog'
 
 export default defineEventHandler(async (event) => {
   const user = await assertAdmin(event)

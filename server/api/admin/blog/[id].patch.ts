@@ -1,6 +1,6 @@
 // server/api/admin/blog/[id].patch.ts
 import { readBody } from 'h3'
-import { assertAdmin, getServiceSupabase, slugify } from '~/server/utils/adminBlog'
+import { assertAdmin, getServiceSupabase, slugify } from '~~/server/utils/adminBlog'
 
 export default defineEventHandler(async (event) => {
   await assertAdmin(event)
