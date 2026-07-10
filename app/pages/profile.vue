@@ -1,8 +1,6 @@
 <!-- app/pages/profile.vue -->
 <script setup lang="ts">
-import { computed, reactive, ref, watch, onMounted } from 'vue'
-import { z } from 'zod'
-import type { FormSubmitEvent } from '#ui/types'
+import { computed, ref, watch, onMounted } from 'vue'
 
 definePageMeta({
   layout: 'app',
@@ -11,7 +9,6 @@ definePageMeta({
 
 const user = useSupabaseUser()
 const toast = useToast()
-const profilePhoneForm = useTemplateRef('profilePhoneForm')
 
 const {
   profile,
@@ -19,21 +16,12 @@ const {
   ensureProfile,
   loadProfile,
   savePhoneNumber,
-  toLocalKenyaPhone,
-  isLikelyKenyanMobile
+  toLocalKenyaPhone
 } = useProfileBootstrap()
 
 const phoneModalOpen = ref(false)
 const isSavingPhone = ref(false)
-const phoneFormState = reactive({ phoneNumber: '' })
-
-const phoneSchema = z.object({
-  phoneNumber: z.string().refine(isLikelyKenyanMobile, {
-    message: 'Enter a valid Kenyan mobile number.'
-  })
-})
-
-type PhoneFormState = z.infer<typeof phoneSchema>
+const phoneModalInitialValue = ref('')
 
 const profileName = computed(() => {
   return (
@@ -96,12 +84,12 @@ watch(
 )
 
 function openPhoneModal() {
-  phoneFormState.phoneNumber = profile.value?.phone_number
+  phoneModalInitialValue.value = profile.value?.phone_number
     ? toLocalKenyaPhone(profile.value.phone_number)
     : toLocalKenyaPhone(user.value?.user_metadata?.phone ?? '')
   phoneModalOpen.value = true
 }
-async function onSavePhoneNumber(event: FormSubmitEvent<PhoneFormState>) {
+async function onSavePhoneNumber(phoneNumber: string) {
   if (!user.value?.id) {
     return
   }
@@ -109,7 +97,7 @@ async function onSavePhoneNumber(event: FormSubmitEvent<PhoneFormState>) {
   isSavingPhone.value = true
 
   try {
-    await savePhoneNumber(event.data.phoneNumber)
+    await savePhoneNumber(phoneNumber)
     await loadProfile()
     phoneModalOpen.value = false
 
@@ -200,61 +188,14 @@ async function onSavePhoneNumber(event: FormSubmitEvent<PhoneFormState>) {
       </UCard>
     </UContainer>
 
-    <!-- app/pages/profile.vue: replace the phone modal with this -->
-<UModal
-  v-model:open="phoneModalOpen"
-  title="Save your payer phone number"
->
-  <template #body>
-    <UForm
-      ref="profilePhoneForm"
-      :schema="phoneSchema"
-      :state="phoneFormState"
-      class="space-y-4"
-      @submit="onSavePhoneNumber"
-    >
-      <UFormField
-        name="phoneNumber"
-        label="Phone number"
-        description="This number will be used for airtime purchases."
-        required
-      >
-        <UInput
-          v-model="phoneFormState.phoneNumber"
-          v-maska="'#### ### ###'"
-          class="w-full"
-          size="xl"
-          icon="i-lucide-phone"
-          autocomplete="tel"
-          inputmode="tel"
-          placeholder="0712 345 678"
-        />
-      </UFormField>
-    </UForm>
-  </template>
-
-  <template #footer>
-    <div class="flex w-full justify-end gap-3">
-      <UButton
-        color="neutral"
-        variant="ghost"
-        type="button"
-        @click="phoneModalOpen = false"
-      >
-        Cancel
-      </UButton>
-
-      <UButton
-        color="error"
-        type="button"
-        :loading="isSavingPhone"
-        @click="profilePhoneForm?.submit()"
-      >
-        Save number
-      </UButton>
-    </div>
-  </template>
-</UModal>
+    <PhoneNumberModal
+      v-model="phoneModalOpen"
+      title="Save your payer phone number"
+      description="This number will be used for airtime purchases."
+      :initial-value="phoneModalInitialValue"
+      :loading="isSavingPhone"
+      @save="onSavePhoneNumber"
+    />
 
   </div>
 </template>
