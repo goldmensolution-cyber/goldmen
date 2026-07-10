@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, watch } from 'vue'
+import { reactive, watch, useTemplateRef } from 'vue'
 import { z } from 'zod'
 import type { FormSubmitEvent } from '#ui/types'
 import { vMaska } from 'maska/vue'
@@ -20,7 +20,7 @@ const emit = defineEmits<{
   (e: 'save', value: string): void
 }>()
 
-const phoneNumberForm = useTemplateRef('phoneNumberForm')
+const form = useTemplateRef('form')
 
 const phoneFormState = reactive({ phoneNumber: '' })
 
@@ -68,7 +68,7 @@ function onSubmit(event: FormSubmitEvent<PhoneFormState>) {
   >
     <template #body>
       <UForm
-        ref="phoneNumberForm"
+        ref="form"
         :schema="phoneSchema"
         :state="phoneFormState"
         class="space-y-4"
@@ -109,7 +109,7 @@ function onSubmit(event: FormSubmitEvent<PhoneFormState>) {
           color="error"
           type="button"
           :loading="loading"
-          @click="phoneNumberForm?.submit()"
+          @click="form?.submit()"
         >
           {{ submitLabel || 'Save number' }}
         </UButton>

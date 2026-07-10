@@ -196,15 +196,6 @@ const needsPhoneNumber = computed(
   () => isAuthenticated.value && !loadingProfile.value && payerNumber.value.length === 0
 )
 
-const profileName = computed(() => {
-  return (
-    profile.full_name ||
-    user.value?.user_metadata?.name ||
-    user.value?.email ||
-    'Your profile'
-  )
-})
-
 function openPhoneModal() {
   phoneModalInitialValue.value = payerNumber.value
     ? toLocal(payerNumber.value)
