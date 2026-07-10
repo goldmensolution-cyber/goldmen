@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { reactive, watch, useTemplateRef } from 'vue'
+import { computed, reactive, watch } from 'vue'
 import { z } from 'zod'
-import type { FormSubmitEvent } from '#ui/types'
+import type { FormSubmitEvent } from '@nuxt/ui'
 import { vMaska } from 'maska/vue'
+import { useToast } from '#imports'
 import { isLikelyKenyanMobile } from '~/composables/useProfileBootstrap'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   modelValue: boolean
   title: string
   description?: string
@@ -13,37 +14,47 @@ const props = defineProps<{
   loading?: boolean
   submitLabel?: string
   cancelLabel?: string
-}>()
+}>(), {
+  description: 'We’ll save this to your profile for airtime purchases.',
+  loading: false,
+  submitLabel: 'Save number',
+  cancelLabel: 'Cancel'
+})
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: boolean): void
   (e: 'save', value: string): void
 }>()
 
-const form = useTemplateRef('form')
+const toast = useToast()
 
-const phoneFormState = reactive({ phoneNumber: '' })
+const open = computed({
+  get: () => props.modelValue,
+  set: (value: boolean) => emit('update:modelValue', value)
+})
+
+const formId = 'phone-number-form'
 
 const phoneSchema = z.object({
-  phoneNumber: z.string().refine(isLikelyKenyanMobile, {
+  phoneNumber: z.string().trim().refine(isLikelyKenyanMobile, {
     message: 'Enter a valid Kenyan mobile number.'
   })
 })
 
 type PhoneFormState = z.infer<typeof phoneSchema>
 
-function closeModal() {
-  emit('update:modelValue', false)
-}
+const phoneFormState = reactive<PhoneFormState>({
+  phoneNumber: ''
+})
 
 watch(
   () => props.modelValue,
-  (open) => {
-    if (open) {
+  (isOpen) => {
+    if (isOpen) {
       phoneFormState.phoneNumber = props.initialValue ?? ''
     }
   },
-  { flush: 'post' }
+  { immediate: true }
 )
 
 watch(
@@ -58,26 +69,36 @@ watch(
 function onSubmit(event: FormSubmitEvent<PhoneFormState>) {
   emit('save', event.data.phoneNumber)
 }
+
+function onError() {
+  toast.add({
+    title: 'Check the phone number',
+    description: 'Enter a valid Kenyan mobile number before saving.',
+    color: 'warning',
+    icon: 'i-lucide-triangle-alert'
+  })
+}
 </script>
 
 <template>
   <UModal
-    :open="modelValue"
+    v-model:open="open"
     :title="title"
-    @update:open="emit('update:modelValue', $event)"
+    :description="description"
   >
     <template #body>
       <UForm
-        ref="form"
+        :id="formId"
         :schema="phoneSchema"
         :state="phoneFormState"
         class="space-y-4"
         @submit="onSubmit"
+        @error="onError"
       >
         <UFormField
           name="phoneNumber"
           label="Phone number"
-          :description="description || 'We’ll save this to your profile for airtime purchases.'"
+          :description="description"
           required
         >
           <UInput
@@ -100,18 +121,18 @@ function onSubmit(event: FormSubmitEvent<PhoneFormState>) {
           color="neutral"
           variant="ghost"
           type="button"
-          @click="closeModal"
+          @click="open = false"
         >
-          {{ cancelLabel || 'Cancel' }}
+          {{ cancelLabel }}
         </UButton>
 
         <UButton
+          :form="formId"
+          type="submit"
           color="error"
-          type="button"
           :loading="loading"
-          @click="form?.submit()"
         >
-          {{ submitLabel || 'Save number' }}
+          {{ submitLabel }}
         </UButton>
       </div>
     </template>
